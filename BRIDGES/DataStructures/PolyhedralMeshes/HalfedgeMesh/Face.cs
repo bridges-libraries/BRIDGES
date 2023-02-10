@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using BRIDGES.DataStructures.PolyhedralMeshes.Abstract;
+using BRIDGES.Geometry.Euclidean3D;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
@@ -71,6 +72,28 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Computes the normal vector of the face.
+        /// </summary>
+        /// <typeparam name="T"> A face parameter type.</typeparam>
+        /// <param name="face"> The face to evaluate.</param>
+        /// <returns> The normal vector of the face.</returns>
+        public Vector Normal<T>()
+            where T : IFace<Point>
+        {
+            List<IVertex<Point>> faceVertices = (List<IVertex<Point>>)this.FaceVertices();
+            int nb_FaceVertex = faceVertices.Count;
+            Vector normal = new Vector();
+
+            for (int i = 0; i < nb_FaceVertex - 2; i++)
+            {
+                normal += Vector.CrossProduct((Vector)(faceVertices[0].Position - faceVertices[i + 1].Position), (Vector)(faceVertices[i + 2].Position - faceVertices[0].Position));
+            }
+            normal.Unitize();
+
+            return normal;
         }
 
         #endregion

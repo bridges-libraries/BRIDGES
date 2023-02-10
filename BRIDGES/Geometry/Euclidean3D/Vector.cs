@@ -467,6 +467,25 @@ namespace BRIDGES.Geometry.Euclidean3D
         }
 
         /// <summary>
+        /// Unitizes a <see cref="Vector"/>.
+        /// </summary>
+        /// <exception cref="DivideByZeroException"> The length of the vector must be different than zero.</exception>
+        public Vector Unitize()
+        {
+            if (this.SquaredLength() == 0.0)
+            {
+                throw new DivideByZeroException("The length of the vector must be different than zero.");
+            }
+
+            double length = this.Length();
+            X = X / length;
+            Y = Y / length;
+            Z = Z / length;
+
+            return this;
+        }
+
+        /// <summary>
         /// Evaluates whether this <see cref="Vector"/>'s length is one.
         /// </summary>
         /// <returns> <see langword="true"/> if this <see cref="Vector"/> is of unit length, <see langword="false"/> otherwise. </returns>

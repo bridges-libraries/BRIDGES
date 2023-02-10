@@ -44,7 +44,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
 
         #endregion
 
-
+        
         #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
@@ -80,6 +80,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         {
             return _halfedge.IsBoundary() && _halfedge.PairHalfedge.IsBoundary();
         }
+
 
         /// <inheritdoc/>
         internal override void Unset()

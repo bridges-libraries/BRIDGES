@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 
 using BRIDGES.DataStructures.PolyhedralMeshes.Abstract;
+using BRIDGES.DataStructures.PolyhedralMeshes;
+
+using BRIDGES.Geometry.Euclidean3D;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
@@ -91,6 +94,30 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
                 incoming = incoming.PairHalfedge.PrevHalfedge;
             }
             return result;
+        }
+
+        /// <summary>
+        /// Computes the normal vector of the vertex based on the adjacent face normals.
+        /// </summary>
+        /// <typeparam name="T"> A vertex parameter type.</typeparam>
+        /// <param name="vertex"> The vertex to evaluate.</param>
+        /// <param name="faceWeight"> Indicates whether the normal vector should be weigted by the area of the adjacent faces.</param>
+        /// <returns> The normal vector of the vertex.</returns>
+        public Vector Normal<T>(bool faceWeight = false)
+            where T : IVertex<Point>
+        {
+            Vector normal = new Vector();
+            double weight = 1;
+
+            foreach (IFace<Point> face in this.AdjacentFaces())
+            {
+                //if (faceWeight) { weight = face.FaceArea(); }
+
+                normal += face.Normal() * weight;
+            }
+            normal.Unitize();
+
+            return normal;
         }
 
         #endregion
@@ -226,6 +253,11 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
             }
 
             return result;
+        }
+
+        internal double InfluenceArea()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

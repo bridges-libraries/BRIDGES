@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BRIDGES.Geometry.Euclidean3D;
+using System;
 using System.Collections.Generic;
 
 
@@ -41,6 +42,10 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
         /// </summary>
         /// <returns> The ordered list of faces. An empty list can be returned. </returns>
         IReadOnlyList<IFace<TPosition>> AdjacentFaces();
+       // double FaceArea();
+        Vector Normal();
+
+
 
         #endregion
     }

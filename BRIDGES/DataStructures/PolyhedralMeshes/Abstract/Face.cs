@@ -1,6 +1,8 @@
-﻿using System;
+﻿using BRIDGES.Geometry.Euclidean3D;
+using System;
 using System.Collections.Generic;
-
+using BRIDGES.Geometry.Euclidean3D;
+using System.Linq;
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
 {
@@ -147,6 +149,37 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
         IReadOnlyList<IFace<TPosition>> IFace<TPosition>.AdjacentFaces()
         {
             return AdjacentFaces();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        //public double facearea()
+        //{
+        //    list<tposition> positions = (from tvertex vertex in facevertices() select vertex.position).tolist();
+
+        //    return polygon<tvector>.area(positions);
+        //}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="faceWeight"></param>
+        /// <returns></returns>
+        public Vector Normal()
+        {
+            List<IVertex<Point>> faceVertices = (List<IVertex<Point>>)FaceVertices();
+            int nb_FaceVertex = faceVertices.Count;
+            Vector normal = new Vector();
+
+            for (int i = 0; i < nb_FaceVertex - 2; i++)
+            {
+                normal += Vector.CrossProduct((Vector)(faceVertices[0].Position - faceVertices[i + 1].Position), (Vector)(faceVertices[i + 2].Position - faceVertices[0].Position));
+            }
+            normal.Unitize();
+
+            return normal;
         }
 
         #endregion
