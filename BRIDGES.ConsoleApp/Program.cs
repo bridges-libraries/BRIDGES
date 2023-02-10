@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 
 namespace BRIDGES.ConsoleApp
@@ -7,6 +8,9 @@ namespace BRIDGES.ConsoleApp
     {
         static void Main(string[] args)
         {
+
+            FDMWorkingExample.FDMMWE();
+
             Console.WriteLine("Hello World!");
         }
     }
