@@ -19,10 +19,10 @@ namespace BRIDGES.ConsoleApp
             Point pointC = new Point(2.0, 2.0, 0.0);
             Point pointD = new Point(0.0, 2.0, 0.0);
 
-            Point pointO = new Point(1.0, 1.5, 6);
+            Point pointO = new Point(1.0, 1.5, 5);
 
             //The force F applied to the free node O
-            Vector F = new Vector(0.0, 0.0, -50.0);
+            Vector F = new Vector(0.0, 0.0, -70.0);
 
 
             List<Particle> particles = new List<Particle>
@@ -35,10 +35,10 @@ namespace BRIDGES.ConsoleApp
             };
 
             //Definie the force densities of each elements
-            double q0 = -2;
+            double q0 = -1.5;
             double q1 = -2;
-            double q2 = -2;
-            double q3 = -2;
+            double q2 = -5;
+            double q3 = -5.5;
 
             //Create the elements
             List<ForceDensity> elements = new List<ForceDensity>
@@ -73,12 +73,7 @@ namespace BRIDGES.ConsoleApp
             fdmSolver.InitialiseMatrices(myModel.Elements.Select(i => (ForceDensity)i).ToList());
 
             fdmSolver.FDMSolve();
-            System.Console.WriteLine("Initial particle position:");
-            System.Console.WriteLine("X =" + particles.Last().Position.Current.X.ToString());
-            System.Console.WriteLine("Y =" + particles.Last().Position.Current.Y.ToString());
-            System.Console.WriteLine("Z =" + particles.Last().Position.Current.Z.ToString());
-
-
+            
             //FormFitFDM fit = new FormFitFDM(myModel, -4.5, 0);
             //fit.Optimise();
 
@@ -93,7 +88,7 @@ namespace BRIDGES.ConsoleApp
           //  System.Console.WriteLine("Exit =" + fit.Exit.ToString());
 
         //    System.Console.WriteLine("Steps =" + fit.Steps.ToString());
-            System.Console.WriteLine("FD =");
+          //  System.Console.WriteLine("FD =" + elements.Last().ForceDensityValue);
 
             //foreach (double d in fit.Optimal_FD)
             //{
