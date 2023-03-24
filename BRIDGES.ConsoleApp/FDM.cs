@@ -15,14 +15,14 @@ namespace BRIDGES.ConsoleApp
         {
             //The nodes of the model
             Point pointA = new Point(0.0, 0.0, 0.0);
-            Point pointB = new Point(2.0, 0.0, 0.0);
-            Point pointC = new Point(2.0, 2.0, 0.0);
-            Point pointD = new Point(0.0, 2.0, 0.0);
+            Point pointB = new Point(3.0, 0.0, 0.0);
+            Point pointC = new Point(2.0, 7.0, 0.0);
+            Point pointD = new Point(0.0, 1.0, 0.0);
 
-            Point pointO = new Point(1.0, 1.5, 5);
+            Point pointO = new Point(1.0, 1.5, 6);
 
             //The force F applied to the free node O
-            Vector F = new Vector(0.0, 0.0, -70.0);
+            Vector F = new Vector(0.0, 0.0, -50.0);
 
 
             List<Particle> particles = new List<Particle>
@@ -35,10 +35,10 @@ namespace BRIDGES.ConsoleApp
             };
 
             //Definie the force densities of each elements
-            double q0 = -1.5;
-            double q1 = -2;
-            double q2 = -5;
-            double q3 = -5.5;
+            double q0 = -4.96;
+            double q1 = -1.587;
+            double q2 = -1.7857;
+            double q3 = -0;
 
             //Create the elements
             List<ForceDensity> elements = new List<ForceDensity>

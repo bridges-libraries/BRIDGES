@@ -27,15 +27,73 @@ namespace BRIDGES.ConsoleApp
             #region Geometry
             //The nodes of the model
             List<Point> points = new List<Point>();
-            points.Add(new Point(0.0, 0.0, 0.0));
-            points.Add(new Point(2.0, 0.0, 0.0));
-            points.Add(new Point(2.0, 2.0, 0.0));
-            points.Add(new Point(0.0, 2.0, 0.0));
+            //points.Add(new Point(0.0, 0.0, 0.0));
+            //points.Add(new Point(3.0, 0.0, 0.0));
+            //points.Add(new Point(2.0, 7.0, 0.0));
+            //points.Add(new Point(0.0, 1.0, 0.0));
 
-            Point pointO = new Point(1.0, 1.5, 5);
+            //Point pointO = new Point(1.0, 1.5, 6);
 
-            //The force F applied to the free node O
-            Euc3D.Vector F = new Euc3D.Vector(0.0, 0.0, -70.0);
+            points.Add(new Point(-15.096293, 10.52492, 5.787252));
+            points.Add(new Point(-5.293628, 11.367286, 5.787252));
+            points.Add(new Point(-9.46545, 2.456744, 5.787252));
+            points.Add(new Point(-10.438131, 13.775888, 7.234065));
+            points.Add(new Point(-17.668545, 11.72922, 0.0));
+            points.Add(new Point(-14.609953, 4.865347, 7.234065));
+            points.Add(new Point(-4.807287, 5.707713, 7.234065));
+            points.Add(new Point(-2.964546, 12.99277, 0.0));
+            points.Add(new Point(-9.22228, -0.373042, 0.0));
+            points.Add(new Point(-11.410811, 25.095032, 0));
+            points.Add(new Point(-9.951791, 8.116316, 7.716336));
+            points.Add(new Point(-23.926279, -1.636592, 0.0));
+            points.Add(new Point(5.48172, 0.890508, 0.0));
+
+
+            Dictionary<Point, bool> IsSupport = new Dictionary<Point, bool>();
+            foreach (Point point in points)
+            {
+                if (point.Z == 0.0) IsSupport.Add(point, true);
+                else IsSupport.Add(point, false);
+            }
+
+
+            //The force F applied to all free nodes
+            Euc3D.Vector F = new Euc3D.Vector(0.0, 0.0, -10);
+
+
+            Dictionary<int, int> ConnectivityMatrix = new Dictionary<int, int>();
+            ConnectivityMatrix.Add(1, 0);
+            ConnectivityMatrix.Add(-1, 3);
+            ConnectivityMatrix.Add(2, 0);
+            ConnectivityMatrix.Add(-2, 4);
+            ConnectivityMatrix.Add(3, 0);
+            ConnectivityMatrix.Add(-3, 5);
+            ConnectivityMatrix.Add(4, 1);
+            ConnectivityMatrix.Add(-4, 3);
+            ConnectivityMatrix.Add(5, 1);
+            ConnectivityMatrix.Add(-5, 6);
+            ConnectivityMatrix.Add(6, 1);
+            ConnectivityMatrix.Add(-6, 7);
+            ConnectivityMatrix.Add(7, 2);
+            ConnectivityMatrix.Add(-7, 5);
+            ConnectivityMatrix.Add(8, 2);
+            ConnectivityMatrix.Add(-8, 6);
+            ConnectivityMatrix.Add(9, 2);
+            ConnectivityMatrix.Add(-9, 8);
+            ConnectivityMatrix.Add(10, 3);
+            ConnectivityMatrix.Add(-10, 9);
+            ConnectivityMatrix.Add(11, 3);
+            ConnectivityMatrix.Add(-11, 10);
+            ConnectivityMatrix.Add(12, 5);
+            ConnectivityMatrix.Add(-12, 10);
+            ConnectivityMatrix.Add(13, 5);
+            ConnectivityMatrix.Add(-13, 11);
+            ConnectivityMatrix.Add(14, 6);
+            ConnectivityMatrix.Add(-14, 10);
+            ConnectivityMatrix.Add(15, 6);
+            ConnectivityMatrix.Add(-15, 12);
+
+
 
 
             //List<Particle> particles = new List<Particle>
@@ -48,34 +106,36 @@ namespace BRIDGES.ConsoleApp
             //};
 
             //Definie the force densities of each elements
-            double[] qList = new double[4];
-            qList[0] = -4;
-            qList[1] = -1;
-            qList[2] = -2;
-            qList[3] = -4.68;
+
+            int Nfd = ConnectivityMatrix.Count / 2;
+            double fdInit = -10;
+
+            double[] qList = new double[Nfd];
+            for (int i = 0; i < Nfd; i++) { qList[i] = fdInit; }
 
             //Create the elements
-            List<ForceDensity> elements = new List<ForceDensity>
-            {
-                new ForceDensity(0,4,qList[0],1),
-                new ForceDensity(1,4,qList[1],1),
-                new ForceDensity(2,4,qList[2],1),
-                new ForceDensity(3,4,qList[3],1)
-            };
+            //List<ForceDensity> elements = new List<ForceDensity>
+            //{
+            //    new ForceDensity(0,4,qList[0],1),
+            //    new ForceDensity(1,4,qList[1],1),
+            //    new ForceDensity(2,4,qList[2],1),
+            //    new ForceDensity(3,4,qList[3],1)
+            //};
 
             // Model myModel = new Model(particles, elements);
             #endregion
 
             #region Declaration of the Solver
 
-            double tolerance = 0.00001;
-            int maxIter = 1000;  // Useless as long as GPA is neing debuged
+            double tolerance = 0.1;
+            int maxIter = 1;  // Useless as long as GPA is neing debuged
             GuidedProjectionAlgorithm gpa = new GuidedProjectionAlgorithm(tolerance, maxIter);
 
             #endregion
 
             #region Set Variables
-            int fdCount = 4;
+            int fdCount = Nfd;
+
             /********** Force Densities **********/
 
             int vertexDimension = 1;
@@ -95,23 +155,46 @@ namespace BRIDGES.ConsoleApp
             /********** Target Equilibrium **********/
 
             int segmentCounter = 0;
-            for (int i = 0; i < 3; i++)
+            foreach (Point point in points)
             {
-                double[] adjNodesCoord = new double[4];
-                for (int j = 0; j < 4; j++)
+                if (!IsSupport[point])
                 {
-                    adjNodesCoord[j] = points[j].GetCoordinates()[i];
+                    List<int> adjNodesIndex = new List<int>();
+                    List<int> adjFDIndex = new List<int>();
+                    for (int j = 1; j < Nfd + 1; j++)
+                    {
+                        if (ConnectivityMatrix[j] == segmentCounter)
+                        {
+                            adjNodesIndex.Add(ConnectivityMatrix[-j]);
+                            adjFDIndex.Add(j - 1);
+                        }
+
+                        if (ConnectivityMatrix[-j] == segmentCounter)
+                        {
+                            adjNodesIndex.Add(ConnectivityMatrix[j]);
+                            adjFDIndex.Add(j - 1);
+                        }
+
+                    }
+
+                    for (int i = 0; i < 3; i++)
+                    {
+                        double[] adjNodesCoord = new double[adjFDIndex.Count];
+                        for (int k = 0; k < adjNodesIndex.Count; k++)
+                        {
+                            adjNodesCoord[k] = points[adjNodesIndex[k]].GetCoordinates()[i];
+                        }
+
+                        Equilibrium energyType = new Equilibrium(point.GetCoordinates()[i], adjNodesCoord, F.GetCoordinates()[i], adjNodesIndex.Count);
+
+                        List<(VariableSet, int)> variables = new List<(VariableSet, int)> { };
+                        foreach (int m in adjFDIndex) { variables.Add((forceDensities, m)); }
+
+                        gpa.AddEnergy(energyType, variables, 1);
+                    }
                 }
-
-                Equilibrium energyType = new Equilibrium(pointO.GetCoordinates()[i], adjNodesCoord, F.GetCoordinates()[i], 4);
-
-                List<(VariableSet, int)> variables = new List<(VariableSet, int)> {
-                        (forceDensities, segmentCounter), (forceDensities, segmentCounter + 1), (forceDensities, segmentCounter+2), (forceDensities, segmentCounter+3)};
-
-                gpa.AddEnergy(energyType, variables, 100.0);
-            
+                segmentCounter++;
             }
-
 
 
 
@@ -121,7 +204,7 @@ namespace BRIDGES.ConsoleApp
 
             gpa.InitialiseX();
 
-            for (int j = 0; j <  4; j++)
+            for (int j = 0; j < Nfd; j++)
             {
                 System.Console.Write(String.Format("{0:0.00000} ", gpa.X[j]));
             }
@@ -135,26 +218,23 @@ namespace BRIDGES.ConsoleApp
                 gpa.RunIteration(false);
             }
 
-            for (int j = 0; j < 4; j++)
+            for (int j = 0; j < Nfd; j++)
             {
                 System.Console.Write(String.Format("{0:0.00000} ", gpa.X[j]));
+                System.Console.WriteLine();
             }
 
             System.Console.WriteLine();
             System.Console.WriteLine();
             System.Console.WriteLine();
 
-            for (int j = 0; j < 4; j++)
-            {
-                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[j]));
-            }
 
             System.Console.WriteLine();
             System.Console.WriteLine("-----------FDFit---------");
             System.Console.WriteLine("Initial particle position:");
-            System.Console.WriteLine("X =" + pointO.X.ToString());
-            System.Console.WriteLine("Y =" + pointO.Y.ToString());
-            System.Console.WriteLine("Z =" + pointO.Z.ToString());
+            // System.Console.WriteLine("X =" + pointO.X.ToString());
+            //System.Console.WriteLine("Y =" + pointO.Y.ToString());
+            //System.Console.WriteLine("Z =" + pointO.Z.ToString());
             System.Console.WriteLine();
 
             #endregion
