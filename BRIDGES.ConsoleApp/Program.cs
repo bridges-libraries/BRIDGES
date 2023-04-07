@@ -21,7 +21,7 @@ namespace BRIDGES.ConsoleApp
             Console.WriteLine();
             Console.WriteLine($"Total time (in ms) : {stopwatch.ElapsedMilliseconds}");
 
-            FDMWorkingExample.FDMMWE();
+          //  FDMWorkingExample.FDMMWE();
 
             //Console.WriteLine("Hello World!");
         }
