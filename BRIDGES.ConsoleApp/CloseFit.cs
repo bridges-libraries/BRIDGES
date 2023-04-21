@@ -367,7 +367,7 @@ new Euc3D.Vector(0,0,-2.560788),
             #region Declaration of the Solver
 
             double tolerance = 0.0001;
-            int maxIter = 10;  // Useless as long as GPA is neing debuged
+            int maxIter = 1000;  // Useless as long as GPA is neing debuged
             GuidedProjectionAlgorithm gpa = new GuidedProjectionAlgorithm(tolerance, maxIter);
 
             #endregion
@@ -420,7 +420,7 @@ new Euc3D.Vector(0,0,-2.560788),
                         (nodes, segmentCounterA*3), (nodes, segmentCounterA*3 + 1), (nodes, segmentCounterA*3+2)
                     };
 
-                    gpa.AddConstraint(constraintTypeA, variablesA, 1);
+                    gpa.AddConstraint(constraintTypeA, variablesA);
                 }
                 segmentCounterA++;
             }
@@ -464,7 +464,7 @@ new Euc3D.Vector(0,0,-2.560788),
                             variablesB.Add((nodes, 3 * n + i));
                         }
 
-                        gpa.AddConstraint(constraintTypeB, variablesB, 1000);
+                        gpa.AddConstraint(constraintTypeB, variablesB);
 
                     }
                 }
@@ -550,7 +550,7 @@ internal class NodeEquilibrium : IQuadraticConstraintType
         for (int i = 0; i < adjNodesCount; i++)
         {
             dok_Hi.Add(2, i, adjNodesCount);
-            dok_Hi.Add(2, i, adjNodesCount + 1 + i);
+            dok_Hi.Add(-2, i, adjNodesCount + 1 + i);
         }
 
         LocalHi = new CompressedColumn(spaceDimension, spaceDimension, dok_Hi);
@@ -562,7 +562,7 @@ internal class NodeEquilibrium : IQuadraticConstraintType
 
 
         /******************** Define Ci ********************/
-        Ci = forceExt;
+        Ci = -forceExt;
     }
     #endregion
 }
