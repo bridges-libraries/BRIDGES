@@ -7,26 +7,23 @@ using BRIDGES.Solvers.GuidedProjection.Interfaces;
 using Euc3D = BRIDGES.Geometry.Euclidean3D;
 
 using BRIDGES.LinearAlgebra.Vectors;
+using BRIDGES.LinearAlgebra.Matrices;
+using BRIDGES.LinearAlgebra.Matrices.Sparse;
+using BRIDGES.LinearAlgebra.Matrices.Storage;
+using System.Linq;
 
 namespace BRIDGES.ConsoleApp
 {
-    internal class FDFit
+    internal class CloseFit
     {
-        internal static void FDFitWE()
+        internal static void CloseFitWE()
         {
             #region Geometry
             //The nodes of the model
             List<Point> points = new List<Point>
             {
-                //points.Add(new Point(0.0, 0.0, 0.0));
-                //points.Add(new Point(3.0, 0.0, 0.0));
-                //points.Add(new Point(2.0, 7.0, 0.0));
-                //points.Add(new Point(0.0, 1.0, 0.0));
-
-                //Point pointO = new Point(1.0, 1.5, 6);
-
-              new Point(11.298875,16.220161,0),
-new Point(13.229426,15.152515,0),
+                new Point(11.298875,16.220161,0),
+                new Point(13.229426,15.152515,0),
 new Point(15.88022,14.384027,0),
 new Point(18.963161,13.795034,0),
 new Point(22.196153,13.268365,0),
@@ -97,7 +94,7 @@ new Point(37.559697,29.659296,0),
         };
 
             List<Point> initialPoints = new List<Point>();
-            foreach(Point p in points) initialPoints.Add(new Point(p.X,p.Y,p.Z));
+            foreach (Point p in points) initialPoints.Add(new Point(p.X + 1, p.Y, p.Z + 1));
 
             Dictionary<Point, bool> IsSupport = new Dictionary<Point, bool>();
             foreach (Point point in points)
@@ -179,8 +176,6 @@ new Euc3D.Vector(0,0,-2.560788),
 
 
             };
-            // Euc3D.Vector F = new Euc3D.Vector(0.0, 0.0, -1.0);
-
 
             Dictionary<int, int> ConnectivityMatrix = new Dictionary<int, int>
             {
@@ -356,41 +351,22 @@ new Euc3D.Vector(0,0,-2.560788),
 
             };
 
-
-
-
-            //List<Particle> particles = new List<Particle>
-            //{
-            //    new Particle(pointA, Euc3D.Vector.Zero, true, 0),
-            //    new Particle(pointB, Euc3D.Vector.Zero, true, 1),
-            //    new Particle(pointC, Euc3D.Vector.Zero, true, 2),
-            //    new Particle(pointD, Euc3D.Vector.Zero, true, 3),
-            //    new Particle(pointO, F, false, 4)
-            //};
-
             //Definie the force densities of each elements
 
             int Nfd = ConnectivityMatrix.Count / 2;
-            double fdInit = -50;
+            double fdInit = -1;
 
             double[] qList = new double[Nfd];
             for (int i = 0; i < Nfd; i++) { qList[i] = fdInit; }
 
-            //Create the elements
-            //List<ForceDensity> elements = new List<ForceDensity>
-            //{
-            //    new ForceDensity(0,4,qList[0],1),
-            //    new ForceDensity(1,4,qList[1],1),
-            //    new ForceDensity(2,4,qList[2],1),
-            //    new ForceDensity(3,4,qList[3],1)
-            //};
+            double[] d = new double[Nfd];
+            for (int i = 0; i < Nfd; i++) d[i] = fdInit;
 
-            // Model myModel = new Model(particles, elements);
             #endregion
 
             #region Declaration of the Solver
 
-            double tolerance = 0.0000000001;
+            double tolerance = 0.0001;
             int maxIter = 10;  // Useless as long as GPA is neing debuged
             GuidedProjectionAlgorithm gpa = new GuidedProjectionAlgorithm(tolerance, maxIter);
 
@@ -399,11 +375,28 @@ new Euc3D.Vector(0,0,-2.560788),
             #region Set Variables
             int fdCount = Nfd;
 
-            /********** Force Densities **********/
 
-            int vertexDimension = 1;
-            VariableSet forceDensities = gpa.AddVariableSet(vertexDimension, fdCount);
+            /****** set force densities variables ****/
+
+            //int vertexDimension = 1;
+            VariableSet forceDensities = gpa.AddVariableSet(1, fdCount);
             for (int i = 0; i < fdCount; i++) { forceDensities.AddVariable(qList[i]); }
+
+
+            /****** set nodes variables ******/
+            int vertexDimension = 1;
+            VariableSet nodes = gpa.AddVariableSet(vertexDimension, 3 * points.Count);
+            foreach (Point p in points)
+            {
+                nodes.AddVariable(p.X);
+                nodes.AddVariable(p.Y);
+                nodes.AddVariable(p.Z);
+            }
+
+
+            /******* set dummy variables *******/
+            VariableSet dummy = gpa.AddVariableSet(1, fdCount);
+            for (int i = 0; i < fdCount; i++) { dummy.AddVariable(d[i]); }
 
 
             /********** Dummy variable (for LowerBound Constraint) **********/
@@ -413,11 +406,28 @@ new Euc3D.Vector(0,0,-2.560788),
 
             #endregion
 
-            #region Set Energy
+            #region Set Constraints
+
+            /********** Target Distance *************/
+            int segmentCounterA = 0;
+            foreach (Point p in points)
+            {
+                if (!IsSupport[p])
+                {
+                    DistanceToPoint constraintTypeA = new DistanceToPoint(initialPoints[segmentCounterA]);
+
+                    List<(VariableSet, int)> variablesA = new List<(VariableSet, int)> {
+                        (nodes, segmentCounterA*3), (nodes, segmentCounterA*3 + 1), (nodes, segmentCounterA*3+2)
+                    };
+
+                    gpa.AddConstraint(constraintTypeA, variablesA, 1);
+                }
+                segmentCounterA++;
+            }
 
             /********** Target Equilibrium **********/
 
-            int segmentCounter = 0;
+            int segmentCounterB = 0;
             foreach (Point point in points)
             {
                 if (!IsSupport[point])
@@ -426,13 +436,13 @@ new Euc3D.Vector(0,0,-2.560788),
                     List<int> adjFDIndex = new List<int>();
                     for (int j = 1; j < Nfd + 1; j++)
                     {
-                        if (ConnectivityMatrix[j] == segmentCounter)
+                        if (ConnectivityMatrix[j] == segmentCounterB)
                         {
                             adjNodesIndex.Add(ConnectivityMatrix[-j]);
                             adjFDIndex.Add(j - 1);
                         }
 
-                        if (ConnectivityMatrix[-j] == segmentCounter)
+                        if (ConnectivityMatrix[-j] == segmentCounterB)
                         {
                             adjNodesIndex.Add(ConnectivityMatrix[j]);
                             adjFDIndex.Add(j - 1);
@@ -442,26 +452,27 @@ new Euc3D.Vector(0,0,-2.560788),
 
                     for (int i = 0; i < 3; i++)
                     {
-                        double[] adjNodesCoord = new double[adjFDIndex.Count];
-                        for (int k = 0; k < adjNodesIndex.Count; k++)
+                        NodeEquilibrium constraintTypeB = new NodeEquilibrium(F[segmentCounterB].GetCoordinates()[i], adjNodesIndex.Count);
+
+                        List<(VariableSet, int)> variablesB = new List<(VariableSet, int)> { };
+                        foreach (int m in adjFDIndex) { variablesB.Add((forceDensities, m)); }
+
+                        variablesB.Add((nodes, segmentCounterB * 3 + i));
+
+                        foreach (int n in adjNodesIndex)
                         {
-                            adjNodesCoord[k] = points[adjNodesIndex[k]].GetCoordinates()[i];
+                            variablesB.Add((nodes, 3 * n + i));
                         }
 
-                        NodeEquilibriumFD energyType = new NodeEquilibriumFD(point.GetCoordinates()[i], adjNodesCoord, F[segmentCounter].GetCoordinates()[i], adjNodesIndex.Count);
-
-                        List<(VariableSet, int)> variables = new List<(VariableSet, int)> { };
-                        foreach (int m in adjFDIndex) { variables.Add((forceDensities, m)); }
-
-                        gpa.AddEnergy(energyType, variables);
-
+                        gpa.AddConstraint(constraintTypeB, variablesB, 1000);
 
                     }
                 }
-                segmentCounter++;
+                segmentCounterB++;
             }
 
 
+            /********** Target FD Upper Bound *******/
 
             #endregion
 
@@ -488,6 +499,14 @@ new Euc3D.Vector(0,0,-2.560788),
                 System.Console.Write(String.Format("{0:0.00000} ", gpa.X[j]));
                 System.Console.WriteLine();
             }
+            for (int k = 0; k < points.Count; k++)
+            {
+                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k]));
+                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k + 1]));
+                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k + 2]));
+
+                System.Console.WriteLine();
+            }
             #endregion
 
 
@@ -495,42 +514,109 @@ new Euc3D.Vector(0,0,-2.560788),
         }
     }
 }
+
+
 /// <summary>
-/// Energy enforcing the equilibrium of node O.
+/// Constraint enforcing a segment defined from two point variables, <em>pi</em> and <em>pj</em>, to have a given length <em>l</em> (computed with euclidean norm).
 /// </summary>
-internal class NodeEquilibriumFD : IEnergyType
+/// <remarks> The vector xReduced = [pi, pj].</remarks>
+internal class NodeEquilibrium : IQuadraticConstraintType
 {
     #region Properties
 
-    /// <inheritdoc cref="IEnergyType.LocalKi"/>
-    public SparseVector LocalKi { get; }
+    /// <inheritdoc cref="IQuadraticConstraintType.LocalHi"/>
+    public SparseMatrix LocalHi { get; }
 
-    /// <inheritdoc cref="IEnergyType.Si"/>
-    public double Si { get; }
+    /// <inheritdoc cref="IQuadraticConstraintType.LocalBi"/>
+    public SparseVector LocalBi { get; }
+
+    /// <inheritdoc cref="IQuadraticConstraintType.Ci"/>
+    public double Ci { get; }
 
     #endregion
 
     #region Constructors
 
     /// <summary>
-    /// Initialises a new instance of the <see cref="Equilibrium"/> class.
+    /// Initialises a new instance of the <see cref="CoherentLength"/> class.
     /// </summary>
-    /// <param name="extForce"> External force applied to node O. </param>
-    /// <param name="count"> Number of scalar value to sum. </param>
-    public NodeEquilibriumFD(double node0, double[] adjNodes, double extForce, int count)
+    /// <param name="targetLength"> Target length for the vector. </param>
+    /// <param name="spaceDimension"> Dimension of the space containing the points. </param>
+    public NodeEquilibrium(double forceExt, int adjNodesCount)
     {
-        /******************** Define LocalKi ********************/
+        int spaceDimension = 2 * adjNodesCount + 1;
+        /******************** Define LocalHi ********************/
+        DictionaryOfKeys dok_Hi = new DictionaryOfKeys(adjNodesCount * 2);
+        for (int i = 0; i < adjNodesCount; i++)
+        {
+            dok_Hi.Add(2, i, adjNodesCount);
+            dok_Hi.Add(2, i, adjNodesCount + 1 + i);
+        }
 
-        LocalKi = new SparseVector(count);
+        LocalHi = new CompressedColumn(spaceDimension, spaceDimension, dok_Hi);
 
-        for (int i = 0; i < count; i++)
-        { LocalKi[i] = node0 - adjNodes[i]; }
 
-        /******************** Define Si ********************/
+        /******************** Define LocalBi ********************/
 
-        Si = extForce;
+        LocalBi = null;
+
+
+        /******************** Define Ci ********************/
+        Ci = forceExt;
     }
-
     #endregion
 }
 
+/// <summary>
+/// Constraint enforcing a segment defined from two point variables, <em>pi</em> and <em>pj</em>, to have a given length <em>l</em> (computed with euclidean norm).
+/// </summary>
+/// <remarks> The vector xReduced = [pi, pj].</remarks>
+internal class DistanceToPoint : IQuadraticConstraintType
+{
+    #region Properties
+
+    /// <inheritdoc cref="IQuadraticConstraintType.LocalHi"/>
+    public SparseMatrix LocalHi { get; }
+
+    /// <inheritdoc cref="IQuadraticConstraintType.LocalBi"/>
+    public SparseVector LocalBi { get; }
+
+    /// <inheritdoc cref="IQuadraticConstraintType.Ci"/>
+    public double Ci { get; }
+
+    #endregion
+
+    #region Constructors
+
+    /// <summary>
+    /// Initialises a new instance of the <see cref="CoherentLength"/> class.
+    /// </summary>
+    /// <param name="targetLength"> Target length for the vector. </param>
+    /// <param name="spaceDimension"> Dimension of the space containing the points. </param>
+    public DistanceToPoint(Point initNode)
+    {
+        int spaceDimension = 3;
+        /******************** Define LocalHi ********************/
+        DictionaryOfKeys dok_Hi = new DictionaryOfKeys(spaceDimension);
+        for (int i = 0; i < spaceDimension; i++)
+        {
+            dok_Hi.Add(2, i, i);
+        }
+
+        LocalHi = new CompressedColumn(spaceDimension, spaceDimension, dok_Hi);
+
+
+        /******************** Define LocalBi ********************/
+        LocalBi = new SparseVector(spaceDimension);
+
+        LocalBi[0] = -2 * initNode.X;
+        LocalBi[1] = -2 * initNode.Y;
+        LocalBi[2] = -2 * initNode.Z;
+
+
+
+        /******************** Define Ci ********************/
+        Ci = initNode.X * initNode.X + initNode.Y * initNode.Y + initNode.Z * initNode.Z;
+    }
+    #endregion
+}
