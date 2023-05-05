@@ -371,7 +371,7 @@ new Euc3D.Vector(0,0,-2.560788),
             //Definie the force densities of each elements
 
             int Nfd = ConnectivityMatrix.Count / 2;
-            double fdInit = -50;
+            double fdInit = -5;
 
             double[] qList = new double[Nfd];
             for (int i = 0; i < Nfd; i++) { qList[i] = fdInit; }
