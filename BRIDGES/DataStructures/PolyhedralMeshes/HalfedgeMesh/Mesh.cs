@@ -1,5 +1,8 @@
 ﻿using System;
-using System.Collections.Generic; 
+using System.Collections.Generic;
+
+using Alg_Fund = BRIDGES.Algebra.Fundamentals;
+using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using BRIDGES.DataStructures.PolyhedralMeshes.Abstract;
 
@@ -10,8 +13,10 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
     /// Class for a polyhedral halfedge mesh data structure.
     /// </summary>
     /// <typeparam name="TPosition"> Type for the position of the vertex. </typeparam>
-    public class Mesh<TPosition> : Mesh<TPosition, Vertex<TPosition>, Edge<TPosition>, Face<TPosition>>
-        where TPosition : IEquatable<TPosition>
+    public partial class Mesh<TPosition> : Mesh<TPosition, Vertex<TPosition>, Edge<TPosition>, Face<TPosition>>
+        where TPosition : IEquatable<TPosition>,
+                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
+                          Alg_Sets.IGroupAction<TPosition, double>
     {
         #region Fields
 
@@ -53,6 +58,22 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         /// <remarks> This may not match with <see cref="FaceCount"/> if faces are removed from the mesh. </remarks>
         protected int _newFaceIndex;
 
+
+        /// <summary>
+        /// Background field for the <see cref="Tri"/> property
+        /// </summary>
+        private TriMesh _triangular = null;
+
+        /// <summary>
+        /// Background field for the <see cref="Quad"/> property
+        /// </summary>
+        public QuadMesh __quadrangular = null;
+
+        /// <summary>
+        /// Background field for the <see cref="Hexa"/> property
+        /// </summary>
+        public HexaMesh _hexagonal = null;
+
         #endregion
 
         #region Properties
@@ -79,6 +100,37 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         public override int FaceCount
         {
             get { return _faces.Count; }
+        }
+
+
+        /// <inheritdoc cref="IMesh{TPosition}.Tri"/>
+        public TriMesh Tri
+        {
+            get 
+            {
+                if (_triangular is null) { _triangular = new TriMesh(this); return _triangular; }
+                else { return _triangular; }
+            }
+        }
+
+        /// <inheritdoc cref="IMesh{TPosition}.Quad"/>
+        public QuadMesh Quad
+        {
+            get
+            {
+                if (__quadrangular is null) { __quadrangular = new QuadMesh(this); return __quadrangular; }
+                else { return __quadrangular; }
+            }
+        }
+
+        /// <inheritdoc cref="IMesh{TPosition}.Hexa"/>
+        public HexaMesh Hexa
+        {
+            get
+            {
+                if (_hexagonal is null) { _hexagonal = new HexaMesh(this); return _hexagonal; }
+                else { return _hexagonal; }
+            }
         }
 
         #endregion
@@ -249,7 +301,6 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         /// Removes the halfedge and its pair halfedge by keeping the mesh manifold. 
         /// </summary>
         /// <param name="halfedge"> The halfedge to remove.</param>
-        /// <returns><see langword="true"/> if the halfedge and its pair halfedge were successfully removed, <see langword="false"/> otherwise.</returns>
         public void RemoveHalfedge(Halfedge<TPosition> halfedge)
         {
             Halfedge<TPosition> pairHalfedge = halfedge.PairHalfedge;
@@ -285,7 +336,6 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         /// Erases any reference to the halfedge and its pair halfedge, then delete them from the mesh.
         /// </summary>
         /// <param name="halfedge"> The halfedge to erase.</param>
-        /// <returns><see langword="true"/> if the halfedge and its pair halfedge were successfully erased, <see langword="false"/> otherwise.</returns>
         public void EraseHalfedge(Halfedge<TPosition> halfedge)
         {
             Halfedge<TPosition> pairHalfedge = halfedge.PairHalfedge;
@@ -1177,6 +1227,18 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
             // Unset the face
             face.Unset();
         }
+
+
+        /******************** Methods - On Specific Meshes ********************/
+
+        /// <inheritdoc cref="Mesh{TPosition, TVertex, TEdge, TFace}.GetTriMesh"/>
+        protected override ITriMesh<TPosition> GetTriMesh() => Tri;
+
+        /// <inheritdoc cref="Mesh{TPosition, TVertex, TEdge, TFace}.GetQuadMesh"/>
+        protected override IQuadMesh<TPosition> GetQuadMesh() => Quad;
+
+        /// <inheritdoc cref="Mesh{TPosition, TVertex, TEdge, TFace}.GetHexaMesh"/>
+        protected override IHexaMesh<TPosition> GetHexaMesh() => Hexa;
 
         #endregion
     }

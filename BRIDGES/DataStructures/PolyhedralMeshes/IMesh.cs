@@ -5,10 +5,10 @@ using System.Collections.Generic;
 namespace BRIDGES.DataStructures.PolyhedralMeshes
 {
     /// <summary>
-    /// Abstract class for a polyhedral mesh data structure.
+    /// Interface for a polyhedral mesh data structure.
     /// </summary>
     /// <typeparam name="TPosition"> Type of the vertex position. </typeparam>
-    public interface IMesh<TPosition>
+    public interface IMesh<TPosition> : ICloneable
         where TPosition : IEquatable<TPosition>
     {
         #region Properties
@@ -27,6 +27,22 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
         /// Gets the number of faces in the current mesh.
         /// </summary>
         int FaceCount { get; }
+
+
+        /// <summary>
+        /// Property to access the methods dedicated to triangular faces and meshes.
+        /// </summary>
+        ITriMesh<TPosition> Tri { get; }
+
+        /// <summary>
+        /// Property to access the methods dedicated to quadrilateral faces and meshes.
+        /// </summary>
+        IQuadMesh<TPosition> Quad { get; }
+
+        /// <summary>
+        /// Property to access the methods dedicated to hexagonal faces and meshes.
+        /// </summary>
+        IHexaMesh<TPosition> Hexa { get; }
 
         #endregion
 
@@ -218,4 +234,3 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
 
         #endregion
     }
-}

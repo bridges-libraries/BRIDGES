@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+	<!-- Project properties -->
 	<PropertyGroup>
 		<Title>BRIDGES</Title>
 		<Authors>École des Ponts ParisTech</Authors>
@@ -19,15 +20,42 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	</PropertyGroup>
 
+	<!-- Internal Access for the test project -->
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>BRIDGES.Test</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
 
+	<!-- NuGet Dependencies -->
 	<ItemGroup>
 	  <PackageReference Include="CSparse" Version="3.7.0" />
 	  <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
 	</ItemGroup>
-	
+
+	<!-- File Ordering in Solution Explorer Dependencies -->
+	<ItemGroup>
+		<!-- Store Mesh.TriMesh.cs, Mesh.QuadMesh.cs and Mesh.HexaMesh.cs under FaceVertexMesh\Mesh.cs -->
+		<Compile Update=".\DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.TriMesh.cs">
+			<DependentUpon>Mesh.cs</DependentUpon>
+		</Compile>
+		<Compile Update=".\DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.QuadMesh.cs">
+			<DependentUpon>Mesh.cs</DependentUpon>
+		</Compile>
+		<Compile Update=".\DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.HexaMesh.cs">
+			<DependentUpon>Mesh.cs</DependentUpon>
+		</Compile>
+		<!-- Store Mesh.TriMesh.cs, Mesh.QuadMesh.cs and Mesh.HexaMesh.cs under HalfedgeMesh\Mesh.cs -->
+		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.HexaMesh.cs">
+		  <DependentUpon>Mesh.cs</DependentUpon>
+		</Compile>
+		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.QuadMesh.cs">
+		  <DependentUpon>Mesh.cs</DependentUpon>
+		</Compile>
+		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.TriMesh.cs">
+		  <DependentUpon>Mesh.cs</DependentUpon>
+		</Compile>
+		
+	</ItemGroup>
+
 </Project>

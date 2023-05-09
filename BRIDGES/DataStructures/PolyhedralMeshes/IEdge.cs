@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BRIDGES.DataStructures.PolyhedralMeshes
 {
     /// <summary>
-    /// Abstract class for an edge in a polyhedral mesh data structure.
+    /// Interface for an edge in a polyhedral mesh data structure.
     /// </summary>
     /// <typeparam name="TPosition"> Type of the vertex position. </typeparam>
     public interface IEdge<TPosition>
