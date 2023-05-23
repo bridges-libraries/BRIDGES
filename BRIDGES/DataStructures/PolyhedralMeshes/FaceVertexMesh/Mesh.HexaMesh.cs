@@ -1,12 +1,9 @@
 ﻿using System;
 
-using BRIDGES.DataStructures.PolyhedralMeshes.Abstract;
-
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
 {
-    public partial class Mesh<TPosition> : Mesh<TPosition, Vertex<TPosition>, Edge<TPosition>, Face<TPosition>>
-        where TPosition : IEquatable<TPosition>
+    public partial class Mesh<TPosition>
     {
         /// <summary>
         /// Class containing methods dedicated to hexagonal faces and meshes. 

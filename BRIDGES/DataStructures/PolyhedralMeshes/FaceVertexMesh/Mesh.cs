@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Alg_Fund = BRIDGES.Algebra.Fundamentals;
+using Alg_Sets = BRIDGES.Algebra.Sets;
+
 using BRIDGES.DataStructures.PolyhedralMeshes.Abstract;
-using MathNet.Numerics.Distributions;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
@@ -12,7 +14,9 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
     /// </summary>
     /// <typeparam name="TPosition"> Type for the position of the vertex. </typeparam>
     public partial class Mesh<TPosition> : Mesh<TPosition, Vertex<TPosition>, Edge<TPosition>, Face<TPosition>>
-        where TPosition : IEquatable<TPosition>
+        where TPosition : IEquatable<TPosition>,
+                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
+                          Alg_Sets.IGroupAction<TPosition, double>
     {
         #region Fields
 

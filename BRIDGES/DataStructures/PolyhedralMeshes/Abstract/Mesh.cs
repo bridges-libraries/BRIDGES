@@ -481,12 +481,12 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
 
         /******************** Properties ********************/
 
-
         ITriMesh<TPosition> IMesh<TPosition>.Tri => GetTriMesh();
 
         IQuadMesh<TPosition> IMesh<TPosition>.Quad => GetQuadMesh();
 
         IHexaMesh<TPosition> IMesh<TPosition>.Hexa => GetHexaMesh();
+
 
         /******************** Methods ********************/
 

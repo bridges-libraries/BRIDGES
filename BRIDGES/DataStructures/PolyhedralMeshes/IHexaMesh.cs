@@ -1,5 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+
+using Alg_Fund = BRIDGES.Algebra.Fundamentals;
+using Alg_Sets = BRIDGES.Algebra.Sets;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes
@@ -10,7 +12,9 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
     /// <remarks> An hexagonal mesh is a mesh which contains only hexagonal faces.
     /// No assumptions should be made on the valency of the mesh vertices.</remarks>
     public interface IHexaMesh<TPosition>
-        where TPosition : IEquatable<TPosition>
+        where TPosition : IEquatable<TPosition>,
+                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
+                          Alg_Sets.IGroupAction<TPosition, double>
     {
         #region Properties
 
