@@ -31,31 +31,28 @@
 	<ItemGroup>
 	  <PackageReference Include="CSparse" Version="3.7.0" />
 	  <PackageReference Include="MathNet.Numerics" Version="5.0.0" />
+	  <PackageReference Include="System.Text.Json" Version="7.0.2" />
 	</ItemGroup>
 
 	<!-- File Ordering in Solution Explorer Dependencies -->
 	<ItemGroup>
 		<!-- Store Mesh.TriMesh.cs, Mesh.QuadMesh.cs and Mesh.HexaMesh.cs under FaceVertexMesh\Mesh.cs -->
-		<Compile Update=".\DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.TriMesh.cs">
-			<DependentUpon>Mesh.cs</DependentUpon>
-		</Compile>
-		<Compile Update=".\DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.QuadMesh.cs">
-			<DependentUpon>Mesh.cs</DependentUpon>
-		</Compile>
-		<Compile Update=".\DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.HexaMesh.cs">
+		<Compile Update="DataStructures\PolyhedralMeshes\FaceVertexMesh\Mesh.*.cs">
 			<DependentUpon>Mesh.cs</DependentUpon>
 		</Compile>
 		<!-- Store Mesh.TriMesh.cs, Mesh.QuadMesh.cs and Mesh.HexaMesh.cs under HalfedgeMesh\Mesh.cs -->
-		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.HexaMesh.cs">
-		  <DependentUpon>Mesh.cs</DependentUpon>
+		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.*.cs">
+			<DependentUpon>Mesh.cs</DependentUpon>
 		</Compile>
-		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.QuadMesh.cs">
-		  <DependentUpon>Mesh.cs</DependentUpon>
+		<!-- Store Serialise.*.cs, under Serialisation\Serialise.cs -->
+		<Compile Update="Serialisation\Serialise.*.cs">
+			<DependentUpon>Serialise.cs</DependentUpon>
 		</Compile>
-		<Compile Update="DataStructures\PolyhedralMeshes\HalfedgeMesh\Mesh.TriMesh.cs">
-		  <DependentUpon>Mesh.cs</DependentUpon>
+		<!-- Store Deserialise.*.cs, under Serialisation\Deserialise.cs -->
+		<Compile Update="Serialisation\Deserialise.*.cs">
+			<DependentUpon>Deserialise.cs</DependentUpon>
 		</Compile>
-		
+
 	</ItemGroup>
 
 </Project>

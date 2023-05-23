@@ -13,6 +13,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
     /// Class for a polyhedral face-vertex mesh data structure.
     /// </summary>
     /// <typeparam name="TPosition"> Type for the position of the vertex. </typeparam>
+    [Serialisation.Serialisable]
     public partial class Mesh<TPosition> : Mesh<TPosition, Vertex<TPosition>, Edge<TPosition>, Face<TPosition>>
         where TPosition : IEquatable<TPosition>,
                           Alg_Fund.IAddable<TPosition> /* To Do : Remove */,

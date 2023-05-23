@@ -12,6 +12,7 @@ namespace BRIDGES.Geometry.Euclidean3D
     /// <summary>
     /// Structure defining a point in three-dimensional euclidean space.
     /// </summary>
+    [Serialisation.Serialisable]
     public struct Point :
           IEquatable<Point>,
           Alg_Fund.IAddable<Point> /* To Do : Remove */, 
