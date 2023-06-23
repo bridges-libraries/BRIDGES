@@ -2,6 +2,7 @@
 using BRIDGES.ConsoleApp;
 using System;
 using System.Collections.Generic;
+using BRIDGES.ConsoleApp.Examples.GuidedProjection;
 
 namespace BRIDGES.ConsoleApp
 {
@@ -12,6 +13,7 @@ namespace BRIDGES.ConsoleApp
 
             System.Diagnostics.Stopwatch stopwatch = System.Diagnostics.Stopwatch.StartNew();
 
+           // FDFit.FDFitWE();
             CloseFit.CloseFitWE();
             //DualContour.CoreFunction();
 
