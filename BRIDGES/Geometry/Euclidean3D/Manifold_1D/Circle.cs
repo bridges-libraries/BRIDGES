@@ -194,7 +194,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Circle at {Centre}, of radius {Radius}.";
+            return $"Circle (O:{Centre}, R:{Radius})";
         }
 
         #endregion

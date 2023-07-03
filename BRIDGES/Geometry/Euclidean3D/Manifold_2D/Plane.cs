@@ -8,6 +8,10 @@ namespace BRIDGES.Geometry.Euclidean3D
     /// <summary>
     /// Class defining a plane in three-dimensional euclidean space.
     /// </summary>
+    /// <remarks> 
+    /// The vectors defining the <see cref="Plane"/> can have any length but zero. <br/>
+    /// The in-plane vectors <see cref="UAxis"/> and <see cref="VAxis"/> are not necessarily orthogonal to one another.
+    /// </remarks>
     public sealed class Plane : IEquatable<Plane>, Geo_Ker.IGeometricallyEquatable<Plane>
     {
         #region Fields
@@ -307,7 +311,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Plane at {Origin}, of normal {Normal}.";
+            return $"Plane (O:{Origin}, N:{Normal})";
         }
 
         #endregion

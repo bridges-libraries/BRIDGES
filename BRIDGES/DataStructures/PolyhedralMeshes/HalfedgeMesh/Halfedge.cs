@@ -210,7 +210,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString()
         {
-            return $"HeHalfedge {Index} from vertex {StartVertex.Index} to {EndVertex.Index}.";
+            return $"Halfedge {Index}";
         }
 
         #endregion

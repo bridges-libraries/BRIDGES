@@ -433,9 +433,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            if (IsClosed) { return $"Polyline with {VertexCount} vertices."; }
-            else { return $"Closed polyline with {VertexCount} vertices."; }
-            
+            return IsClosed ? $"Closed Polyline (V:{VertexCount})" : $"Open Polyline (V:{VertexCount})";
         }
 
         #endregion

@@ -327,7 +327,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Vector with {Size} components.";
+            return $"Vector (S:{Size})";
         }
 
         #endregion

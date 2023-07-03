@@ -126,7 +126,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString()
         {
-            return $"Vertex {Index} at {Position}.";
+            return $"Vertex {Index}";
         }
 
         #endregion

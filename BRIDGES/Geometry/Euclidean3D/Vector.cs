@@ -499,12 +499,17 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// </remarks>
         /// <param name="other"> <see cref="Vector"/> to compare with. </param>
         /// <returns> <see langword="true"/> if the two <see cref="Vector"/> are equal, <see langword="false"/> otherwise. </returns>
-        public bool Equals(Vector other) => (this - other).SquaredLength() < Settings.AbsolutePrecision;
+        public bool Equals(Vector other)
+        {
+            return Math.Abs(this.X - other.X) < Settings.AbsolutePrecision
+                    & Math.Abs(this.Y - other.Y) < Settings.AbsolutePrecision
+                    & Math.Abs(this.Z - other.Z) < Settings.AbsolutePrecision;
+        }
 
         #endregion
 
 
-        #region Overrides
+        #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj)
@@ -521,7 +526,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"({X},{Y},{Z})";
+            return $"({X}, {Y}, {Z})";
         }
 
         #endregion-

@@ -278,7 +278,7 @@ namespace BRIDGES.Geometry.Projective3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"({_coordinates[0]},{_coordinates[1]},{_coordinates[2]},{_coordinates[3]})";
+            return $"({_coordinates[0]}, {_coordinates[1]}, {_coordinates[2]}, {_coordinates[3]})";
         }
 
         #endregion

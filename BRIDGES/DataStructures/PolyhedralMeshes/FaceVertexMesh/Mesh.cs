@@ -263,7 +263,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"FvMesh with {VertexCount} vertices, {EdgeCount} edges, {FaceCount} faces.";
+            return $"FvMesh (V:{VertexCount}, E:{EdgeCount}, F:{FaceCount})";
         }
 
         #endregion

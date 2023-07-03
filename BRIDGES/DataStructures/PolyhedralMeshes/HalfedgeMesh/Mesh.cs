@@ -470,7 +470,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"HeMesh with {VertexCount} vertices, {HalfedgeCount} halfedges, {FaceCount} faces.";
+            return $"HeMesh (V:{VertexCount}, H:{HalfedgeCount}, F:{FaceCount})";
         }
 
         #endregion

@@ -684,7 +684,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Sparse vector with {NonZerosCount} non-zero components.";
+            return $"Sparse Vector (S:{Size})";
         }
 
         #endregion

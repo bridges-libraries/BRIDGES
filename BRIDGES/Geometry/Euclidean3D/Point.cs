@@ -390,12 +390,17 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// </remarks>
         /// <param name="other"> <see cref="Point"/> to compare with. </param>
         /// <returns> <see langword="true"/> if the two <see cref="Point"/> are equal, <see langword="false"/> otherwise. </returns>
-        public bool Equals(Point other) => (this.DistanceTo(other)) < Settings.AbsolutePrecision;
+        public bool Equals(Point other)
+        {
+            return Math.Abs(this.X - other.X) < Settings.AbsolutePrecision
+                    & Math.Abs(this.Y - other.Y) < Settings.AbsolutePrecision
+                    & Math.Abs(this.Z - other.Z) < Settings.AbsolutePrecision;
+        }
 
         #endregion
 
 
-        #region Overrides
+        #region Override : Object
 
         /******************** object ********************/
 
@@ -414,7 +419,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"({X},{Y},{Z})";
+            return $"({X}, {Y}, {Z})";
         }
 
         #endregion

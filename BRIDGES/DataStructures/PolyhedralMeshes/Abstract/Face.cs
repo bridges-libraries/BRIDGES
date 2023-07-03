@@ -114,17 +114,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString()
         {
-            IReadOnlyList<IVertex<TPosition>> faceVertices = FaceVertices();
-
-            string text = $"Face {Index} comprising the vertices (";
-
-            for (int i_FV = 0; i_FV < faceVertices.Count - 1; i_FV++)
-            {
-                text += faceVertices[i_FV].Index + ",";
-            }
-            text += faceVertices[faceVertices.Count - 1].Index + ").";
-
-            return text;
+            return $"Face {Index}";
         }
 
         #endregion

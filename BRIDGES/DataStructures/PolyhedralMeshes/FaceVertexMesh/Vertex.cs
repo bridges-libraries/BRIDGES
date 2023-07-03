@@ -60,7 +60,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString()
         {
-            return $"FvVertex {Index} at {Position}.";
+            return $"Vertex {Index}";
         }
 
         #endregion

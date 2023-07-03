@@ -128,7 +128,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Line starting at {Origin}, aligned with the direction {Axis}.";
+            return $"Line (O:{Origin}, V:{Axis})";
         }
 
         #endregion

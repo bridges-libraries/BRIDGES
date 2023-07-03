@@ -115,7 +115,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString()
         {
-            return $"Edge {Index} from vertex {StartVertex.Index} to {EndVertex.Index}.";
+            return $"Edge {Index}";
         }
 
         #endregion
