@@ -20,9 +20,18 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
         #region Fields
 
         /// <summary>
-        /// The halfedge whose index is twice the index of the current edge.
+        /// The halfedge whose index is twice the index of this edge.
         /// </summary>
         private Halfedge<TPosition> _halfedge;
+
+        #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the corresponding halfedge whose index is twice the index of this edge.
+        /// </summary>
+        internal Halfedge<TPosition> CorrespondingHalfedge { get => _halfedge; }
 
         #endregion
 

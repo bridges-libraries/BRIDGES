@@ -1,15 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Alg_Fund = BRIDGES.Algebra.Fundamentals;
+using Alg_Sets = BRIDGES.Algebra.Sets;
+
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes
 {
     /// <summary>
-    /// Abstract class for a polyhedral mesh data structure.
+    /// Interface for a polyhedral mesh data structure.
     /// </summary>
     /// <typeparam name="TPosition"> Type of the vertex position. </typeparam>
-    public interface IMesh<TPosition>
-        where TPosition : IEquatable<TPosition>
+    public interface IMesh<TPosition> : ICloneable
+        where TPosition : IEquatable<TPosition>,
+                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
+                          Alg_Sets.IGroupAction<TPosition, double>
     {
         #region Properties
 
@@ -27,6 +32,22 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
         /// Gets the number of faces in the current mesh.
         /// </summary>
         int FaceCount { get; }
+
+
+        /// <summary>
+        /// Property to access the methods dedicated to triangular faces and meshes.
+        /// </summary>
+        ITriMesh<TPosition> Tri { get; }
+
+        /// <summary>
+        /// Property to access the methods dedicated to quadrilateral faces and meshes.
+        /// </summary>
+        IQuadMesh<TPosition> Quad { get; }
+
+        /// <summary>
+        /// Property to access the methods dedicated to hexagonal faces and meshes.
+        /// </summary>
+        IHexaMesh<TPosition> Hexa { get; }
 
         #endregion
 

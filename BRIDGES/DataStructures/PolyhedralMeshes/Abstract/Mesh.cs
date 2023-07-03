@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+
+using Alg_Fund = BRIDGES.Algebra.Fundamentals;
+using Alg_Sets = BRIDGES.Algebra.Sets;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
@@ -12,9 +14,10 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
     /// <typeparam name="TVertex"> Type of vertex for the mesh. </typeparam>
     /// <typeparam name="TEdge"> Type of vertex for the mesh. </typeparam>
     /// <typeparam name="TFace"> Type of vertex for the mesh.</typeparam>
-    public abstract class Mesh<TPosition, TVertex, TEdge, TFace> : IMesh<TPosition>,
-        ICloneable
-        where TPosition : IEquatable<TPosition>
+    public abstract partial class Mesh<TPosition, TVertex, TEdge, TFace> : IMesh<TPosition>
+        where TPosition : IEquatable<TPosition>,
+                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
+                          Alg_Sets.IGroupAction<TPosition, double>
         where TVertex : Vertex<TPosition, TVertex, TEdge, TFace>
         where TEdge : Edge<TPosition, TVertex, TEdge, TFace>
         where TFace : Face<TPosition, TVertex, TEdge, TFace>
@@ -424,6 +427,30 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
         /// <param name="face"> Face to erase. </param>
         public abstract void EraseFace(TFace face);
 
+
+        /******************** On Specific Meshes ********************/
+
+        /// <inheritdoc cref="IMesh{TVector}.Tri"/>
+        /// <remarks>
+        /// This method is a work-around for the <see cref="IMesh{TPosition}.Tri"/> property. 
+        /// This method should refer to a property named "Tri" returning a specific implementation of the <see cref="ITriMesh{TPosition}"/> interface. 
+        /// </remarks>
+        protected abstract ITriMesh<TPosition> GetTriMesh();
+
+        /// <inheritdoc cref="IMesh{TVector}.Quad"/>
+        /// <remarks>
+        /// This method is a work-around for the <see cref="IMesh{TPosition}.Quad"/> property. 
+        /// This method should refer to a property named "Quad" returning a specific implementation of the <see cref="IQuadMesh{TPosition}"/> interface. 
+        /// </remarks>
+        protected abstract IQuadMesh<TPosition> GetQuadMesh();
+
+        /// <inheritdoc cref="IMesh{TVector}.Hexa"/>
+        /// <remarks>
+        /// This method is a work-around for the <see cref="IMesh{TPosition}.Hexa"/> property. 
+        /// This method should refer to a property named "Hexa" returning a specific implementation of the <see cref="IHexaMesh{TPosition}"/> interface. 
+        /// </remarks>
+        protected abstract IHexaMesh<TPosition> GetHexaMesh();
+
         #endregion
 
 
@@ -452,12 +479,18 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
 
         #region Explicit : IMesh<TPosition>
 
+        /******************** Properties ********************/
+
+        ITriMesh<TPosition> IMesh<TPosition>.Tri => GetTriMesh();
+
+        IQuadMesh<TPosition> IMesh<TPosition>.Quad => GetQuadMesh();
+
+        IHexaMesh<TPosition> IMesh<TPosition>.Hexa => GetHexaMesh();
+
+
         /******************** Methods ********************/
 
-        IVertex<TPosition> IMesh<TPosition>.AddVertex(TPosition position)
-        {
-            return AddVertex(position);
-        }
+        IVertex<TPosition> IMesh<TPosition>.AddVertex(TPosition position) => AddVertex(position);
 
         IVertex<TPosition> IMesh<TPosition>.GetVertex(int index)
         {
