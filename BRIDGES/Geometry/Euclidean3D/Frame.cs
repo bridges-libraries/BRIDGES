@@ -192,7 +192,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Frame at {Origin}, of dimension {Dimension}.";
+            return $"Frame (O:{Origin}, {Dimension}D)";
         }
 
         #endregion

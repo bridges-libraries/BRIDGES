@@ -66,7 +66,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh
         /// <inheritdoc cref="object.ToString()"/>
         public override string ToString()
         {
-            return $"FvEdge {Index} from vertex {StartVertex.Index} to {EndVertex.Index}.";
+            return $"Edge {Index}";
         }
 
         #endregion

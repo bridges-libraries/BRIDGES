@@ -175,7 +175,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Segment from {StartPoint} to {EndPoint}.";
+            return $"Segment (S:{StartPoint}, E:{EndPoint})";
         }
 
         #endregion

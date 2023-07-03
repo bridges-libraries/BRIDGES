@@ -698,7 +698,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"({ScalarPart},{I},{J},{K})";
+            return $"({ScalarPart}, {I}, {J}, {K})";
         }
 
         #endregion

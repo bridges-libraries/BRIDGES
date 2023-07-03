@@ -541,7 +541,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"({RealPart},{ImaginaryPart})";
+            return $"({RealPart}, {ImaginaryPart})";
         }
 
         #endregion

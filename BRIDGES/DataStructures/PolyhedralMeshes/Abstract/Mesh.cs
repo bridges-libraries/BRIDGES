@@ -471,7 +471,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Mesh with {VertexCount} vertices, {EdgeCount} edges, {FaceCount} faces.";
+            return $"Mesh (V:{VertexCount}, E:{EdgeCount}, F:{FaceCount})";
         }
 
         #endregion

@@ -598,7 +598,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Dense vector with {Size} components.";
+            return $"Dense Vector (S:{Size})";
         }
 
         #endregion

@@ -12,9 +12,9 @@ namespace BRIDGES.Geometry.Euclidean3D
         #region Properties
 
         /// <summary>
-        /// Gets the start <see cref="Point"/> of the current <see cref="Ray"/>.
+        /// Gets the origin of the current <see cref="Ray"/>.
         /// </summary>
-        public Point StartPoint { get; set;  }
+        public Point Origin { get; set;  }
 
         /// <summary>
         /// Gets the axis of the current <see cref="Ray"/>.
@@ -28,11 +28,11 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of the <see cref="Ray"/> structure by defining its origin and axis.
         /// </summary>
-        /// <param name="start"> Start <see cref="Point"/> of the <see cref="Ray"/>. </param>
+        /// <param name="origin"> Origin of the <see cref="Ray"/>. </param>
         /// <param name="axis"> Axis of the <see cref="Ray"/>. </param>
-        public Ray(Point start, Vector axis)
+        public Ray(Point origin, Vector axis)
         {
-            StartPoint = start;
+            Origin = origin;
             Axis = axis;
         }
 
@@ -42,7 +42,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <param name="ray"> <see cref="Ray"/> to copy. </param>
         public Ray(Ray ray)
         {
-            StartPoint = ray.StartPoint;
+            Origin = ray.Origin;
             Axis = ray.Axis;
         }
 
@@ -71,7 +71,7 @@ namespace BRIDGES.Geometry.Euclidean3D
             Vector axis = Axis;
             axis.Unitise();
 
-            return StartPoint + (lengthParameter * axis);
+            return Origin + (lengthParameter * axis);
         }
 
 
@@ -85,7 +85,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <returns> <see langword="true"/> if the two <see cref="Ray"/> are equal, <see langword="false"/> otherwise. </returns>
         public bool Equals(Ray other)
         {
-            return Vector.AreParallel(Axis, other.Axis) && StartPoint.Equals(other.StartPoint);
+            return Vector.AreParallel(Axis, other.Axis) && Origin.Equals(other.Origin);
         }
 
         #endregion
@@ -108,7 +108,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <inheritdoc cref="object.ToString"/>
         public override string ToString()
         {
-            return $"Ray starting at {StartPoint}, aligned with the direction {Axis}.";
+            return $"Ray (O:{Origin}, V:{Axis})";
         }
 
         #endregion
