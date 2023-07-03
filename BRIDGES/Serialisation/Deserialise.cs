@@ -33,7 +33,7 @@ namespace BRIDGES.Serialisation
             }
             else
             {
-                MethodInfo serialiser = FindDeserialiserMethod(serialisedType);
+                MethodInfo serialiser = FindDeserialiser(serialisedType);
 
                 if (serialiser is null) { throw new MissingMethodException("The object is marked as serialisable but the serialiser method could not be found."); }
                 else
@@ -52,7 +52,7 @@ namespace BRIDGES.Serialisation
         /// </summary>
         /// <param name="deserialisableType"> Type whose deserialiser method is being searched. </param>
         /// <returns> The method metadata if it exists, <see langword="null"/> otherwise. </returns>
-        private static MethodInfo FindDeserialiserMethod(Type deserialisableType)
+        private static MethodInfo FindDeserialiser(Type deserialisableType)
         {
             // Go through the public methods of the Deserialise class
             Type deserialiserClassType = typeof(Deserialise);
