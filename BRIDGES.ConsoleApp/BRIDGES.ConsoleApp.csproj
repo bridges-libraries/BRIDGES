@@ -9,7 +9,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<OutputType>Exe</OutputType>
 		
-		<RepositoryUrl>https://github.com/Ecole-des-Ponts-ParisTech/BRIDGES</RepositoryUrl>
+		<RepositoryUrl>https://github.com/bridges-libraries/BRIDGES</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
