@@ -1,9 +1,7 @@
-﻿using BRIDGES.Serialisation.Formats;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
-namespace BRIDGES.Serialisation
+
+namespace BRIDGES.Serialisation.Formats
 {
     /// <summary>
     /// Specifies the file formats available for the meshes.

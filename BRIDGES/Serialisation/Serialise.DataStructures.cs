@@ -21,18 +21,18 @@ namespace BRIDGES.Serialisation
         /// <param name="format"> Format of the serialisation. </param>
         /// <returns> A string representation of the <see cref="Meshes.HalfedgeMesh.Mesh{TPosition}"/>. </returns>
         [Serialiser(typeof(Meshes.HalfedgeMesh.Mesh<>))]
-        public static string HalfedgeMesh<TPosition>(Meshes.HalfedgeMesh.Mesh<TPosition> mesh, PolyhedralMeshSerialisationFormat format)
+        public static string HalfedgeMesh<TPosition>(Meshes.HalfedgeMesh.Mesh<TPosition> mesh, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
                           Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
                           Algebra.Sets.IGroupAction<TPosition, double>
         {
             switch (format)
             {
-                case PolyhedralMeshSerialisationFormat.Json:
+                case Formats.PolyhedralMeshSerialisationFormat.Json:
                     return HalfedgeMeshToJson(mesh);
-                case PolyhedralMeshSerialisationFormat.Xml:
+                case Formats.PolyhedralMeshSerialisationFormat.Xml:
                     throw new NotImplementedException();
-                case PolyhedralMeshSerialisationFormat.Obj:
+                case Formats.PolyhedralMeshSerialisationFormat.Obj:
                     return PolyhedralMeshToObj(mesh);
                 default:
                     throw new NotImplementedException("The specified file format for the halfedge mesh serialisation is not implemented.");
@@ -47,18 +47,18 @@ namespace BRIDGES.Serialisation
         /// <param name="format"> Format of the serialisation. </param>
         /// <returns> A string representation of the <see cref="Meshes.FaceVertexMesh.Mesh{TPosition}"/>. </returns>
         [Serialiser(typeof(Meshes.FaceVertexMesh.Mesh<>))]
-        public static string FaceVertexMesh<TPosition>(Meshes.FaceVertexMesh.Mesh<TPosition> mesh, PolyhedralMeshSerialisationFormat format)
+        public static string FaceVertexMesh<TPosition>(Meshes.FaceVertexMesh.Mesh<TPosition> mesh, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
                           Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
                           Algebra.Sets.IGroupAction<TPosition, double>
         {
             switch (format)
             {
-                case PolyhedralMeshSerialisationFormat.Json:
+                case Formats.PolyhedralMeshSerialisationFormat.Json:
                     throw new NotImplementedException();
-                case PolyhedralMeshSerialisationFormat.Xml:
+                case Formats.PolyhedralMeshSerialisationFormat.Xml:
                     throw new NotImplementedException();
-                case PolyhedralMeshSerialisationFormat.Obj:
+                case Formats.PolyhedralMeshSerialisationFormat.Obj:
                     return PolyhedralMeshToObj(mesh);
                 default:
                     throw new NotImplementedException("The specified file format for the face|vertex mesh serialisation is not implemented.");
@@ -73,18 +73,18 @@ namespace BRIDGES.Serialisation
         /// <param name="mesh"> <see cref="Meshes.IMesh{TPosition}"/> to serialise. </param>
         /// <param name="format"> Format of the serialisation. </param>
         /// <returns> A string representation of the <see cref="Meshes.IMesh{TPosition}"/>. </returns>
-        public static string PolyhedralMesh<TPosition>(Meshes.IMesh<TPosition> mesh, PolyhedralMeshSerialisationFormat format)
+        public static string PolyhedralMesh<TPosition>(Meshes.IMesh<TPosition> mesh, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
                           Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
                           Algebra.Sets.IGroupAction<TPosition, double>
         {
             switch (format)
             {
-                case PolyhedralMeshSerialisationFormat.Json:
+                case Formats.PolyhedralMeshSerialisationFormat.Json:
                     throw new NotImplementedException();
-                case PolyhedralMeshSerialisationFormat.Xml:
+                case Formats.PolyhedralMeshSerialisationFormat.Xml:
                     throw new NotImplementedException();
-                case PolyhedralMeshSerialisationFormat.Obj:
+                case Formats.PolyhedralMeshSerialisationFormat.Obj:
                     return PolyhedralMeshToObj(mesh);
                 default:
                     throw new NotImplementedException("The specified file format for the polyhedral mesh serialisation is not implemented.");
