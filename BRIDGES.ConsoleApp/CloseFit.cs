@@ -24,17 +24,22 @@ namespace BRIDGES.ConsoleApp
             //The nodes of the model
             List<Point> points = new List<Point>
             {
-new Point(40.18845,37.668301,0),
-new Point(21.769007,34.606365,0),
-new Point(29.82111,57.56171,0),
-new Point(25.025793,45.277184,11.96329),
-new Point(4.629511,52.466801,0),
+new Point(76.37944,65.210777,0),
+new Point(90.466629,56.388199,0),
+new Point(75.794128,32.960308,0),
+new Point(75.794128,47.821083,15.058298),
+new Point(57.653465,41.452553,0),
+new Point(50.185642,62.724533,0),
+new Point(60.595333,69.966057,0),
+new Point(65.800179,57.293388,12.37736),
+
+
 
 
         };
 
             List<Point> initialPoints = new List<Point>();
-            foreach (Point p in points) initialPoints.Add(new Point(p.X, p.Y, p.Z + 1));
+            foreach (Point p in points) initialPoints.Add(new Point(p.X, p.Y, p.Z));
 
             Dictionary<Point, bool> IsSupport = new Dictionary<Point, bool>();
             foreach (Point point in points)
@@ -46,11 +51,16 @@ new Point(4.629511,52.466801,0),
             //The force F applied to all free nodes
             List<Euc3D.Vector> F = new List<Euc3D.Vector>
             {
-new Euc3D.Vector(0,0,-95.476149),
-new Euc3D.Vector(0,0,-124.128668),
-new Euc3D.Vector(0,0,-128.548374),
-new Euc3D.Vector(0,0,-259.01041),
-new Euc3D.Vector(0,0,-113.306085),
+new Euc3D.Vector(0,0,-140.537193),
+new Euc3D.Vector(0,0,-131.889671),
+new Euc3D.Vector(0,0,-147.619494),
+new Euc3D.Vector(0,0,-285.4142),
+new Euc3D.Vector(0,0,-167.666891),
+new Euc3D.Vector(0,0,-102.125553),
+new Euc3D.Vector(0,0,-94.652167),
+new Euc3D.Vector(0,0,-274.179582),
+
+
 
 
             };
@@ -59,12 +69,24 @@ new Euc3D.Vector(0,0,-113.306085),
             {
 {1,0},
 {-1,3},
-{2,1},
-{-2,3},
-{3,2},
+{2,0},
+{-2,7},
+{3,1},
 {-3,3},
-{4,3},
-{-4,4}
+{4,2},
+{-4,3},
+{5,3},
+{-5,4},
+{6,3},
+{-6,7},
+{7,4},
+{-7,7},
+{8,5},
+{-8,7},
+{9,6},
+{-9,7},
+
+
 
 
 
@@ -73,7 +95,7 @@ new Euc3D.Vector(0,0,-113.306085),
             //Definie the force densities of each elements
 
             int Nfd = ConnectivityMatrix.Count / 2;
-            double fdInit = -100;
+            double fdInit = 5;
 
             double[] qList = new double[Nfd];
             for (int i = 0; i < Nfd; i++) { qList[i] = fdInit; }
@@ -86,7 +108,7 @@ new Euc3D.Vector(0,0,-113.306085),
             #region Declaration of the Solver
 
             double tolerance = 0.001;
-            int maxIter = 10;  // Useless as long as GPA is being debuged
+            int maxIter = 100;  // Useless as long as GPA is being debuged
             GuidedProjectionAlgorithm gpa = new GuidedProjectionAlgorithm(tolerance, maxIter);
 
             #endregion
@@ -126,7 +148,7 @@ new Euc3D.Vector(0,0,-113.306085),
             #region Set Constraints
 
             /********** Target FD Upper Bound *******/
-            double upperFDbound = -5;
+            double upperFDbound = -10;
 
             for (int q = 0; q < fdCount; q++)
             {
@@ -137,11 +159,12 @@ new Euc3D.Vector(0,0,-113.306085),
                 variablesC.Add((dummy, q));
 
 
-                gpa.AddConstraint(constraintTypeC, variablesC, 1);
+                gpa.AddConstraint(constraintTypeC, variablesC, 100);
             }
 
             /********** Target Distance *************/
             int segmentCounterA = 0;
+            int segmentCounterFreeA = 0;
             foreach (Point p in points)
             {
                 if (!IsSupport[p])
@@ -149,18 +172,18 @@ new Euc3D.Vector(0,0,-113.306085),
                     DistanceToPoint constraintTypeA = new DistanceToPoint(initialPoints[segmentCounterA]);
 
                     List<(VariableSet, int)> variablesA = new List<(VariableSet, int)> {
-                            (nodes, segmentCounterA*3), (nodes, segmentCounterA*3 + 1), (nodes, segmentCounterA*3+2)
+                            (nodes, segmentCounterFreeA*3), (nodes, segmentCounterFreeA*3 + 1), (nodes, segmentCounterFreeA*3+2)
                         };
-
-                    gpa.AddConstraint(constraintTypeA, variablesA, 1);
-                    segmentCounterA++;
+                   gpa.AddConstraint(constraintTypeA, variablesA, 1);
+                    segmentCounterFreeA++;
                 }
-
+                segmentCounterA++;
             }
 
             /********** Target Equilibrium **********/
 
             int segmentCounterB = 0;
+            int segmentCounterFree = 0;
             foreach (Point point in points)
             {
                 if (!IsSupport[point])
@@ -203,7 +226,7 @@ new Euc3D.Vector(0,0,-113.306085),
                         List<(VariableSet, int)> variablesB = new List<(VariableSet, int)> { };
                         foreach (int m in adjFDIndex) { variablesB.Add((forceDensities, m)); }
 
-                        variablesB.Add((nodes, segmentCounterB * 3 + i));
+                        variablesB.Add((nodes, segmentCounterFree * 3 + i));
 
                         foreach (int n in adjNodesIndex)
                         {
@@ -213,9 +236,9 @@ new Euc3D.Vector(0,0,-113.306085),
                         gpa.AddConstraint(constraintTypeB, variablesB, 1);
 
                     }
-                    segmentCounterB++;
+                    segmentCounterFree++;
                 }
-
+                segmentCounterB++;
             }
             #endregion
 
@@ -237,25 +260,25 @@ new Euc3D.Vector(0,0,-113.306085),
                 gpa.RunIteration(false);
             }
 
-            for (int j = 0; j < Nfd; j++)
+            for (int j = 0; j < gpa.X.Count(); j++)
             {
                 System.Console.Write(String.Format("{0:0.00000} ", gpa.X[j]));
                 System.Console.WriteLine();
             }
-            for (int k = 0; k < points.Count; k++)
-            {
-                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k]));
-                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k + 1]));
-                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k + 2]));
+            //for (int k = 0; k < points.Count-suppo; k++)
+            //{
+            //    System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k]));
+            //    System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k + 1]));
+            //    System.Console.Write(String.Format("{0:0.00000} ", gpa.X[Nfd + 3 * k + 2]));
 
-                System.Console.WriteLine();
-            }
+            //    System.Console.WriteLine();
+            //}
 
-            for (int l = 0; l < Nfd; l++)
-            {
-                System.Console.Write(String.Format("{0:0.00000} ", gpa.X[l + Nfd + 3 * points.Count]));
-                System.Console.WriteLine();
-            }
+            //for (int l = 0; l < Nfd; l++)
+            //{
+            //    System.Console.Write(String.Format("{0:0.00000} ", gpa.X[l + Nfd + 3 * points.Count]));
+            //    System.Console.WriteLine();
+            //}
 
             #endregion
 
@@ -344,15 +367,18 @@ internal class NodeEquilibrium2 : IQuadraticConstraintType
     public NodeEquilibrium2(double forceExt, List<int> supportsPosition, List<double> supports)
     {
         int adjNodesCount = supportsPosition.Count;
-        int spaceDimension = 2 * adjNodesCount + 1;
+        int spaceDimension = 2 * adjNodesCount -supportsPosition.Sum() + 1;
         /******************** Define LocalHi ********************/
         DictionaryOfKeys dok_Hi = new DictionaryOfKeys(adjNodesCount * 2 - supports.Count);
         int j = 0;
         for (int i = 0; i < adjNodesCount; i++)
         {
             dok_Hi.Add(2, i, adjNodesCount);
-            if (supportsPosition[i]==0) dok_Hi.Add(-2, i, adjNodesCount + 1 + j);
-            j++;
+            if (supportsPosition[i] == 0)
+            {
+                dok_Hi.Add(-2, i, adjNodesCount + 1 + j);
+                j++;
+            }
         }
 
         LocalHi = new CompressedColumn(spaceDimension, spaceDimension, dok_Hi);
@@ -360,19 +386,19 @@ internal class NodeEquilibrium2 : IQuadraticConstraintType
 
         /******************** Define LocalBi ********************/
 
-        LocalBi = new SparseVector(adjNodesCount * 2 - supports.Count);
+        LocalBi = new SparseVector(adjNodesCount * 2 - supports.Count+1);
         int k = 0;
         for (int i = 0; i < adjNodesCount; i++)
         {
             if (supportsPosition[i] == 1)
             {
-                LocalBi[i] = supports[k];
+                LocalBi[i] = -supports[k];
                 k++;
             }
             else LocalBi[i] = 0;
         }
 
-        for (int i = adjNodesCount; i < adjNodesCount * 2 - supports.Count; i++) LocalBi[i] = 0;
+        for (int i = adjNodesCount; i < adjNodesCount * 2 - supports.Count+1; i++) LocalBi[i] = 0;
 
 
         /******************** Define Ci ********************/
