@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using Alg_Set = BRIDGES.Algebra.Sets;
+using System.Numerics;
 
 
 namespace BRIDGES.Arithmetic.Polynomials.Multivariate
@@ -9,7 +7,8 @@ namespace BRIDGES.Arithmetic.Polynomials.Multivariate
     /// <summary>
     /// Class defining a multivariate monomial.
     /// </summary>
-    public class Monomial
+    public class Monomial :
+        IMultiplyOperators<Monomial, Monomial, Monomial>
     {
         #region Fields
 

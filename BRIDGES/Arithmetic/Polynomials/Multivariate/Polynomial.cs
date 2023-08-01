@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
-
 
 namespace BRIDGES.Arithmetic.Polynomials.Multivariate
 {
@@ -9,8 +7,7 @@ namespace BRIDGES.Arithmetic.Polynomials.Multivariate
     /// Class defining a multivariate polynomial.
     /// </summary>
     /// <remarks> For a univarite polynomial, refer to <see cref="Polynomial"/>. </remarks>
-    public class Polynomial 
-        // Alg_Sets.IGroupAction<Polynomial, double>
+    public class Polynomial
     {
         #region Fields
 
@@ -141,65 +138,7 @@ namespace BRIDGES.Arithmetic.Polynomials.Multivariate
 
         #region Operators
 
-        /******************** Algebraic Near Ring ********************/
-/*
-        /// <summary>
-        /// Computes the addition of two <see cref="Polynomial"/>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="Polynomial"/> for the addition. </param>
-        /// <param name="right"> Right <see cref="Polynomial"/> for the addition. </param>
-        /// <returns> The <see cref="Polynomial"/> resulting from the addition. </returns>
-        public static Polynomial operator +(Polynomial left, Polynomial right)
-        {
-
-        }
-
-        /// <summary>
-        /// Computes the subtraction of two <see cref="Polynomial"/>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="Polynomial"/> to subtract. </param>
-        /// <param name="right"> Right <see cref="Polynomial"/> to subtract with. </param>
-        /// <returns> The <see cref="Polynomial"/> resulting from the subtraction. </returns>
-        public static Polynomial operator -(Polynomial left, Polynomial right)
-        {
-            
-        }
-
-
-        /// <summary>
-        /// Computes the opposite of the <see cref="Polynomial"/>.
-        /// </summary>
-        /// <param name="operand"> <see cref="Polynomial"/> whose opposite is to be computed. </param>
-        /// <returns> The <see cref="Polynomial"/>, opposite of the initial one. </returns>
-        /// <exception cref="NotImplementedException"> The unary negation of the operand as a <see cref="Polynomial"/> is not implemented. </exception>
-        public static Polynomial operator -(Polynomial operand)
-        {
-            int count = operand.TermCount;
-
-            double[] coefficients = new double[count];
-            Monomial[] monomials = new Monomial[count];
-            for (int i = 0; i < count; i++)
-            {
-                coefficients[i] = -operand.Coefficient(i);
-                monomials[i] = new Monomial(operand.Monomial(i));
-            }
-
-            return new Polynomial(ref coefficients, ref monomials);
-        }
-
-
-        /// <summary>
-        /// Computes the multiplication of two <see cref="Polynomial"/>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="Polynomial"/> for the multiplication. </param>
-        /// <param name="right"> Right <see cref="Polynomial"/> for the multiplication. </param>
-        /// <returns> The <see cref="Polynomial"/> resulting from the multiplication. </returns>
-        /// <exception cref="ArgumentException"> The number of columns of left and the number of rows of right must be equal. </exception>
-        public static Polynomial operator *(Polynomial left, Polynomial right)
-        {
-
-        }
-*/
+        /* To Do */
 
         #endregion
 

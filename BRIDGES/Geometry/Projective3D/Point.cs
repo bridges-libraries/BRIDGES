@@ -1,7 +1,5 @@
 ﻿using System;
-
-using Alg_Fund = BRIDGES.Algebra.Fundamentals;
-using Alg_Sets = BRIDGES.Algebra.Sets;
+using System.Numerics;
 
 using Geo_Ker = BRIDGES.Geometry.Kernel;
 
@@ -13,8 +11,8 @@ namespace BRIDGES.Geometry.Projective3D
     /// </summary>
     public struct Point :
           IEquatable<Point>,
-          Alg_Fund.IAddable<Point> /* To Do : Remove */,
-          Alg_Sets.IGroupAction<Point, double>,
+          IAdditionOperators<Point, Point, Point>,
+          IMultiplyOperators<Point, double, Point>, IDivisionOperators<Point, double, Point>,
           Geo_Ker.IAnalytic<double>
     {
         #region Fields
@@ -261,7 +259,7 @@ namespace BRIDGES.Geometry.Projective3D
         #endregion
 
 
-        #region Overrides
+        #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj)
@@ -280,24 +278,6 @@ namespace BRIDGES.Geometry.Projective3D
         {
             return $"({_coordinates[0]}, {_coordinates[1]}, {_coordinates[2]}, {_coordinates[3]})";
         }
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IAddable<Point> ********************/
-
-        /// <inheritdoc/>
-        Point Alg_Fund.IAddable<Point>.Add(Point right) => this + right;
-
-
-        /******************** IGroupAction<Point, double> ********************/
-
-        /// <inheritdoc/>
-        Point Alg_Sets.IGroupAction<Point, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Point Alg_Sets.IGroupAction<Point, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

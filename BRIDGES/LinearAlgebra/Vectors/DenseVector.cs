@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -12,8 +12,8 @@ namespace BRIDGES.LinearAlgebra.Vectors
     /// </summary>
     public sealed class DenseVector : Vector,
         IEquatable<DenseVector>, IEnumerable<double>,
-        Alg_Meas.IDotProduct<DenseVector, double>,
-        Alg_Sets.IGroupAction<DenseVector, double>
+        IMultiplyOperators<DenseVector, double, DenseVector>, IDivisionOperators<DenseVector, double, DenseVector>,
+        Alg_Meas.IDotProduct<DenseVector, double>
     {
         #region Fields
 
@@ -563,25 +563,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
         #endregion
 
 
-        #region Overrides
-
-        /******************** Vector ********************/
-
-        /// <inheritdoc cref="Vector.ToArray()"/>
-        public override double[] ToArray()=> (double[]) _components.Clone();
-
-        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator()"/>
-        public override IEnumerator<double> GetEnumerator()
-        {
-            for (int i = 0; i < Size; i++) { yield return this[i]; }
-        }
-
-
-        /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
-        public override bool Equals(Vector other) => other is DenseVector dense ? Equals(dense) : base.Equals(other);
-
-
-        /******************** object ********************/
+        #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj)
@@ -603,6 +585,24 @@ namespace BRIDGES.LinearAlgebra.Vectors
 
         #endregion
 
+        #region Override : Vector
+
+        /// <inheritdoc cref="Vector.ToArray()"/>
+        public override double[] ToArray() => (double[])_components.Clone();
+
+        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator()"/>
+        public override IEnumerator<double> GetEnumerator()
+        {
+            for (int i = 0; i < Size; i++) { yield return this[i]; }
+        }
+
+
+        /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
+        public override bool Equals(Vector other) => other is DenseVector dense ? Equals(dense) : base.Equals(other);
+
+        #endregion
+
+
         #region Explicit Implementations
 
         /******************** IDotProduct<DenseVector, double>, ********************/
@@ -612,16 +612,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
 
         /// <inheritdoc cref="Alg_Meas.IDotProduct{TSelf,TValue}.DotProduct(TSelf)"/>
         double Alg_Meas.IDotProduct<DenseVector, double>.DotProduct(DenseVector other) => TransposeMultiply(this, other);
-
-
-        /******************** IGroupAction<Vector, double> ********************/
-
-        /// <inheritdoc/>
-        DenseVector Alg_Sets.IGroupAction<DenseVector, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        DenseVector Alg_Sets.IGroupAction<DenseVector, double>.Divide(double divisor) => this / divisor;
-
+        
         #endregion
     }
 }

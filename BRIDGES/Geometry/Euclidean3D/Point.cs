@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Numerics;
 
-using Alg_Fund = BRIDGES.Algebra.Fundamentals;
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 using Geo_Ker = BRIDGES.Geometry.Kernel;
@@ -15,9 +14,9 @@ namespace BRIDGES.Geometry.Euclidean3D
     [Serialisation.Serialisable]
     public struct Point :
           IEquatable<Point>,
-          Alg_Fund.IAddable<Point> /* To Do : Remove */, 
+          IAdditionOperators<Point, Point, Point>,
+          IMultiplyOperators<Point, double, Point>, IDivisionOperators<Point, double, Point>,
           Alg_Meas.IDotProduct<Point, double>,
-          Alg_Sets.IGroupAction<Point, double>,
           Geo_Ker.IAnalytic<double>
     {
         #region Properties
@@ -427,25 +426,10 @@ namespace BRIDGES.Geometry.Euclidean3D
 
         #region Explicit Implementations
 
-        /******************** IAddable<Point> ********************/
-
-        /// <inheritdoc/>
-        Point Alg_Fund.IAddable<Point>.Add(Point right) => this + right;
-
-
         /******************** IDotProduct<Point, double> ********************/
 
         /// <inheritdoc/>
         double Alg_Meas.IDotProduct<Point, double>.DotProduct(Point other) => Point.DotProduct(this, other);
-
-
-        /******************** IGroupAction<Point, double> ********************/
-
-        /// <inheritdoc/>
-        Point Alg_Sets.IGroupAction<Point, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Point Alg_Sets.IGroupAction<Point, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

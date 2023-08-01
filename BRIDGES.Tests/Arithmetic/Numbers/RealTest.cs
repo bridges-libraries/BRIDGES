@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BRIDGES.Arithmetic.Numbers;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
-
 
 namespace BRIDGES.Tests.Arithmetic.Numbers
 {
@@ -559,47 +557,6 @@ namespace BRIDGES.Tests.Arithmetic.Numbers
             Real realB = new Real(9.85);
             // Assert
             Assert.IsTrue(realA.Equals(realB));
-        }
-
-        #endregion
-
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Real, double> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Real"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Real,double> Multiply(double)")]
-        public void AsIGroupAction_Multiply_double()
-        {
-            // Arrange
-            Real real = new Real(2.5);
-            double factor = 4.0;
-            Real expected = new Real(10.0);
-            //Act
-            Alg_Sets.IGroupAction<Real, double> representation = (Alg_Sets.IGroupAction<Real, double>)real;
-            Real actual = representation.Multiply(factor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Real"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Real,double> Divide(double)")]
-        public void AsIGroupAction_Divide_double()
-        {
-            // Arrange
-            Real real = new Real(2.5);
-            double factor = -4.0;
-            Real expected = new Real(-0.625);
-            //Act
-            Alg_Sets.IGroupAction<Real, double> representation = (Alg_Sets.IGroupAction<Real, double>)real;
-            Real actual = representation.Divide(factor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
         }
 
         #endregion

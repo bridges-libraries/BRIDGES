@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 
 using C_Stor = CSparse.Storage;
-
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using Vect = BRIDGES.LinearAlgebra.Vectors;
 
@@ -14,7 +13,7 @@ namespace BRIDGES.LinearAlgebra.Matrices.Sparse
     /// Class defining a sparse matrix with a compressed column storage.
     /// </summary>
     public sealed class CompressedColumn : SparseMatrix,
-        Alg_Sets.IGroupAction<CompressedColumn, double>
+        IMultiplyOperators<CompressedColumn, double, CompressedColumn>, IDivisionOperators<CompressedColumn, double, CompressedColumn>
     {
         #region Fields
 
@@ -1309,9 +1308,14 @@ namespace BRIDGES.LinearAlgebra.Matrices.Sparse
         #endregion
 
 
-        #region Overrides
+        #region Override : Matrix
 
-        /******************** SparseMatrix ********************/
+        /// <inheritdoc cref="Matrix.At(int, int)"/>
+        public override double At(int row, int column) => _storedMatrix.At(row, column);
+
+        #endregion
+
+        #region Override : SparseMatrix
 
         /// <inheritdoc cref="SparseMatrix.NonZeros()"/>
         public override IEnumerable<(int rowIndex, int columnIndex, double value)> NonZeros()
@@ -1324,23 +1328,6 @@ namespace BRIDGES.LinearAlgebra.Matrices.Sparse
                 }
             }
         }
-
-        /******************** Matrix ********************/
-
-        /// <inheritdoc cref="Matrix.At(int, int)"/>
-        public override double At(int row, int column) => _storedMatrix.At(row, column);
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<CompressedColumn, double> ********************/
-
-        /// <inheritdoc/>
-        CompressedColumn Alg_Sets.IGroupAction<CompressedColumn, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        CompressedColumn Alg_Sets.IGroupAction<CompressedColumn, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

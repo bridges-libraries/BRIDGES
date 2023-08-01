@@ -53,9 +53,9 @@ namespace BRIDGES.Arithmetic.Polynomials.Univariate.Specials
 
             for (int j = 0; j < degree + 1; j++)
             {
-                temp[j] = Zero;
+                temp[j] = AdditiveIdentity;
             }
-            temp[degree - index] = One;
+            temp[degree - index] = MultiplicativeIdentity;
 
             /********** Compute the triangular table **********/
             Polynomial x = new Polynomial(0.0, 1.0);

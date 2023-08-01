@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 
 using Json = System.Text.Json;
@@ -23,8 +24,8 @@ namespace BRIDGES.Serialisation
         [Deserialiser(typeof(Meshes.HalfedgeMesh.Mesh<>))]
         public static Meshes.HalfedgeMesh.Mesh<TPosition> HalfedgeMesh<TPosition>(string text, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             switch (format)
             {
@@ -49,8 +50,8 @@ namespace BRIDGES.Serialisation
         [Deserialiser(typeof(Meshes.FaceVertexMesh.Mesh<>))]
         public static Meshes.FaceVertexMesh.Mesh<TPosition> FaceVertexMesh<TPosition>(string text, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             switch (format)
             {
@@ -74,8 +75,8 @@ namespace BRIDGES.Serialisation
         /// <returns> The deserialised <see cref="Meshes.HalfedgeMesh.Mesh{TPosition}"/> from the json representation. </returns>
         private static Meshes.HalfedgeMesh.Mesh<TPosition> HalfedgeMeshFromJson<TPosition>(string text)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             // Initialisation
             int newVertexIndex = 0, newHalfedgeIndex = 0, newFaceIndex = 0;

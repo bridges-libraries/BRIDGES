@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Numerics;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -10,9 +10,11 @@ namespace BRIDGES.Arithmetic.Numbers
     /// Structure defining a complex number.
     /// </summary>
     public struct Complex :
-        IEquatable<Complex>,
-        Alg_Meas.IDotProduct<Complex, Complex>,
-        Alg_Sets.IGroupAction<Complex, double>, Alg_Sets.IGroupAction<Complex, Real>
+        IEquatable<Complex>, IEqualityOperators<Complex, Complex, bool>,
+        IAdditionOperators<Complex, Complex, Complex>, ISubtractionOperators<Complex, Complex, Complex>,
+        IMultiplyOperators<Complex, Real, Complex>, IDivisionOperators<Complex, Real, Complex>,
+        IMultiplyOperators<Complex, double, Complex>, IDivisionOperators<Complex, double, Complex>,
+        Alg_Meas.IDotProduct<Complex, Complex>
     {
         #region Fields
 
@@ -50,7 +52,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// </summary>
         public double RealPart
         {
-            get => _realPart;
+            readonly get => _realPart;
             set { _realPart = value; _modulus = null; _argument = null; }
         }
 
@@ -59,7 +61,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// </summary>
         public double ImaginaryPart
         {
-            get => _imaginaryPart;
+            readonly get => _imaginaryPart;
             set { _imaginaryPart = value; _modulus = null; _argument = null; }
         }
 
@@ -68,13 +70,13 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <summary>
         /// Gets the modulus of this <see cref="Complex"/> number.
         /// </summary>
-        public double Modulus => _modulus == null ? Math.Sqrt((_realPart * _realPart) + (_imaginaryPart * _imaginaryPart)) : _modulus.Value;
+        public readonly double Modulus => _modulus == null ? Math.Sqrt((_realPart * _realPart) + (_imaginaryPart * _imaginaryPart)) : _modulus.Value;
         
         /// <summary>
         /// Gets the argument of this <see cref="Complex"/> number.
         /// </summary>
         /// <exception cref="InvalidOperationException"> The complex argument is not defined. </exception>
-        public double Argument
+        public readonly double Argument
         {
             get 
             {
@@ -125,19 +127,19 @@ namespace BRIDGES.Arithmetic.Numbers
         /// Gets a new instance of the <see cref="Complex"/> structure equal to the additive neutral element : <c>(0.0, 1.0)</c>.
         /// </summary>
         /// <returns> The new <see cref="Complex"/> number equal to zero. </returns>
-        public static Complex Zero => new Complex(0d, 0d);
+        public static Complex Zero => new(0d, 0d);
 
         /// <summary>
         /// Gets a new instance of the <see cref="Complex"/> structure equal to the multiplicative neutral element : <c>(0.0, 1.0)</c>.
         /// </summary>
         /// <returns> The new <see cref="Complex"/> number equal to one. </returns>
-        public static Complex One => new Complex(1d, 0d);
+        public static Complex One => new(1d, 0d);
 
         /// <summary>
         /// Gets a new instance of the <see cref="Complex"/> structure equal to the unit imaginary element : <c>(0.0, 1.0)</c>.
         /// </summary>
         /// <returns> The new <see cref="Complex"/> number equal to imaginary one. </returns>
-        public static Complex ImaginaryOne => new Complex(0d, 1d);
+        public static Complex ImaginaryOne => new(0d, 1d);
 
         #endregion
 
@@ -287,7 +289,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// </summary>
         /// <param name="operand"> <see cref="Complex"/> number from which the opposite is computed. </param>
         /// <returns> The new <see cref="Complex"/> number, opposite of the initial one. </returns>
-        public static Complex operator -(Complex operand) => new Complex(-operand.RealPart, -operand.ImaginaryPart); 
+        public static Complex operator -(Complex operand) => new(-operand.RealPart, -operand.ImaginaryPart); 
 
 
         /// <summary>
@@ -325,7 +327,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number for the addition. </param>
         /// <param name="right"> <see cref="Real"/> number for the addition. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the addition. </returns>
-        public static Complex operator +(Complex left, Real right) => new Complex(left.RealPart + right.Value, left.ImaginaryPart);
+        public static Complex operator +(Complex left, Real right) => new(left.RealPart + right.Value, left.ImaginaryPart);
 
         /// <summary>
         /// Computes the left addition of a <see cref="Complex"/> number with a <see cref="Real"/> number.
@@ -333,7 +335,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Real"/> number for the addition. </param>
         /// <param name="right"> <see cref="Complex"/> number for the addition. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the addition. </returns>
-        public static Complex operator +(Real left, Complex right) => new Complex(left.Value + right.RealPart, right.ImaginaryPart);
+        public static Complex operator +(Real left, Complex right) => new(left.Value + right.RealPart, right.ImaginaryPart);
 
 
         /// <summary>
@@ -342,7 +344,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number to subtract. </param>
         /// <param name="right"> <see cref="Real"/> number to subtract with. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the subtraction. </returns>
-        public static Complex operator -(Complex left, Real right) => new Complex(left.RealPart - right.Value, left.ImaginaryPart);
+        public static Complex operator -(Complex left, Real right) => new(left.RealPart - right.Value, left.ImaginaryPart);
 
         /// <summary>
         /// Computes the subtraction of a <see cref="Real"/> number with a <see cref="Complex"/> number.
@@ -350,7 +352,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Real"/> number to subtract. </param>
         /// <param name="right"> <see cref="Complex"/> number to subtract with. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the subtraction. </returns>
-        public static Complex operator -(Real left, Complex right) => new Complex(left.Value - right.RealPart, -right.ImaginaryPart);
+        public static Complex operator -(Real left, Complex right) => new(left.Value - right.RealPart, -right.ImaginaryPart);
 
 
         /// <summary>
@@ -359,7 +361,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number for the multiplicaion. </param>
         /// <param name="right"> <see cref="Real"/> number for the multiplicaion. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the multiplication. </returns>
-        public static Complex operator *(Complex left, Real right) => new Complex(left.RealPart * right.Value, left.ImaginaryPart * right.Value);
+        public static Complex operator *(Complex left, Real right) => new(left.RealPart * right.Value, left.ImaginaryPart * right.Value);
 
         /// <summary>
         /// Computes the left multiplication of a <see cref="Complex"/> number with a <see cref="Real"/> number.
@@ -367,7 +369,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Real"/> number for the multiplicaion. </param>
         /// <param name="right"> <see cref="Complex"/> number for the multiplicaion. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the multiplication. </returns>
-        public static Complex operator *(Real left, Complex right) => new Complex(left.Value * right.RealPart, left.Value * right.ImaginaryPart);
+        public static Complex operator *(Real left, Complex right) => new(left.Value * right.RealPart, left.Value * right.ImaginaryPart);
 
 
         /// <summary>
@@ -376,7 +378,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number to divide. </param>
         /// <param name="right"> <see cref="Real"/> number to divide with. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the division. </returns>
-        public static Complex operator /(Complex left, Real right) => new Complex(left.RealPart / right.Value, left.ImaginaryPart / right.Value);
+        public static Complex operator /(Complex left, Real right) => new(left.RealPart / right.Value, left.ImaginaryPart / right.Value);
 
         /// <summary>
         /// Computes the division of a <see cref="Real"/> number with a <see cref="Complex"/> number.
@@ -388,7 +390,7 @@ namespace BRIDGES.Arithmetic.Numbers
         {
             double norm = ((right.RealPart * right.RealPart) + (right.ImaginaryPart * right.ImaginaryPart));
 
-            return new Complex(left.Value * (right.RealPart / norm), left.Value * (-right.ImaginaryPart / norm));
+            return new(left.Value * (right.RealPart / norm), left.Value * (-right.ImaginaryPart / norm));
         }
 
 
@@ -400,7 +402,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number for the addition. </param>
         /// <param name="right"> <see cref="double"/> number for the addition. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the addition. </returns>
-        public static Complex operator +(Complex left, double right) => new Complex(left.RealPart + right, left.ImaginaryPart);
+        public static Complex operator +(Complex left, double right) => new(left.RealPart + right, left.ImaginaryPart);
 
         /// <summary>
         /// Computes the left addition of a <see cref="Complex"/> number with a <see cref="double"/> number.
@@ -408,7 +410,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="double"/> number for the addition. </param>
         /// <param name="right"> <see cref="Complex"/> number for the addition. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the addition. </returns>
-        public static Complex operator +(double left, Complex right) => new Complex(left + right.RealPart, right.ImaginaryPart);
+        public static Complex operator +(double left, Complex right) => new(left + right.RealPart, right.ImaginaryPart);
 
 
         /// <summary>
@@ -417,7 +419,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number to subtract. </param>
         /// <param name="right"> <see cref="double"/> number to subtract with. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the subtraction. </returns>
-        public static Complex operator -(Complex left, double right) => new Complex(left.RealPart - right, left.ImaginaryPart);
+        public static Complex operator -(Complex left, double right) => new(left.RealPart - right, left.ImaginaryPart);
 
         /// <summary>
         /// Computes the subtraction of a <see cref="double"/> number with a <see cref="Complex"/> number.
@@ -425,7 +427,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="double"/> number to subtract. </param>
         /// <param name="right"> <see cref="Complex"/> number to subtract with. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the subtraction. </returns>
-        public static Complex operator -(double left, Complex right) => new Complex(left- right.RealPart, -right.ImaginaryPart);
+        public static Complex operator -(double left, Complex right) => new(left- right.RealPart, -right.ImaginaryPart);
 
 
         /// <summary>
@@ -434,7 +436,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number for the multiplicaion. </param>
         /// <param name="right"> <see cref="double"/> number for the multiplicaion. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the multiplication. </returns>
-        public static Complex operator *(Complex left, double right) => new Complex(left.RealPart * right, left.ImaginaryPart * right);
+        public static Complex operator *(Complex left, double right) => new(left.RealPart * right, left.ImaginaryPart * right);
 
         /// <summary>
         /// Computes the left  multiplication of a <see cref="double"/> number with a <see cref="Complex"/> number.
@@ -442,7 +444,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="double"/> number for the multiplicaion. </param>
         /// <param name="right"> <see cref="Complex"/> number for the multiplicaion. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the multiplication. </returns>
-        public static Complex operator *(double left, Complex right) => new Complex(left * right.RealPart, left * right.ImaginaryPart);
+        public static Complex operator *(double left, Complex right) => new(left * right.RealPart, left * right.ImaginaryPart);
 
 
         /// <summary>
@@ -451,7 +453,7 @@ namespace BRIDGES.Arithmetic.Numbers
         /// <param name="left"> <see cref="Complex"/> number to divide. </param>
         /// <param name="right"> <see cref="double"/> number to divide with. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the division. </returns>
-        public static Complex operator /(Complex left, double right) => new Complex(left.RealPart / right, left.ImaginaryPart / right);
+        public static Complex operator /(Complex left, double right) => new(left.RealPart / right, left.ImaginaryPart / right);
 
         /// <summary>
         /// Computes the division of a <see cref="double"/> number with a <see cref="Complex"/> number.
@@ -466,6 +468,16 @@ namespace BRIDGES.Arithmetic.Numbers
             return new Complex(left * (right.RealPart / norm), left * (-right.ImaginaryPart / norm));
         }
 
+
+        /******************** Equality Operators ********************/
+
+        /// <inheritdoc cref="IEqualityOperators{TSelf, TOther, TResult}.operator ==(TSelf,TOther)"/>
+        public static bool operator ==(Complex left, Complex right) => left.Equals(right);
+
+
+        /// <inheritdoc cref="IEqualityOperators{TSelf, TOther, TResult}.operator !=(TSelf,TOther)"/>
+        public static bool operator !=(Complex left, Complex right) => !left.Equals(right);
+
         #endregion
 
         #region Conversions
@@ -475,21 +487,21 @@ namespace BRIDGES.Arithmetic.Numbers
         /// </summary>
         /// <param name="real"> <see cref="Real"/> number to convert. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the conversion. </returns>
-        public static explicit operator Complex(Real real) => new Complex(real.Value, 0d);
+        public static explicit operator Complex(Real real) => new(real.Value, 0d);
 
         /// <summary>
         /// Converts a <see cref="double"/>-precision real number into a <see cref="Complex"/> number.
         /// </summary>
         /// <param name="number"> <see cref="double"/>-precision real number to convert. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the conversion. </returns>
-        public static explicit operator Complex(double number) => new Complex(number, 0d);
+        public static explicit operator Complex(double number) => new(number, 0d);
 
         /// <summary>
         /// Converts a <see cref="ValueTuple{T1, T2}"/> into a <see cref="Complex"/> number.
         /// </summary>
         /// <param name="pair"> <see cref="ValueTuple{T1, T2}"/> to convert. </param>
         /// <returns> The new <see cref="Complex"/> number resulting from the conversion. </returns>
-        public static explicit operator Complex(ValueTuple<double, double> pair) => new Complex(pair.Item1, pair.Item2);
+        public static explicit operator Complex(ValueTuple<double, double> pair) => new(pair.Item1, pair.Item2);
 
         #endregion
 
@@ -510,11 +522,11 @@ namespace BRIDGES.Arithmetic.Numbers
         public double Norm() => Math.Sqrt((RealPart * RealPart) + (ImaginaryPart * ImaginaryPart));
         
         /// <inheritdoc cref="Alg_Meas.IMetric{TSelf}.DistanceTo(TSelf)"/>
-        public double DistanceTo(Complex other) => (this - other).Norm();
+        public readonly double DistanceTo(Complex other) => (this - other).Norm();
 
 
         /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
-        public bool Equals(Complex other) 
+        public readonly bool Equals(Complex other) 
         { 
             return (Math.Abs(RealPart - other.RealPart) < Settings.AbsolutePrecision && Math.Abs(ImaginaryPart - other.ImaginaryPart) < Settings.AbsolutePrecision); 
         }
@@ -522,48 +534,25 @@ namespace BRIDGES.Arithmetic.Numbers
         #endregion
 
 
-        #region Overrides
-
-        /******************** object ********************/
+        #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
-        public override bool Equals(object obj)
+        public override readonly bool Equals(object obj)
         {
             return obj is Complex complex && Equals(complex);
         }
 
         /// <inheritdoc cref="object.GetHashCode"/>
-        public override int GetHashCode()
+        public override readonly int GetHashCode()
         {
             return base.GetHashCode();
         }
 
         /// <inheritdoc cref="object.ToString"/>
-        public override string ToString()
+        public override readonly string ToString()
         {
             return $"({RealPart}, {ImaginaryPart})";
         }
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Complex, Real> ********************/
-
-        /// <inheritdoc/>
-        Complex Alg_Sets.IGroupAction<Complex, Real>.Multiply(Real factor) => this * factor;
-
-        /// <inheritdoc/>
-        Complex Alg_Sets.IGroupAction<Complex, Real>.Divide(Real divisor) => this / divisor;
-
-
-        /******************** IGroupAction<Complex, double> ********************/
-
-        /// <inheritdoc/>
-        Complex Alg_Sets.IGroupAction<Complex, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Complex Alg_Sets.IGroupAction<Complex, double>.Divide(double divisor) => this /divisor;
 
         #endregion
     }

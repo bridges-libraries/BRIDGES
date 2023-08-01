@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Numerics;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 using Geo_Ker = BRIDGES.Geometry.Kernel;
@@ -14,7 +14,7 @@ namespace BRIDGES.Geometry.Euclidean3D
     public struct Vector :
           IEquatable<Vector>,
           Alg_Meas.IDotProduct<Vector, double>,
-          Alg_Sets.IGroupAction<Vector, double>,
+          IMultiplyOperators<Vector, double, Vector>, IDivisionOperators<Vector, double, Vector>,
           Geo_Ker.IAnalytic<double>
     {
         #region Properties
@@ -543,14 +543,6 @@ namespace BRIDGES.Geometry.Euclidean3D
 
         /// <inheritdoc/>
         double Alg_Meas.IDotProduct<Vector, double>.DotProduct(Vector other) => Vector.DotProduct(this, other);
-
-        /******************** IGroupAction<Vector, double> ********************/
-
-        /// <inheritdoc/>
-        Vector Alg_Sets.IGroupAction<Vector, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Vector Alg_Sets.IGroupAction<Vector, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

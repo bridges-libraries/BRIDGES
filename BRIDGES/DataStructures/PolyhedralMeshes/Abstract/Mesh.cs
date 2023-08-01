@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
-
-using Alg_Fund = BRIDGES.Algebra.Fundamentals;
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
@@ -16,8 +14,8 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.Abstract
     /// <typeparam name="TFace"> Type of vertex for the mesh.</typeparam>
     public abstract partial class Mesh<TPosition, TVertex, TEdge, TFace> : IMesh<TPosition>
         where TPosition : IEquatable<TPosition>,
-                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
-                          Alg_Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         where TVertex : Vertex<TPosition, TVertex, TEdge, TFace>
         where TEdge : Edge<TPosition, TVertex, TEdge, TFace>
         where TFace : Face<TPosition, TVertex, TEdge, TFace>

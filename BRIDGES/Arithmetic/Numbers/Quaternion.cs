@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Numerics;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -11,8 +11,11 @@ namespace BRIDGES.Arithmetic.Numbers
     /// </summary>
     public struct Quaternion :
         IEquatable<Quaternion>,
-        Alg_Meas.IDotProduct<Quaternion, double>,
-        Alg_Sets.IGroupAction<Quaternion, double>, Alg_Sets.IGroupAction<Quaternion, Real>, Alg_Sets.IGroupAction<Quaternion, Complex>
+        IAdditionOperators<Quaternion, Quaternion, Quaternion>, ISubtractionOperators<Quaternion, Quaternion, Quaternion>,
+        IMultiplyOperators<Quaternion, double, Quaternion>, IDivisionOperators<Quaternion, double, Quaternion>,
+        IMultiplyOperators<Quaternion, Real, Quaternion>, IDivisionOperators<Quaternion, Real, Quaternion>,
+        IMultiplyOperators<Quaternion, Complex, Quaternion>, IDivisionOperators<Quaternion, Complex, Quaternion>,
+        Alg_Meas.IDotProduct<Quaternion, double>
     {
         #region Properties
 
@@ -679,7 +682,7 @@ namespace BRIDGES.Arithmetic.Numbers
         #endregion
 
 
-        #region Overrides
+        #region Override : Object
 
         /******************** object ********************/
 
@@ -700,36 +703,6 @@ namespace BRIDGES.Arithmetic.Numbers
         {
             return $"({ScalarPart}, {I}, {J}, {K})";
         }
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Quaternion, Complex> ********************/
-
-        /// <inheritdoc/>
-        Quaternion Alg_Sets.IGroupAction<Quaternion, Complex>.Multiply(Complex factor) => this * factor;
-
-        /// <inheritdoc/>
-        Quaternion Alg_Sets.IGroupAction<Quaternion, Complex>.Divide(Complex divisor) => this / divisor;
-
-
-        /******************** IGroupAction<Quaternion, Real> ********************/
-
-        /// <inheritdoc/>
-        Quaternion Alg_Sets.IGroupAction<Quaternion, Real>.Multiply(Real factor) => this * factor;
-
-        /// <inheritdoc/>
-        Quaternion Alg_Sets.IGroupAction<Quaternion, Real>.Divide(Real divisor) => this / divisor;
-
-
-        /******************** IGroupAction<Quaternion, double> ********************/
-
-        /// <inheritdoc/>
-        Quaternion Alg_Sets.IGroupAction<Quaternion, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Quaternion Alg_Sets.IGroupAction<Quaternion, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

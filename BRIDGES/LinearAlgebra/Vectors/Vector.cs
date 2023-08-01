@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections;
 using System.Collections.Generic;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -13,8 +13,8 @@ namespace BRIDGES.LinearAlgebra.Vectors
     /// </summary>
     public abstract class Vector :
         IEquatable<Vector>, IEnumerable<double>,
-        Alg_Meas.IDotProduct<Vector, double>,
-        Alg_Sets.IGroupAction<Vector, double>
+        IMultiplyOperators<Vector, double, Vector>, IDivisionOperators<Vector, double, Vector>,
+        Alg_Meas.IDotProduct<Vector, double>
     {
         #region Properties
 
@@ -308,9 +308,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
         #endregion
 
 
-        #region Overrides
-
-        /******************** object ********************/
+        #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj)
@@ -341,16 +339,6 @@ namespace BRIDGES.LinearAlgebra.Vectors
 
         /// <inheritdoc cref="Alg_Meas.IDotProduct{TSelf,TValue}.DotProduct(TSelf)"/>
         double Alg_Meas.IDotProduct<Vector,double>.DotProduct(Vector other) => TransposeMultiply(this, other);
-
-
-        /******************** IGroupAction<Vector, double> ********************/
-
-        /// <inheritdoc cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/>
-        Vector Alg_Sets.IGroupAction<Vector, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/>
-        Vector Alg_Sets.IGroupAction<Vector, double>.Divide(double divisor) => this / divisor;
-
 
         /******************** IEnumerable ********************/
 

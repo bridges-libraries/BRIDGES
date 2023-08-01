@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BRIDGES.Arithmetic.Numbers;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
-
 
 namespace BRIDGES.Tests.Arithmetic.Numbers
 {
@@ -905,84 +903,6 @@ namespace BRIDGES.Tests.Arithmetic.Numbers
             Complex complexB = new Complex(10.0, -4.0);
             // Assert
             Assert.IsTrue(complexA.Equals(complexB));
-        }
-
-        #endregion
-
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Complex, Real> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Complex"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Complex,Real> Multiply(Real)")]
-        public void AsIGroupAction_Multiply_Real()
-        {
-            // Arrange
-            Complex complex = new Complex(1.0, 2.5);
-            Real real = new Real(4.0);
-            Complex expected = new Complex(4.0, 10.0);
-            //Act
-            Alg_Sets.IGroupAction<Complex, Real> representation = (Alg_Sets.IGroupAction<Complex, Real>)complex;
-            Complex actual = representation.Multiply(real);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Complex"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Complex,Real> Divide(Real)")]
-        public void AsIGroupAction_Divide_Real()
-        {
-            // Arrange
-            Complex complex = new Complex(1.0, 6.0);
-            Real real = new Real(4.0);
-            Complex expected = new Complex(0.25, 1.5);
-            //Act
-            Alg_Sets.IGroupAction<Complex, Real> representation = (Alg_Sets.IGroupAction<Complex, Real>)complex;
-            Complex actual = representation.Divide(real);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-
-        /******************** IGroupAction<Complex, double> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Complex"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Complex,double> Multiply(double)")]
-        public void AsIGroupAction_Multiply_double()
-        {
-            // Arrange
-            Complex complex = new Complex(1.0, 2.5);
-            double number = 4.0;
-            Complex expected = new Complex(4.0, 10.0);
-            //Act
-            Alg_Sets.IGroupAction<Complex, double> representation = (Alg_Sets.IGroupAction<Complex, double>)complex;
-            Complex actual = representation.Multiply(number);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Complex"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Complex,double> Divide(double)")]
-        public void AsIGroupAction_Divide_double()
-        {
-            // Arrange
-            Complex complex = new Complex(1.0, 6.0);
-            double number = 4.0;
-            Complex expected = new Complex(0.25, 1.5);
-            //Act
-            Alg_Sets.IGroupAction<Complex, double> representation = (Alg_Sets.IGroupAction<Complex, double>)complex;
-            Complex actual = representation.Divide(number);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
         }
 
         #endregion

@@ -71,8 +71,8 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
                 _parentMesh.RemoveVertex(end);
 
                 /* To Do : Improved with a smarter evaluation of the new vertex position*/
-                TPosition newPosition = start.Position.Add(end.Position);
-                newPosition = newPosition.Multiply(0.5);
+                TPosition newPosition = start.Position + end.Position;
+                newPosition = newPosition * 0.5;
                 Vertex<TPosition> newVertex = _parentMesh.AddVertex(newPosition);
 
                 for (int i = 0; i < neighborhood.Count; i++)
@@ -134,8 +134,8 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh
                 _parentMesh.EraseHalfedge(halfedge);
 
                 /* To Do : Improved with a smarter evaluation of the new vertex position*/
-                TPosition newPosition = start.Position.Add(end.Position);
-                newPosition = newPosition.Multiply(0.5);
+                TPosition newPosition = start.Position + end.Position;
+                newPosition = newPosition * 0.5;
                 Vertex<TPosition> newVertex = _parentMesh.AddVertex(newPosition);
 
                 if (!(left is null))

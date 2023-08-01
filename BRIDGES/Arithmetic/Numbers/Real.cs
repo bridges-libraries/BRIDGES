@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Numerics;
 
-using Alg_Sets= BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -11,8 +11,9 @@ namespace BRIDGES.Arithmetic.Numbers
     /// </summary>
     public struct Real : 
         IEquatable<Real>,
-        Alg_Meas.IDotProduct<Real,double>,
-        Alg_Sets.IGroupAction<Real, double>
+        IAdditionOperators<Real, Real, Real>, ISubtractionOperators<Real, Real, Real>,
+        IMultiplyOperators<Real, double, Real>, IDivisionOperators<Real, double, Real>,
+        Alg_Meas.IDotProduct<Real,double>
     {
         #region Properties
 
@@ -272,7 +273,7 @@ namespace BRIDGES.Arithmetic.Numbers
         #endregion
 
 
-        #region Overrides
+        #region Override : Object
 
         /******************** object ********************/
 
@@ -293,18 +294,6 @@ namespace BRIDGES.Arithmetic.Numbers
         {
             return $"{Value}";
         }
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Real, double> ********************/
-
-        /// <inheritdoc cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/>
-        Real Alg_Sets.IGroupAction<Real, double>.Multiply(double factor) => new Real(Value * factor);
-
-        /// <inheritdoc cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/>
-        Real Alg_Sets.IGroupAction<Real, double>.Divide(double divisor) => new Real(Value / divisor);
 
         #endregion
     }

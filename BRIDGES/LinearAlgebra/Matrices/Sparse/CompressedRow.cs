@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
-
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using Vect = BRIDGES.LinearAlgebra.Vectors;
 
@@ -12,7 +11,7 @@ namespace BRIDGES.LinearAlgebra.Matrices.Sparse
     /// Class defining a sparse matrix with a compressed row storage.
     /// </summary>
     public class CompressedRow : SparseMatrix,
-        Alg_Sets.IGroupAction<CompressedRow, double>
+        IMultiplyOperators<CompressedRow, double, CompressedRow>, IDivisionOperators<CompressedRow, double, CompressedRow>
     {
         #region Fields
 
@@ -1330,24 +1329,7 @@ namespace BRIDGES.LinearAlgebra.Matrices.Sparse
         #endregion
 
 
-        #region Overrides
-
-        /******************** SparseMatrix ********************/
-
-        /// <inheritdoc cref="SparseMatrix.NonZeros()"/>
-        public override IEnumerable<(int rowIndex, int columnIndex, double value)> NonZeros()
-        {
-            for (int i_R = 0; i_R < RowCount; i_R++)
-            {
-                for (int i_NZ = _rowPointers[i_R]; i_NZ < _rowPointers[i_R + 1]; i_NZ++)
-                {
-                    yield return (i_R, _columnIndices[i_NZ], _values[i_NZ]);
-                }
-            }
-        }
-
-
-        /******************** Matrix ********************/
+        #region Override : Matrix
 
         /// <inheritdoc cref="Matrix.At(int, int)"/>
         public override double At(int row, int column)
@@ -1362,16 +1344,21 @@ namespace BRIDGES.LinearAlgebra.Matrices.Sparse
 
         #endregion
 
-        #region Explicit Implementations
+        #region Override : SparseMatrix
 
-        /******************** IGroupAction<CompressedRow, double> ********************/
-
-        /// <inheritdoc/>
-        CompressedRow Alg_Sets.IGroupAction<CompressedRow, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        CompressedRow Alg_Sets.IGroupAction<CompressedRow, double>.Divide(double divisor) => this / divisor; 
+        /// <inheritdoc cref="SparseMatrix.NonZeros()"/>
+        public override IEnumerable<(int rowIndex, int columnIndex, double value)> NonZeros()
+        {
+            for (int i_R = 0; i_R < RowCount; i_R++)
+            {
+                for (int i_NZ = _rowPointers[i_R]; i_NZ < _rowPointers[i_R + 1]; i_NZ++)
+                {
+                    yield return (i_R, _columnIndices[i_NZ], _values[i_NZ]);
+                }
+            }
+        }
 
         #endregion
+
     }
 }

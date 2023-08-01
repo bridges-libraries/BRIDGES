@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -12,8 +12,8 @@ namespace BRIDGES.LinearAlgebra.Vectors
     /// </summary>
     public sealed class SparseVector : Vector,
         IEquatable<SparseVector>, IEnumerable<double>,
-        Alg_Meas.IDotProduct<SparseVector, double>,
-        Alg_Sets.IGroupAction<SparseVector, double>
+        IMultiplyOperators<SparseVector, double, SparseVector>, IDivisionOperators<SparseVector, double, SparseVector>,
+        Alg_Meas.IDotProduct<SparseVector, double>
     {
         #region Fields
 
@@ -642,32 +642,7 @@ namespace BRIDGES.LinearAlgebra.Vectors
         #endregion
 
 
-        #region Overrides
-
-        /******************** Vector ********************/
-
-        /// <inheritdoc cref="DenseVector.ToArray()"/>
-        public override double[] ToArray()
-        {
-            double[] result = new double[Size];
-            foreach ((int rowIndex, double value) in NonZeros()) { result[rowIndex] = value; }
-
-            return result;
-        }
-
-        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator()"/>
-        /// <remarks> This method iterates over both zero and non-zero values. To iterate only on non-zero values use <see cref="SparseVector.NonZeros()"/>. </remarks>
-        public override IEnumerator<double> GetEnumerator()
-        {
-            for (int i = 0; i < Size; i++) { yield return this[i]; }
-        }
-
-
-        /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
-        public override bool Equals(Vector other) => other is SparseVector sparse ? Equals(sparse) : base.Equals(other);
-
-
-        /******************** object ********************/
+        #region Override : Object
 
         /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj)
@@ -689,6 +664,30 @@ namespace BRIDGES.LinearAlgebra.Vectors
 
         #endregion
 
+        #region Override : Vector
+
+        /// <inheritdoc cref="DenseVector.ToArray()"/>
+        public override double[] ToArray()
+        {
+            double[] result = new double[Size];
+            foreach ((int rowIndex, double value) in NonZeros()) { result[rowIndex] = value; }
+
+            return result;
+        }
+
+        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator()"/>
+        /// <remarks> This method iterates over both zero and non-zero values. To iterate only on non-zero values use <see cref="SparseVector.NonZeros()"/>. </remarks>
+        public override IEnumerator<double> GetEnumerator()
+        {
+            for (int i = 0; i < Size; i++) { yield return this[i]; }
+        }
+
+
+        /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
+        public override bool Equals(Vector other) => other is SparseVector sparse ? Equals(sparse) : base.Equals(other);
+
+        #endregion
+
         #region Explicit Implementations
 
         /******************** IDotProduct<DenseVector, double>, ********************/
@@ -698,15 +697,6 @@ namespace BRIDGES.LinearAlgebra.Vectors
 
         /// <inheritdoc cref="Alg_Meas.IDotProduct{TSelf,TValue}.DotProduct(TSelf)"/>
         double Alg_Meas.IDotProduct<SparseVector, double>.DotProduct(SparseVector other) => TransposeMultiply(this, other);
-
-
-        /******************** IGroupAction<Vector, double> ********************/
-
-        /// <inheritdoc/>
-        SparseVector Alg_Sets.IGroupAction<SparseVector, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        SparseVector Alg_Sets.IGroupAction<SparseVector, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

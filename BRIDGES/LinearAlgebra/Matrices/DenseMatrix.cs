@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
 
 using MNet_LinAlg = MathNet.Numerics.LinearAlgebra;
-
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using Vect = BRIDGES.LinearAlgebra.Vectors;
 
@@ -14,7 +13,7 @@ namespace BRIDGES.LinearAlgebra.Matrices
     /// Class defining a dense matrix.
     /// </summary>
     public sealed class DenseMatrix : Matrix,
-        Alg_Sets.IGroupAction<DenseMatrix, double>
+        IMultiplyOperators<DenseMatrix, double, DenseMatrix>, IDivisionOperators<DenseMatrix, double, DenseMatrix>
     {
         #region Fields
 
@@ -130,7 +129,7 @@ namespace BRIDGES.LinearAlgebra.Matrices
         /// <param name="rowCount"> Number of rows of the <see cref="DenseMatrix"/>. </param>
         /// <param name="columnCount"> Number of columns of the <see cref="DenseMatrix"/>. </param>
         /// <returns> The <see cref="DenseMatrix"/> of the given size, with zeros on every coordinates. </returns>
-        public static DenseMatrix Zero(int rowCount, int columnCount) => new DenseMatrix(rowCount, columnCount);
+        public static DenseMatrix Zero(int rowCount, int columnCount) => new(rowCount, columnCount);
 
         /// <summary>
         /// Returns the neutral <see cref="Matrix"/> for the multiplication. 
@@ -970,27 +969,13 @@ namespace BRIDGES.LinearAlgebra.Matrices
         #endregion
 
 
-        #region Overrides
-
-        /******************** Matrix ********************/
+        #region Override : Matrix
 
         /// <inheritdoc cref="Matrix.ToArray()"/>
         public override double[,] ToArray() => _storedMatrix.ToArray();
 
         /// <inheritdoc cref="Matrix.At(int, int)"/>
         public override double At(int row, int column) => _storedMatrix[row, column];
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<DenseMatrix, double> ********************/
-
-        /// <inheritdoc/>
-        DenseMatrix Alg_Sets.IGroupAction<DenseMatrix, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        DenseMatrix Alg_Sets.IGroupAction<DenseMatrix, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

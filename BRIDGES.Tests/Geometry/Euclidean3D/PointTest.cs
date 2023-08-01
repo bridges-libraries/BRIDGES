@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BRIDGES.Geometry.Euclidean3D;
 
-using Alg_Fund = BRIDGES.Algebra.Fundamentals;
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Mes = BRIDGES.Algebra.Measure;
 
 
@@ -599,27 +597,7 @@ namespace BRIDGES.Tests.Geometry.Euclidean3D
 
         #region Explicit Implementations
 
-        /******************** IAddable<Point> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Fund.IAddable{T}.Add(T)"/> method of <see cref="Point"/>.
-        /// </summary>
-        [TestMethod("AsIAddable<Point> Add(Point)")]
-        public void AsIAddable_Add_Point()
-        {
-            // Arrange
-            Point pointA = new Point(1.5, 6.0, 3.2);
-            Point pointB = new Point(5.5, 2.0, 4.5);
-            Point expected = new Point(7.0, 8.0, 7.7);
-            //Act
-            Alg_Fund.IAddable<Point> addable = (Alg_Fund.IAddable<Point>)pointA;
-            Point otherPoint = addable.Add(pointB);
-            // Assert
-            Assert.IsTrue(otherPoint.Equals(expected));
-        }
-
         /******************** IDotProduct<Point, double> ********************/
-
 
         /// <summary>
         /// Tests the <see cref="Alg_Mes.IDotProduct{TSelf, TValue}.DotProduct(TSelf)"/> method of <see cref="Point"/>.
@@ -637,43 +615,6 @@ namespace BRIDGES.Tests.Geometry.Euclidean3D
             // Assert
             Assert.AreEqual(dotProduct, expected, Settings.AbsolutePrecision);
         }
-
-        /******************** IGroupAction<Point, double> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Point"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Point,double> Multiply(double)")]
-        public void AsIGroupAction_Multiply_double()
-        {
-            // Arrange
-            Point point = new Point(1.0, 2.5, 5.2);
-            double factor = 4.0;
-            Point expected = new Point(4.0, 10.0, 20.8);
-            //Act
-            Alg_Sets.IGroupAction<Point, double> representation = (Alg_Sets.IGroupAction<Point,double>)point;
-            Point otherPoint = representation.Multiply(factor);
-            // Assert
-            Assert.IsTrue(otherPoint.Equals(expected));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Point"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Point,double> Divide(double)")]
-        public void AsIGroupAction_Divide_double()
-        {
-            // Arrange
-            Point point = new Point(1.0, 6.0, 3.4);
-            double number = 4.0;
-            Point expected = new Point(0.25, 1.5, 0.85);
-            //Act
-            Alg_Sets.IGroupAction<Point, double> representation = (Alg_Sets.IGroupAction<Point, double>)point;
-            Point otherPoint = representation.Divide(number);
-            // Assert
-            Assert.IsTrue(otherPoint.Equals(expected));
-        }
-
 
         #endregion
 

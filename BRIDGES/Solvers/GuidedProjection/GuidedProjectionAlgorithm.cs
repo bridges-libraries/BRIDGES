@@ -92,6 +92,21 @@ namespace BRIDGES.Solvers.GuidedProjection
         public Vector X { get { return _x; } }
 
 
+        /// <summary>
+        /// Gets the number of components in the vector X of this <see cref="GuidedProjectionAlgorithm"/>.  
+        /// </summary>
+        public int ComponentCount => _x.Size;
+
+        /// <summary>
+        /// Gets the number of energies of this <see cref="GuidedProjectionAlgorithm"/>.  
+        /// </summary>
+        public int EnergyCount => _energies.Count;
+
+        /// <summary>
+        /// Gets the number of constraints of this <see cref="GuidedProjectionAlgorithm"/>.  
+        /// </summary>
+        public int ConstraintCount => _constraints.Count;
+
         /**************************************** Settings ****************************************/
 
         /// <summary>

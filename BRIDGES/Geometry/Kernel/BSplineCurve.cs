@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
-
-using Alg_Fund = BRIDGES.Algebra.Fundamentals;
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using Uni_Spe = BRIDGES.Arithmetic.Polynomials.Univariate.Specials;
 
@@ -15,7 +13,8 @@ namespace BRIDGES.Geometry.Kernel
     /// <typeparam name="TPoint"> Type of point in the geometric space. </typeparam>
     public class BSplineCurve<TPoint> :
         ICurve<TPoint>
-        where TPoint : Alg_Fund.IAddable<TPoint>, Alg_Sets.IGroupAction<TPoint, double>
+        where TPoint : IAdditionOperators<TPoint, TPoint, TPoint>,
+                       IMultiplyOperators<TPoint, double, TPoint>, IDivisionOperators<TPoint, double, TPoint>
     {
         #region Fields
 
@@ -181,13 +180,13 @@ namespace BRIDGES.Geometry.Kernel
                 double[] bSplines = Uni_Spe.BSpline.EvaluateBasisAt(parameter, i_KnotSpan, Degree, _knotVector);
 
                 // Initialisation
-                TPoint result = ControlPoint(i_KnotSpan - Degree).Multiply(bSplines[0]);
+                TPoint result = ControlPoint(i_KnotSpan - Degree) * bSplines[0];
 
                 // Iteration
                 for (int i = 1; i < Degree + 1; i++)
                 {
-                    TPoint temp = _controlPoints[i_KnotSpan - Degree + i].Multiply(bSplines[i]);
-                    result =  result.Add(temp);
+                    TPoint temp = _controlPoints[i_KnotSpan - Degree + i] * bSplines[i];
+                    result =  result + temp;
                 }
 
                 return result;

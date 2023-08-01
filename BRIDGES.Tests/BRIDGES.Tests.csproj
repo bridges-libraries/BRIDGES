@@ -6,7 +6,7 @@
 		<Company>École des Ponts ParisTech</Company>
 		<Description>Test project for the BRIDGES class library.</Description>
 
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 
 		<RepositoryUrl>https://github.com/bridges-libraries/BRIDGES</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>

@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
-
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using Vect = BRIDGES.LinearAlgebra.Vectors;
 
@@ -12,7 +11,7 @@ namespace BRIDGES.LinearAlgebra.Matrices
     /// Class defining a matrix.
     /// </summary>
     public abstract class Matrix :
-        Alg_Sets.IGroupAction<Matrix, double>
+        IMultiplyOperators<Matrix, double, Matrix>, IDivisionOperators<Matrix, double, Matrix>
     {
         #region Properties
 
@@ -338,19 +337,6 @@ namespace BRIDGES.LinearAlgebra.Matrices
         /// <param name="column"> Column index of the value to get.</param>
         /// <returns> The value at the given row and column index. </returns>
         public abstract double At(int row, int column);
-
-        #endregion
-
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Matrix, double> ********************/
-
-        /// <inheritdoc/>
-        Matrix Alg_Sets.IGroupAction<Matrix, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Matrix Alg_Sets.IGroupAction<Matrix, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

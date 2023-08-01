@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Numerics;
 using System.Collections.Generic;
-
-using Alg_Sets = BRIDGES.Algebra.Sets;
 
 using Vect = BRIDGES.LinearAlgebra.Vectors;
 
@@ -12,7 +11,7 @@ namespace BRIDGES.LinearAlgebra.Matrices
     /// Class defining a sparse matrix.
     /// </summary>
     public abstract class SparseMatrix : Matrix,
-        Alg_Sets.IGroupAction<SparseMatrix, double>
+        IMultiplyOperators<SparseMatrix, double, SparseMatrix>, IDivisionOperators<SparseMatrix, double, SparseMatrix>
     {
         #region Properties
 
@@ -427,9 +426,7 @@ namespace BRIDGES.LinearAlgebra.Matrices
         #endregion
 
 
-        #region Overrides
-
-        /******************** Matrix ********************/
+        #region Override : Matrix
 
         /// <inheritdoc cref="Matrix.ToArray()"/>
         public override double[,] ToArray()
@@ -442,18 +439,6 @@ namespace BRIDGES.LinearAlgebra.Matrices
 
             return result;
         }
-
-        #endregion
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<SparseMatrix, double> ********************/
-
-        /// <inheritdoc/>
-        SparseMatrix Alg_Sets.IGroupAction<SparseMatrix, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        SparseMatrix Alg_Sets.IGroupAction<SparseMatrix, double>.Divide(double divisor) => this / divisor;
 
         #endregion
     }

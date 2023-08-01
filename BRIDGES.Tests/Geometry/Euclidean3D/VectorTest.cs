@@ -4,7 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BRIDGES.Geometry.Euclidean3D;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
 using Alg_Meas = BRIDGES.Algebra.Measure;
 
 
@@ -772,45 +771,6 @@ namespace BRIDGES.Tests.Geometry.Euclidean3D
             double actual = dotProductable.DotProduct(vectorB);
             // Assert
             Assert.AreEqual(expected, actual, Settings.AbsolutePrecision);
-        }
-
-
-        /******************** IGroupAction<Vector, double> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method
-        /// computing the scalar multiplication of the current <see cref="Vector"/> with a <see cref="double"/>-precision real number.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Vector,double> Multiply(double)")]
-        public void AsIGroupAction_Multiply_double()
-        {
-            // Arrange
-            Vector vector = new Vector(1.0, 2.5, 5.2);
-            double factor = 4.0;
-            Vector expected = new Vector(4.0, 10.0, 20.8);
-            //Act
-            Alg_Sets.IGroupAction<Vector, double> representation = (Alg_Sets.IGroupAction<Vector,double>)vector;
-            Vector actual = representation.Multiply(factor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method
-        /// computing the scalar division of the current <see cref="Vector"/> with a <see cref="double"/>-precision real number.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Vector,double> Divide(double)")]
-        public void AsIGroupAction_Divide_double()
-        {
-            // Arrange
-            Vector vector = new Vector(1.0, 6.0, 3.4);
-            double number = 4.0;
-            Vector expected = new Vector(0.25, 1.5, 0.85);
-            //Act
-            Alg_Sets.IGroupAction<Vector, double> representation = (Alg_Sets.IGroupAction<Vector, double>)vector;
-            Vector actual = representation.Divide(number);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
         }
 
         #endregion

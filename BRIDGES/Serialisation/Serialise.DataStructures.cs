@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Numerics;
 using System.Collections.Generic;
 
 using Json = System.Text.Json;
@@ -23,8 +24,8 @@ namespace BRIDGES.Serialisation
         [Serialiser(typeof(Meshes.HalfedgeMesh.Mesh<>))]
         public static string HalfedgeMesh<TPosition>(Meshes.HalfedgeMesh.Mesh<TPosition> mesh, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             switch (format)
             {
@@ -49,8 +50,8 @@ namespace BRIDGES.Serialisation
         [Serialiser(typeof(Meshes.FaceVertexMesh.Mesh<>))]
         public static string FaceVertexMesh<TPosition>(Meshes.FaceVertexMesh.Mesh<TPosition> mesh, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             switch (format)
             {
@@ -75,8 +76,8 @@ namespace BRIDGES.Serialisation
         /// <returns> A string representation of the <see cref="Meshes.IMesh{TPosition}"/>. </returns>
         public static string PolyhedralMesh<TPosition>(Meshes.IMesh<TPosition> mesh, Formats.PolyhedralMeshSerialisationFormat format)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             switch (format)
             {
@@ -101,8 +102,8 @@ namespace BRIDGES.Serialisation
         /// <returns> A json representation of the <see cref="Meshes.HalfedgeMesh.Mesh{TPosition}"/>. </returns>
         private static string HalfedgeMeshToJson<TPosition>(Meshes.HalfedgeMesh.Mesh<TPosition> mesh)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             var options = new Json.JsonWriterOptions { Indented = true };
 
@@ -300,8 +301,8 @@ namespace BRIDGES.Serialisation
         /// <returns> An "obj" representation of the <see cref="Meshes.HalfedgeMesh.Mesh{TPosition}"/>. </returns>
         private static string PolyhedralMeshToObj<TPosition>(Meshes.IMesh<TPosition> mesh)
             where TPosition : IEquatable<TPosition>,
-                          Algebra.Fundamentals.IAddable<TPosition> /* To Do : Remove */,
-                          Algebra.Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
         {
             StringWriter sw = new StringWriter();
 

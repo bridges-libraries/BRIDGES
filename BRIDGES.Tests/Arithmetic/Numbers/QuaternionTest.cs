@@ -4,8 +4,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using BRIDGES.Arithmetic.Numbers;
 
-using Alg_Sets = BRIDGES.Algebra.Sets;
-
 
 namespace BRIDGES.Tests.Arithmetic.Numbers
 {
@@ -1192,127 +1190,6 @@ namespace BRIDGES.Tests.Arithmetic.Numbers
             Quaternion quaternionB = new Quaternion(1.0, 2.0, 3.0, 4.0);
             // Assert
             Assert.IsTrue(quaternionA.Equals(quaternionB));
-        }
-
-        #endregion
-
-
-        #region Explicit Implementations
-
-        /******************** IGroupAction<Quaternion, Complex> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Quaternion"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Quaternion,Complex> Multiply(Complex)")]
-        public void AsIGroupAction_Multiply_Complex()
-        {
-            // Arrange
-            Quaternion quaternion = new Quaternion(1.0, 2.0, 3.0, 4.0);
-            Complex complex = new Complex(9.0, 8.0);
-            Quaternion expected = new Quaternion(1.0 * 9.0 - 2.0 * 8.0, 1.0 * 8.0 + 2.0 * 9.0,
-                  3.0 * 9.0 + 4.0 * 8.0, -3.0 * 8.0 + 4.0 * 9.0);
-            //Act
-            Alg_Sets.IGroupAction<Quaternion, Complex> representation = (Alg_Sets.IGroupAction<Quaternion, Complex>)quaternion;
-            Quaternion actual = representation.Multiply(complex);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Quaternion"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Quaternion,Complex> Divide(Complex)")]
-        public void AsIGroupAction_Divide_Complex()
-        {
-            // Arrange
-            Quaternion quaternion = new Quaternion(6.0, 7.0, 8.0, 9.0);
-            Complex complex = new Complex(1.0, 2.0);
-            Quaternion expected = new Quaternion(
-                (6.0 * 1.0 + 7.0 * 2.0) / 5.0,
-                (-6.0 * 2.0 + 7.0 * 1.0) / 5.0,
-                (8.0 * 1.0 - 9.0 * 2.0) / 5.0,
-                (8.0 * 2.0 + 9.0 * 1.0) / 5.0);
-            // Act
-            Alg_Sets.IGroupAction<Quaternion, Complex> representation = (Alg_Sets.IGroupAction<Quaternion, Complex>)quaternion;
-            Quaternion actual = representation.Divide(complex); ;
-            // Assert 
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-
-        /******************** IGroupAction<Quaternion, Real> ********************/
-
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Quaternion"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Quaternion,Real> Multiply(Real)")]
-        public void AsIGroupAction_Multiply_Real()
-        {
-            // Arrange
-            Quaternion quaternion = new Quaternion(1.0, 2.5, -5.0, 10.0);
-            Real factor = new Real(4.0);
-            Quaternion expected = new Quaternion(4.0, 10.0, -20.0, 40.0);
-            //Act
-            Alg_Sets.IGroupAction<Quaternion, Real> representation = (Alg_Sets.IGroupAction<Quaternion, Real>)quaternion;
-            Quaternion actual = representation.Multiply(factor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Quaternion"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Quaternion,Real> Divide(Real)")]
-        public void AsIGroupAction_Divide_Real()
-        {
-            // Arrange
-            Quaternion quaternion = new Quaternion(1.0, 2.5, 5.0, -10.0);
-            Real divisor = new Real(4.0);
-            Quaternion expected = new Quaternion(0.25, 0.625, 1.25, -2.5);
-            //Act
-            Alg_Sets.IGroupAction<Quaternion, Real> representation = (Alg_Sets.IGroupAction<Quaternion, Real>)quaternion;
-            Quaternion actual = representation.Divide(divisor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-
-        /******************** IGroupAction<Quaternion, double> ********************/
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Multiply(TValue)"/> method of <see cref="Quaternion"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Quaternion,double> Multiply(double)")]
-        public void AsIGroupAction_Multiply_double()
-        {
-            // Arrange
-            Quaternion quaternion = new Quaternion(1.0, 2.5, -5.0, 10.0);
-            double factor = 4.0;
-            Quaternion expected = new Quaternion(4.0, 10.0, -20.0, 40.0);
-            //Act
-            Alg_Sets.IGroupAction<Quaternion, double> representation = (Alg_Sets.IGroupAction<Quaternion, double>)quaternion;
-            Quaternion actual = representation.Multiply(factor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
-        }
-
-        /// <summary>
-        /// Tests the <see cref="Alg_Sets.IGroupAction{TSelf, TValue}.Divide(TValue)"/> method of <see cref="Quaternion"/>.
-        /// </summary>
-        [TestMethod("AsIGroupAction<Quaternion,double> Divide(double)")]
-        public void AsIGroupAction_Divide_double()
-        {
-            // Arrange
-            Quaternion quaternion = new Quaternion(1.0, 2.5, 5.0, -10.0);
-            double divisor = 4.0;
-            Quaternion expected = new Quaternion(0.25, 0.625, 1.25, -2.5);
-            //Act
-            Alg_Sets.IGroupAction<Quaternion, double> representation = (Alg_Sets.IGroupAction<Quaternion, double>)quaternion;
-            Quaternion actual = representation.Divide(divisor);
-            // Assert
-            Assert.IsTrue(expected.Equals(actual));
         }
 
         #endregion

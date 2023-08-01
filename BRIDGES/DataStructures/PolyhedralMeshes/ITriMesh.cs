@@ -1,7 +1,5 @@
 ﻿using System;
-
-using Alg_Fund = BRIDGES.Algebra.Fundamentals;
-using Alg_Sets = BRIDGES.Algebra.Sets;
+using System.Numerics;
 
 
 namespace BRIDGES.DataStructures.PolyhedralMeshes
@@ -13,8 +11,8 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
     /// No assumptions should be made on the valency of the mesh vertices.</remarks>
     public interface ITriMesh<TPosition>
         where TPosition : IEquatable<TPosition>,
-                          Alg_Fund.IAddable<TPosition> /* To Do : Remove */,
-                          Alg_Sets.IGroupAction<TPosition, double>
+                          IAdditionOperators<TPosition, TPosition, TPosition>,
+                          IMultiplyOperators<TPosition, double, TPosition>, IDivisionOperators<TPosition, double, TPosition>
     {
         #region Properties
 

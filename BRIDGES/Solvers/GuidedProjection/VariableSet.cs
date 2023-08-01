@@ -12,9 +12,9 @@ namespace BRIDGES.Solvers.GuidedProjection
         #region Fields
 
         /// <summary>
-        /// List of variables of the set. 
+        /// List of components of the set variables.
         /// </summary>
-        private List<double> _variables;
+        private List<double> _components;
 
         #endregion
 
@@ -54,7 +54,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         internal VariableSet(int setIndex, int firstRank, int variableDimension)
         {
             // Instanciate Fields 
-            _variables = new List<double>();
+            _components = new List<double>();
 
             // Initialise Properties
             FirstRank = firstRank;
@@ -74,7 +74,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         internal VariableSet(int setIndex, int firstRank, int variableDimension, int setCapacity)
         {
             // Instanciate Fields 
-            _variables = new List<double>(variableDimension * setCapacity);
+            _components = new List<double>(variableDimension * setCapacity);
 
             // Initialise Properties
             FirstRank = firstRank;
@@ -95,7 +95,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <returns> The component at the given index in the set. </returns>
         internal double GetComponent(int componentIndex)
         {
-            return _variables[componentIndex];
+            return _components[componentIndex];
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <param name="value"> Value to set. </param>
         internal void SetComponent(int componentIndex, double value)
         {
-            _variables[componentIndex] = value;
+            _components[componentIndex] = value;
         }
 
 
@@ -121,7 +121,7 @@ namespace BRIDGES.Solvers.GuidedProjection
                     "does not match the expected dimension of the variables of the set.");
             }
 
-            _variables.AddRange(components);
+            _components.AddRange(components);
             VariableCount++;
         }
 
@@ -136,7 +136,7 @@ namespace BRIDGES.Solvers.GuidedProjection
             int index = variableIndex * VariableDimension;
             for (int i = 0; i < VariableDimension; i++)
             {
-                variable[i] = _variables[index + i];
+                variable[i] = _components[index + i];
             }
             return variable;
         }

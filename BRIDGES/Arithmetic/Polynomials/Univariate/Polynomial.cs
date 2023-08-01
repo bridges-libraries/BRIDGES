@@ -1,7 +1,5 @@
 ﻿using System;
-
-
-using Alg_Sets = BRIDGES.Algebra.Sets;
+using System.Numerics;
 
 
 namespace BRIDGES.Arithmetic.Polynomials.Univariate
@@ -11,7 +9,10 @@ namespace BRIDGES.Arithmetic.Polynomials.Univariate
     /// </summary>
     /// <remarks> For a multivariate polynomial, refer to <see cref="Multivariate.Polynomial"/>. </remarks>
     public class Polynomial :
-        Alg_Sets.IGroupAction<Polynomial, double>
+        IAdditionOperators<Polynomial, Polynomial, Polynomial>, IAdditiveIdentity<Polynomial, Polynomial>,
+        ISubtractionOperators<Polynomial, Polynomial, Polynomial>, IUnaryNegationOperators<Polynomial, Polynomial>,
+        IMultiplyOperators<Polynomial, Polynomial, Polynomial>, IMultiplicativeIdentity<Polynomial, Polynomial>,
+        IMultiplyOperators<Polynomial, double, Polynomial>, IDivisionOperators<Polynomial, double, Polynomial>
     {
         #region Fields
 
@@ -77,12 +78,12 @@ namespace BRIDGES.Arithmetic.Polynomials.Univariate
         /// <summary>
         /// Gets a new <see cref="Polynomial"/>, constant equal to zero.
         /// </summary>
-        public static Polynomial Zero =>new Polynomial(0d);
+        public static Polynomial AdditiveIdentity =>new Polynomial(0d);
 
         /// <summary>
         /// Gets a new <see cref="Polynomial"/>, constant equal to one.
         /// </summary>
-        public static Polynomial One => new Polynomial(1d);
+        public static Polynomial MultiplicativeIdentity => new Polynomial(1d);
 
         #endregion
 
@@ -407,16 +408,9 @@ namespace BRIDGES.Arithmetic.Polynomials.Univariate
 
         #endregion
 
-
         #region Explicit Implementations
 
-        /******************** IGroupAction<DenseMatrix, double> ********************/
-
-        /// <inheritdoc/>
-        Polynomial Alg_Sets.IGroupAction<Polynomial, double>.Multiply(double factor) => this * factor;
-
-        /// <inheritdoc/>
-        Polynomial Alg_Sets.IGroupAction<Polynomial, double>.Divide(double divisor) => this / divisor;
+        /******************** IAdditiveIdentity<Polynomial, Polynomial> ********************/
 
         #endregion
     }
