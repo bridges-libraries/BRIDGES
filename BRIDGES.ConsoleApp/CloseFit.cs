@@ -381,7 +381,7 @@ internal class NodeEquilibrium2 : IQuadraticConstraintType
             }
         }
 
-        LocalHi = new CompressedColumn(spaceDimension, spaceDimension, dok_Hi);
+        LocalHi = new CompressedColumn(spaceDimension, spaceDimension, dok_Hi); //problems in the definition of the columnPointers....
 
 
         /******************** Define LocalBi ********************/
