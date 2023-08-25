@@ -1,45 +1,42 @@
-﻿using System;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 
 namespace BRIDGES.Solvers.GuidedProjection
 {
     /// <summary>
-    /// Class defining a set of variables with the same dimension (i.e. variables with the same number of components).
+    /// Class defining a set of variables with the same dimension (i.e. the same number of components).
     /// </summary>
-    public class VariableSet
+    public class VariableSet : IEnumerable<Variable>
     {
         #region Fields
-
+        
         /// <summary>
-        /// List of variables of the set. 
+        /// List of th variables in the set.
         /// </summary>
-        private List<double> _variables;
+        private readonly List<Variable> _variables;
 
         #endregion
 
         #region Properties
 
         /// <summary>
-        /// Gets the index of the set in the <see cref="GuidedProjectionAlgorithm"/>'s list of variable sets.
+        /// Number of variables in this set.
         /// </summary>
-        public int SetIndex { get; private set; }
+        public int Count => _variables.Count;
 
         /// <summary>
-        /// Gets the common dimension of variables in the set.
+        /// Common dimension of the variables in this set. 
         /// </summary>
-        public int VariableDimension { get; private set; }
+        public int Dimension { get; private set; }
 
         /// <summary>
-        /// Gets the number of variables in the set. 
+        /// Gets a variable at the specified index in this set.
         /// </summary>
-        public int VariableCount { get; private set; }
-
-
-        /// <summary>
-        /// Gets the rank of the first component of the first variable in the set.
-        /// </summary>
-        internal int FirstRank { get; private set; }
+        /// <param name="index"> The zero-based index of the variable to get. </param>
+        /// <returns> The variable at the specified index. </returns>
+        public Variable this[int index] => _variables[index];
 
         #endregion
 
@@ -48,98 +45,49 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <summary>
         /// Initializes a new instance of the <see cref="VariableSet"/> class.
         /// </summary>
-        /// <param name="setIndex"> Index of the set in the <see cref="GuidedProjectionAlgorithm"/>'s list of variable sets. </param>
-        /// <param name="firstRank"> Rank of the first component of the first variable in the set. </param>
-        /// <param name="variableDimension"> Dimension of the variables in the set. </param>
-        internal VariableSet(int setIndex, int firstRank, int variableDimension)
+        /// <param name="dimension"> Common dimension of the variables in the set. </param>
+        /// <param name="capacity"> Number of variables that the set can initially store. </param>
+        public VariableSet(int dimension, int capacity)
         {
-            // Instanciate Fields 
-            _variables = new List<double>();
+            Dimension = dimension;
 
-            // Initialise Properties
-            FirstRank = firstRank;
-
-            SetIndex = setIndex;
-            VariableCount = 0;
-            VariableDimension = variableDimension;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VariableSet"/> class.
-        /// </summary>
-        /// <param name="setIndex"> Index of the set in the <see cref="GuidedProjectionAlgorithm"/>'s list of VariableSet. </param>
-        /// <param name="firstRank"> Index of the first component of the first variable in the set. </param>
-        /// <param name="variableDimension"> Dimension of the variables contained in the set. </param>
-        /// <param name="setCapacity"> Indicative capacity of the set. </param>
-        internal VariableSet(int setIndex, int firstRank, int variableDimension, int setCapacity)
-        {
-            // Instanciate Fields 
-            _variables = new List<double>(variableDimension * setCapacity);
-
-            // Initialise Properties
-            FirstRank = firstRank;
-
-            SetIndex = setIndex;
-            VariableCount = 0;
-            VariableDimension = variableDimension;
+            _variables = new List<Variable>(capacity);
         }
 
         #endregion
 
         #region Methods
-
+        
         /// <summary>
-        /// Returns the component at the given index in the set.
+        /// Adds a variable in this set.
         /// </summary>
-        /// <param name="componentIndex"> Index of the component to get. </param>
-        /// <returns> The component at the given index in the set. </returns>
-        internal double GetComponent(int componentIndex)
+        /// <param name="components"> Components of the variable to add. </param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"> The number of components of the variable must be equal to the common dimension of the variables in this set. </exception>
+        public Variable AddVariable(params double[] components)
         {
-            return _variables[componentIndex];
-        }
-
-        /// <summary>
-        /// Sets the component at the given index in the set.
-        /// </summary>
-        /// <param name="componentIndex"> Index of the component to set. </param>
-        /// <param name="value"> Value to set. </param>
-        internal void SetComponent(int componentIndex, double value)
-        {
-            _variables[componentIndex] = value;
-        }
-
-
-        /// <summary>
-        /// Adds a variable to the set. 
-        /// </summary>
-        /// <param name="components"> Components of the variables to add. </param>
-        public void AddVariable(params double[] components)
-        {
-            if (components.Length != VariableDimension)
+            if ( Dimension != components.Length)
             {
-                throw new ArgumentOutOfRangeException("The number of components for the new variable" +
-                    "does not match the expected dimension of the variables of the set.");
+                throw new ArgumentOutOfRangeException("The number of components of the variable must be equal to the common dimension of the variables in this set.");
             }
 
-            _variables.AddRange(components);
-            VariableCount++;
-        }
+            Variable variable = new Variable(components);
+            _variables.Add(variable);
 
-        /// <summary>
-        /// Returns the components of the variable at the given index.
-        /// </summary>
-        /// <param name="variableIndex"> Index of the variable to get. </param>
-        /// <returns> The components of the variable at the index. </returns>
-        public double[] GetVariable(int variableIndex)
-        {
-            double[] variable = new double[VariableDimension];
-            int index = variableIndex * VariableDimension;
-            for (int i = 0; i < VariableDimension; i++)
-            {
-                variable[i] = _variables[index + i];
-            }
             return variable;
         }
+
+
+        /// <inheritdoc cref="IEnumerable{T}.GetEnumerator()"/>
+        public IEnumerator<Variable> GetEnumerator() =>_variables.GetEnumerator();
+
+        #endregion
+
+
+        #region Explicit Implementations : IEnumerable
+
+        /// <inheritdoc cref="IEnumerable.GetEnumerator()"/>
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion
     }

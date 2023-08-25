@@ -3,24 +3,24 @@
 using BRIDGES.LinearAlgebra.Vectors;
 
 
-namespace BRIDGES.Solvers.GuidedProjection.Interfaces
+namespace BRIDGES.Solvers.GuidedProjection.Abstracts
 {
     /// <summary>
-    /// Interface defining an energy type for the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Abstract class defining an energy type for the <see cref="GuidedProjectionAlgorithm"/>.
     /// </summary>
-    public interface IEnergyType
+    public abstract class EnergyType
     {
         #region Properties
 
         /// <summary>
         /// Gets the local vector Ki of the energy.
         /// </summary>
-        SparseVector LocalKi { get; }
+        public SparseVector LocalKi { get; protected set; }
 
         /// <summary>
         /// Gets the scalar value Si of the energy.
         /// </summary>
-        double Si { get; }
+        public double Si { get; protected set; }
 
         #endregion
     }

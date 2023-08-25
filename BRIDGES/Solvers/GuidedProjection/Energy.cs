@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using BRIDGES.Solvers.GuidedProjection.Interfaces;
+using BRIDGES.Solvers.GuidedProjection.Abstracts;
 
 
 namespace BRIDGES.Solvers.GuidedProjection
@@ -9,24 +9,29 @@ namespace BRIDGES.Solvers.GuidedProjection
     /// <summary>
     /// Class defining an energy for the <see cref="GuidedProjectionAlgorithm"/>.
     /// </summary>
-    public class Energy
+    public sealed class Energy
     {
         #region Fields
 
         /// <summary>
-        /// Energy type defining the reduced vector <see cref="IEnergyType.LocalKi"/> and the scalar value <see cref="IEnergyType.Si"/>.
+        /// Variables composing the local vector LocalX on which the <see cref="Type"/> is defined.
         /// </summary>
-        internal protected IEnergyType energyType;
+        private readonly List<Variable> _variables;
 
-        /// <summary>
-        /// Variables composing the local vector xReduced on which the <see cref="energyType"/> is defined.
-        /// </summary>
-        /// <remarks> The first component corresponds to the variable set and the second to the index of the variable in the set. </remarks>
-        internal protected List<(VariableSet Set, int Index)> variables;
-        
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets the energy type defining the local vector <see cref="EnergyType.LocalKi"/> and the scalar value <see cref="EnergyType.Si"/>.
+        /// </summary>
+        public EnergyType Type { get; private set; }
+
+        /// <summary>
+        /// Gets the variables composing the local vector LocalX.
+        /// </summary>
+        public IReadOnlyList<Variable> Variables => _variables;
+
 
         /// <summary>
         /// Gets or sets the weight of the energy.
@@ -40,16 +45,14 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <summary>
         /// Initialises a new instance of the <see cref="Energy"/> class.
         /// </summary>
-        /// <param name="energyType"> Energy type defining the energy locally. </param>
-        /// <param name="variablesKi"> Variables composing the reduced vector xReduced. </param>
+        /// <param name="energyType"> Energy type defining the local quantities of the energy. </param>
+        /// <param name="variablesKi"> Variables composing the local vector LocalX. </param>
         /// <param name="weight"> Weight of the energy. </param>
-        internal Energy(IEnergyType energyType, List<(VariableSet, int)> variablesKi, double weight)
+        public Energy(EnergyType energyType, List<Variable> variablesKi, double weight)
         {
-            // Initialise Fields
-            this.energyType = energyType;
-            this.variables = variablesKi;
+            this.Type = energyType;
+            this._variables = variablesKi;
 
-            // Initialise Properties
             Weight = weight;
         }
 
