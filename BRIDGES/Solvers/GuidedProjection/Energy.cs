@@ -14,9 +14,9 @@ namespace BRIDGES.Solvers.GuidedProjection
         #region Fields
 
         /// <summary>
-        /// Variables composing the local vector LocalX on which the <see cref="Type"/> is defined.
+        /// Variables composing the local vector localX on which the <see cref="EnergyType"/> is defined.
         /// </summary>
-        private readonly List<Variable> _variables;
+        private readonly Variable[] _variables;
 
         #endregion
 
@@ -28,13 +28,13 @@ namespace BRIDGES.Solvers.GuidedProjection
         public EnergyType Type { get; private set; }
 
         /// <summary>
-        /// Gets the variables composing the local vector LocalX.
+        /// Gets the variables composing the local vector localX.
         /// </summary>
         public IReadOnlyList<Variable> Variables => _variables;
 
 
         /// <summary>
-        /// Gets or sets the weight of the energy.
+        /// Gets or sets the weight of this energy.
         /// </summary>
         public double Weight { get; internal set; }
 
@@ -46,12 +46,17 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// Initialises a new instance of the <see cref="Energy"/> class.
         /// </summary>
         /// <param name="energyType"> Energy type defining the local quantities of the energy. </param>
-        /// <param name="variablesKi"> Variables composing the local vector LocalX. </param>
+        /// <param name="variablesKi"> Variables composing the local vector localX. </param>
         /// <param name="weight"> Weight of the energy. </param>
-        public Energy(EnergyType energyType, List<Variable> variablesKi, double weight)
+        public Energy(EnergyType energyType, IReadOnlyList<Variable> variablesKi, double weight)
         {
             this.Type = energyType;
-            this._variables = variablesKi;
+
+            this._variables = new Variable[variablesKi.Count];
+            for (int i = 0; i < variablesKi.Count; i++)
+            {
+                _variables[i] = variablesKi[i];
+            }
 
             Weight = weight;
         }

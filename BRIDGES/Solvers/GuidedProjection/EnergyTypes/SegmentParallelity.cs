@@ -8,7 +8,7 @@ using BRIDGES.Solvers.GuidedProjection.Abstracts;
 namespace BRIDGES.Solvers.GuidedProjection.EnergyTypes
 {
     /// <summary>
-    /// Energy enforcing a segment to be parallel to a fixed direction <em>V</em>. The list of variables for this energy consists of:
+    /// Energy enforcing a segment to be parallel to a fixed direction <em>V</em>. The list of variables of this energy consists in:
     /// <list type="bullet">
     ///     <item> 
     ///         <term>P<sub>s</sub></term>
@@ -35,7 +35,7 @@ namespace BRIDGES.Solvers.GuidedProjection.EnergyTypes
         /// <param name="direction"> Coordinates of the direction vector to which the segment must be parallel. </param>
         public SegmentParallelity(double[] direction)
         {
-            /******************** Unitise the direction ********************/
+            // ----- Unitise the direction ----- //
 
             bool isZero = true;
             double length = 0d;
@@ -55,7 +55,7 @@ namespace BRIDGES.Solvers.GuidedProjection.EnergyTypes
             }
 
 
-            /******************** Define LocalKi ********************/
+            // ----- Define LocalKi ----- //
 
             Dictionary<int, double> component = new Dictionary<int, double>((2 * direction.Length) + 1);
             for (int i = 0; i < direction.Length; i++)
@@ -68,7 +68,7 @@ namespace BRIDGES.Solvers.GuidedProjection.EnergyTypes
             LocalKi = new SparseVector((2 * direction.Length) + 1, ref component);
 
 
-            /******************** Define Si ********************/
+            // ----- Define Si ----- //
 
             Si = 0.0;
         }

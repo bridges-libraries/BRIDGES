@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BRIDGES.Solvers.GuidedProjection.Abstracts
 {
     /// <summary>
-    /// Abstract class defining a linearised constraint type for the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Abstract class defining a linearised constraint type.
     /// </summary>
     public abstract class LinearisedConstraintType : ConstraintType
     {

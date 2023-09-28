@@ -7,7 +7,7 @@ using BRIDGES.LinearAlgebra.Matrices;
 namespace BRIDGES.Solvers.GuidedProjection.Abstracts
 {
     /// <summary>
-    /// Abstract class defining a constraint type for the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Abstract class defining a constraint type.
     /// </summary>
     public abstract class ConstraintType
     {

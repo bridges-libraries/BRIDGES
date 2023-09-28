@@ -7,7 +7,7 @@ using BRIDGES.Solvers.GuidedProjection.Abstracts;
 namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
 {
     /// <summary>
-    /// Constraint enforcing a vector variable to equal a fixed target length (computed with euclidean norm). The list of variables for this constraint consists of:
+    /// Constraint enforcing a vector variable to equal a fixed target length (computed with euclidean norm). The list of variables of this constraint consists in:
     /// <list type="bullet">
     ///     <item> 
     ///         <term>V</term>
@@ -26,7 +26,7 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
         /// <param name="dimension"> Dimension of the vector variable. </param>
         public VectorLength(double length, int dimension = 3)
         {
-            /******************** Define LocalHi ********************/
+            // ----- Define LocalHi ********************/
 
             int[] columnPointers = new int[dimension + 1];
             int[] rowIndices = new int[dimension];
@@ -43,12 +43,12 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
             LocalHi = new CompressedColumn(dimension, dimension, columnPointers, rowIndices, values);
 
 
-            /******************** Define LocalBi ********************/
+            // ----- Define LocalBi ----- //
 
             LocalBi = null;
 
 
-            /******************** Define Ci ********************/
+            // ----- Define Ci ----- //
 
             Ci = length * length;
         }
