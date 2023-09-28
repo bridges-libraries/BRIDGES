@@ -7,7 +7,7 @@ using BRIDGES.Solvers.GuidedProjection.Abstracts;
 namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
 {
     /// <summary>
-    /// Constraint enforcing a scalar variable to match with the distance between two variables. The list of variables for this constraint consists of:
+    /// Constraint enforcing a scalar variable to match with the distance between two variables. The list of variables of this constraint consists in:
     /// <list type="bullet">
     ///     <item> 
     ///         <term>P<sub>i</sub></term>
@@ -33,7 +33,7 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
         /// <param name="dimension"> Common dimension of the variables with which the distance is being computed. </param>
         public CoherentLength(int dimension)
         {
-            /******************** Define LocalHi ********************/
+            // ----- Define LocalHi ----- //
 
             int[] columnPointers = new int[(2 * dimension) + 2];
             int[] rowIndices = new int[(4 * dimension) + 1];
@@ -58,12 +58,12 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
             LocalHi = new CompressedColumn((2 * dimension) + 1, (2 * dimension) + 1, columnPointers, rowIndices, values);
 
 
-            /******************** Define LocalBi ********************/
+            // ----- Define LocalBi ----- //
 
             LocalBi = null ;
 
 
-            /******************** Define Ci ********************/
+            // ----- Define Ci ----- //
 
             Ci = 0d;
         }

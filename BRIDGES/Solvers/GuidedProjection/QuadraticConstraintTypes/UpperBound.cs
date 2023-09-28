@@ -9,7 +9,7 @@ using BRIDGES.Solvers.GuidedProjection.Abstracts;
 namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
 {
     /// <summary>
-    /// Constraint enforcing a scalar variable to be smaller than a fixed upper bound. The list of variables for this constraint consists of:
+    /// Constraint enforcing a scalar variable to be smaller than a fixed upper bound. The list of variables of this constraint consists in:
     /// <list type="bullet">
     ///     <item> 
     ///         <term>S</term>
@@ -31,7 +31,7 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
         /// <param name="bound"> Value of the upper bound. </param>
         public UpperBound(double bound)
         {
-            /******************** Define LocalHi ********************/
+            // ----- Define LocalHi ----- //
 
             int[] columnPointers = new int[3] { 0, 0, 1 };
             int[] rowIndices = new int[1] { 1 };
@@ -40,14 +40,14 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
             LocalHi = new CompressedColumn(2, 2, columnPointers, rowIndices, values);
 
 
-            /******************** Define LocalBi ********************/
+            // ----- Define LocalBi ----- //
 
             Dictionary<int, double> components = new Dictionary<int, double> { { 0, -1.0 } };
 
             LocalBi = new SparseVector(2, ref components);
 
 
-            /******************** Define Ci ********************/
+            // ----- Define Ci ----- //
 
             Ci = bound;
         }
