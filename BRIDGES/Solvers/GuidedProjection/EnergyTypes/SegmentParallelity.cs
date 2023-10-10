@@ -2,69 +2,74 @@
 using System.Collections.Generic;
 
 using BRIDGES.LinearAlgebra.Vectors;
-using BRIDGES.Solvers.GuidedProjection.Interfaces;
+using BRIDGES.Solvers.GuidedProjection.Abstracts;
 
 
 namespace BRIDGES.Solvers.GuidedProjection.EnergyTypes
 {
     /// <summary>
-    /// Energy enforcing a segment defined from two point variables, <em>pi</em> and <em>pj</em>, to be parallel to a constant direction <em>v</em>.
+    /// Energy enforcing a segment to be parallel to a fixed direction <em>V</em>. The list of variables of this energy consists in:
+    /// <list type="bullet">
+    ///     <item> 
+    ///         <term>P<sub>s</sub></term>
+    ///         <description> Variable representing the start point of the segment.</description>
+    ///     </item>
+    ///     <item> 
+    ///         <term>P<sub>e</sub></term>
+    ///         <description> Variable representing the end point of the segment.</description>
+    ///     </item>
+    ///     <item> 
+    ///         <term>L</term>
+    ///         <description> Variable representing the length of the segment.</description>
+    ///     </item>
+    /// </list>
     /// </summary>
-    /// <remarks> 
-    /// A scalar variable <em>l</em> identified as the segment length must be defined.<br/>
-    /// The vector xReduced = [pi, pj, l].
-    /// </remarks>
-    public class SegmentParallelity : IEnergyType
+    /// <remarks> The definition of a variable representing the length between to other variables must be accompanied by the use of the <see cref="QuadraticConstraintTypes.CoherentLength"/> constraint. </remarks>
+    public class SegmentParallelity : EnergyType
     {
-        #region Properties
-
-        /// <inheritdoc cref="IEnergyType.LocalKi"/>
-        public SparseVector LocalKi { get; }
-
-        /// <inheritdoc cref="IEnergyType.Si"/>
-        public double Si { get; }
-
-        #endregion
-
         #region Constructors
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="SegmentParallelity"/> class by defining the coordinates of the target direction vector.
+        /// Initialises a new instance of the <see cref="SegmentParallelity"/> class.
         /// </summary>
-        /// <param name="coordinates"> Coordinates of the target direction vector. </param>
-        public SegmentParallelity(double[] coordinates)
+        /// <param name="direction"> Coordinates of the direction vector to which the segment must be parallel. </param>
+        public SegmentParallelity(double[] direction)
         {
-            // Unitise the direction vector
-            double length = 0.0;
-            for (int i = 0; i < coordinates.Length; i++)
+            // ----- Unitise the direction ----- //
+
+            bool isZero = true;
+            double length = 0d;
+            for (int i = 0; i < direction.Length; i++)
             {
-                length += coordinates[i] * coordinates[i];
+                if (isZero & Settings.AbsolutePrecision < Math.Abs(direction[i])) { isZero = false; }
+
+                length += direction[i] * direction[i];
             }
             length = Math.Sqrt(length);
 
-            if (length == 0.0)
+            if (isZero) { throw new DivideByZeroException("The length of the target direction must be different from zero."); }
+
+            for (int i = 0; i < direction.Length; i++)
             {
-                throw new DivideByZeroException("The length of the target direction vector must be different than zero.");
+                direction[i] = direction[i] / length;
             }
 
-            for (int i = 0; i < coordinates.Length; i++)
+
+            // ----- Define LocalKi ----- //
+
+            Dictionary<int, double> component = new Dictionary<int, double>((2 * direction.Length) + 1);
+            for (int i = 0; i < direction.Length; i++)
             {
-                coordinates[i] = coordinates[i] / length;
+                component.Add(i, -direction[i]);
+                component.Add(direction.Length + i, direction[i]);
             }
+            component.Add(2 * direction.Length, -1);
 
-            /******************** Define LocalKi ********************/
+            LocalKi = new SparseVector((2 * direction.Length) + 1, ref component);
 
-            Dictionary<int, double> component = new Dictionary<int, double>((2 * coordinates.Length) + 1);
-            for (int i = 0; i < coordinates.Length; i++)
-            {
-                component.Add(i, -coordinates[i]);
-                component.Add(coordinates.Length + i, coordinates[i]);
-            }
-            component.Add(2 * coordinates.Length, -1);
 
-            LocalKi = new SparseVector((2 * coordinates.Length) + 1, ref component);
+            // ----- Define Si ----- //
 
-            /******************** Define Si ********************/
             Si = 0.0;
         }
 
