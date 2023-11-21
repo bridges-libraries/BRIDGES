@@ -4,9 +4,9 @@
 namespace BRIDGES.Solvers.GuidedProjection
 {
     /// <summary>
-    /// Variable of the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Variable for the <see cref="Solver"/>.
     /// </summary>
-    public sealed class Variable : IEquatable<Variable>
+    public sealed class Variable : IVariable, IEquatable<Variable>
     {
         #region Fields
 
@@ -19,37 +19,31 @@ namespace BRIDGES.Solvers.GuidedProjection
 
         #region Properties
 
-        /// <summary>
-        /// Gets the component at the specified index in this variable.
-        /// </summary>
-        /// <param name="index"> The zero-based index of the variable's component to get. </param>
-        /// <returns> The component at the specified index. </returns>
+        /// <inheritdoc/>
+        /// <remarks> If <see langword="true"/>, the variable was added to a <see cref="Solver"/> and it references the global vector X. </remarks>
+        public bool IsReference => !(_components.Count == _components.Array.Length);
+
+
+        /// <inheritdoc/>
+        /// <exception cref="IndexOutOfRangeException"> The index must be positive and smaller than the dimension of the variable. </exception>
         public double this[int index]
         {
             get 
             {
-                return index < _components.Count ? _components.Array[_components.Offset + index] :
-                    throw new IndexOutOfRangeException("The index must be positive and smaller than the dimmension of the variable.");
+                return (-1 < index ) & (index < _components.Count) ? _components.Array[_components.Offset + index] :
+                    throw new IndexOutOfRangeException("The index must be positive and smaller than the dimension of the variable.");
             }
         }
-
-        /// <summary>
-        /// Get the number of components of this variable.
-        /// </summary>
+        
+        /// <inheritdoc/>
         public int Dimension => _components.Count;
-
-
-        /// <summary>
-        /// Gets the index of the variable's first component, relative to the start of the global vector X.
-        /// </summary>
-        internal int Offset => _components.Offset;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        ///  Initialises a new instance of the <see cref="Variable"/> class from its components.
+        /// Initialises a new instance of the <see cref="Variable"/> class from its components.
         /// </summary>
         /// <param name="components"> Components of the variable. </param>
         public Variable(params double[] components)
@@ -59,28 +53,12 @@ namespace BRIDGES.Solvers.GuidedProjection
 
             double[] array = (double[])components.Clone();
 
-            _components = new ArraySegment<double>(array);
+            this._components = new ArraySegment<double>(array);
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Creates an array representation of the variable.
-        /// </summary>
-        /// <returns> The double-precision array representing the variable. </returns>
-        public double[] ToArray()
-        {
-            double[] array = new double[Dimension];
-            for (int i = 0; i < Dimension; i++) 
-            { 
-                array[i] = this[i]; 
-            }
-
-            return array;
-        }
-
 
         /// <summary>
         /// Creates a <see cref="Span{T}"/> representation of the variable
@@ -114,10 +92,27 @@ namespace BRIDGES.Solvers.GuidedProjection
             _components = new ArraySegment<double>(array, offset, Dimension);
         }
 
+        // ---------- Implement IVariable ---------- //
+
+        /// <inheritdoc/>
+        public int ReferenceIndex(int index) => _components.Offset + index;
+
+
+        /// <inheritdoc/>
+        public double[] ToArray()
+        {
+            double[] array = new double[Dimension];
+            for (int i = 0; i < Dimension; i++) 
+            { 
+                array[i] = this[i]; 
+            }
+
+            return array;
+        }
+
 
         // ---------- Implement IEquatable<.> ---------- //
 
-        /// <inheritdoc cref="IEquatable{T}.Equals(T)"/>
         /// <summary> Indicates whether this <see cref="Variable"/> is equal to another <see cref="Variable"/>. </summary>
         /// <param name="other"> A <see cref="Variable"/> to compare with this one. </param>
         /// <returns> <see langword="true"/> if their <see cref="ArraySegment{T}"/> field are equal, <see langword="false"/> otherwise. </returns>

@@ -16,7 +16,7 @@ namespace BRIDGES.Solvers.GuidedProjection
     /// Class defining a Guided Projection Algorithm solver.<br/>
     /// The algorithm is described in <see href="https://doi.org/10.1145/2601097.2601213"/>.
     /// </summary>
-    public sealed class GuidedProjectionAlgorithm
+    public sealed class Solver
     {
         #region Events
 
@@ -40,16 +40,16 @@ namespace BRIDGES.Solvers.GuidedProjection
         // ---------- For Quadratic Constraints ---------- //
 
         /// <summary>
-        /// Event raised whenever the members of <see cref="LinearisedConstraintType"/> needs to be updated.
+        /// Event raised whenever the members of <see cref="UpdatedConstraintType"/> needs to be updated.
         /// </summary>
-        private event Action LinearisedConstraintUpdate;
+        private event Action ConstraintUpdate;
 
         /// <summary>
-        /// Raises the event which updates the members of <see cref="LinearisedConstraintType"/>.
+        /// Raises the event which updates the members of <see cref="UpdatedConstraintType"/>.
         /// </summary>
-        private void OnLinearisedConstraintUpdate()
+        private void OnConstraintUpdate()
         {
-            LinearisedConstraintUpdate?.Invoke();
+            ConstraintUpdate?.Invoke();
         }
 
         #endregion
@@ -57,26 +57,26 @@ namespace BRIDGES.Solvers.GuidedProjection
         #region Fields
 
         /// <summary>
-        /// Collection of variables of this <see cref="GuidedProjectionAlgorithm"/>.
+        /// Collection of variables of this <see cref="Solver"/>.
         /// </summary>
         /// <remarks> The use of the <see cref="HashSet{T}"/> collection allows for efficient search, but does not provide indexing. </remarks>
         private readonly HashSet<Variable> _variables;
 
         /// <summary>
-        /// List of energies of this <see cref="GuidedProjectionAlgorithm"/>.
+        /// List of energies of this <see cref="Solver"/>.
         /// </summary>
         /// <remarks> The use of the <see cref="HashSet{T}"/> collection allows for efficient search, but does not provide indexing. </remarks>
         private readonly HashSet<Energy> _energies;
 
         /// <summary>
-        /// List of constraints of this <see cref="GuidedProjectionAlgorithm"/>.
+        /// List of constraints of this <see cref="Solver"/>.
         /// <remarks> The use of the <see cref="HashSet{T}"/> collection allows for efficient search, but does not provide indexing. </remarks>
         /// </summary>
         private readonly HashSet<Constraint> _constraints;
 
 
         /// <summary>
-        /// Vector containing the variables of this <see cref="GuidedProjectionAlgorithm"/>.
+        /// Vector containing the variables of this <see cref="Solver"/>.
         /// </summary>
         private DenseVector _x;
 
@@ -93,19 +93,20 @@ namespace BRIDGES.Solvers.GuidedProjection
         #region Properties
 
         /// <summary>
-        /// Gets the number of components in the global vector X of this <see cref="GuidedProjectionAlgorithm"/>.  
+        /// Gets the number of components in the global vector X of this <see cref="Solver"/>.  
         /// </summary>
         public int ComponentCount { get; private set; } = 0;
 
         /// <summary>
-        /// Gets the number of energies of this <see cref="GuidedProjectionAlgorithm"/>.  
+        /// Gets the number of energies of this <see cref="Solver"/>.  
         /// </summary>
         public int EnergyCount => _energies.Count;
 
         /// <summary>
-        /// Gets the number of constraints of this <see cref="GuidedProjectionAlgorithm"/>.  
+        /// Gets the number of constraints of this <see cref="Solver"/>.  
         /// </summary>
         public int ConstraintCount => _constraints.Count;
+
 
         // ---------- Settings ---------- //
 
@@ -133,11 +134,11 @@ namespace BRIDGES.Solvers.GuidedProjection
         #region Constructors
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="GuidedProjectionAlgorithm"/> class.
+        /// Initialises a new instance of the <see cref="Solver"/> class.
         /// </summary>
         /// <param name="epsilon"> The weights of the distance to the previous iteration. </param>
         /// <param name="maxIteration"> The iteration index after which the solver is stopped. </param>
-        public GuidedProjectionAlgorithm(double epsilon, int maxIteration)
+        public Solver(double epsilon, int maxIteration)
         {
             // Instanciate Fields
             _variables = new HashSet<Variable>();
@@ -205,7 +206,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <para> See the <paramref name="energyType"/> class description to learn about the expected variables. The order of the variables matters.</para>
         /// </param>
         /// <param name="weight"> Weight of the energy. </param>
-        public void AddEnergy(EnergyType energyType, IReadOnlyList<Variable> variables, double weight = 1.0)
+        public void AddEnergy(EnergyType energyType, IReadOnlyList<IVariable> variables, double weight = 1.0)
         {
             Energy energy = new Energy(energyType, variables, weight);
             _energies.Add(energy);
@@ -220,7 +221,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <para> See the <paramref name="energyType"/> class description to learn about the expected variables. The order of the variables matters.</para>
         /// </param>
         /// <param name="weightFunction"> Function computing the weight from the iteration index. </param>
-        public void AddEnergy(EnergyType energyType, IReadOnlyList<Variable> variables, Func<int,double> weightFunction)
+        public void AddEnergy(EnergyType energyType, IReadOnlyList<IVariable> variables, Func<int,double> weightFunction)
         {
             Energy energy = new Energy(energyType, variables, 0.0);
             _energies.Add(energy);
@@ -260,14 +261,14 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <para> See the <paramref name="constraintType"/> class description to learn about the expected variables. The order of the variables matters.</para>
         /// </param>
         /// <param name="weight"> Weight for the constraint. </param>
-        public void AddConstraint(ConstraintType constraintType, IReadOnlyList<Variable> variables, double weight = 1.0)
+        public void AddConstraint(ConstraintType constraintType, IReadOnlyList<IVariable> variables, double weight = 1.0)
         {
             Constraint constraint = new Constraint(constraintType, variables, weight);
             _constraints.Add(constraint);
 
-            if (constraintType is LinearisedConstraintType linearisedType)
+            if (constraintType is UpdatedConstraintType updatedConstraintType)
             {
-                LinearisedConstraintUpdate += () => linearisedType.UpdateLocal(variables); ;
+                ConstraintUpdate += () => updatedConstraintType.UpdateLocal(); ;
             }
         }
 
@@ -280,7 +281,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <para> See the <paramref name="constraintType"/> class description to learn about the expected variables. The order of the variables matters.</para>
         /// </param>
         /// <param name="weightFunction"> Function computing the weight from the iteration index. </param>
-        public void AddConstraint(ConstraintType constraintType, IReadOnlyList<Variable> variables, Func<int, double> weightFunction)
+        public void AddConstraint(ConstraintType constraintType, IReadOnlyList<IVariable> variables, Func<int, double> weightFunction)
         {
             Constraint constraint = new Constraint(constraintType, variables, 0.0);
             _constraints.Add(constraint);
@@ -288,9 +289,9 @@ namespace BRIDGES.Solvers.GuidedProjection
             void constraintWeightUpdater(int iteration) => constraint.Weight = weightFunction(iteration);
             WeigthUpdate += constraintWeightUpdater;
 
-            if (constraintType is LinearisedConstraintType linearisedType)
+            if (constraintType is UpdatedConstraintType updatedConstraintType)
             {
-                LinearisedConstraintUpdate += () => linearisedType.UpdateLocal(variables); ;
+                ConstraintUpdate += () => updatedConstraintType.UpdateLocal(); ;
             }
         }
 
@@ -317,7 +318,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         // ---------- For Solving ---------- //
 
         /// <summary>
-        /// Initialises the members of this <see cref="GuidedProjectionAlgorithm"/>.
+        /// Initialises the members of this <see cref="Solver"/>.
         /// </summary>
         public void InitialiseX()
         {
@@ -357,7 +358,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         {
             // ----- Iteration Updates ----- //
 
-            OnLinearisedConstraintUpdate();
+            OnConstraintUpdate();
 
             OnWeigthUpdate(Iteration);
 
@@ -537,7 +538,7 @@ namespace BRIDGES.Solvers.GuidedProjection
                 if (cstr.Weight == 0d) { continue; }
 
 
-                IReadOnlyList<Variable> variables = cstr.Variables;
+                IReadOnlyList<IVariable> variables = cstr.Variables;
                 ConstraintType constraintType = cstr.Type;
 
                 int localSize = constraintType.LocalHi.ColumnCount;
@@ -548,11 +549,10 @@ namespace BRIDGES.Solvers.GuidedProjection
                 List<int> rowIndices = new List<int>(localSize);
                 for (int i_Variable = 0; i_Variable < variables.Count; i_Variable++)
                 {
-                    Variable variable = variables[i_Variable];
-                    int offset = variable.Offset;
-                    for (int i_VarComp = 0; i_VarComp < variable.Dimension; i_VarComp++) 
-                    { 
-                        rowIndices.Add(offset + i_VarComp); 
+                    IVariable variable = variables[i_Variable];
+                    for (int i_VarComp = 0; i_VarComp < variable.Dimension; i_VarComp++)
+                    {
+                        rowIndices.Add(variable.ReferenceIndex(i_VarComp));
                     }
                 }
 
@@ -578,7 +578,7 @@ namespace BRIDGES.Solvers.GuidedProjection
                 // ----- For r ----- //
 
                 if (constraintType.Ci == 0.0) { list_r.Add(cstr.Weight * 0.5 * tmp_Val); }
-                else { list_r.Add(cstr.Weight * (0.5 * tmp_Val - constraintType.Ci)); }
+                else { list_r.Add(cstr.Weight * ((0.5 * tmp_Val) - constraintType.Ci)); }
 
 
                 // ----- For H ----- //
@@ -618,7 +618,7 @@ namespace BRIDGES.Solvers.GuidedProjection
                 // Verifications
                 if (energy.Weight == 0d) { continue; }
 
-                IReadOnlyList<Variable> variables = energy.Variables;
+                IReadOnlyList<IVariable> variables = energy.Variables;
                 EnergyType energyType = energy.Type;
 
                 int localSize = energyType.LocalKi.Size;
@@ -629,11 +629,10 @@ namespace BRIDGES.Solvers.GuidedProjection
                 List<int> rowIndices = new List<int>(localSize);
                 for (int i_Variable = 0; i_Variable < variables.Count; i_Variable++)
                 {
-                    Variable variable = variables[i_Variable];
-                    int offset = variable.Offset;
+                    IVariable variable = variables[i_Variable];
                     for (int i_VarComp = 0; i_VarComp < variable.Dimension; i_VarComp++)
                     {
-                        rowIndices.Add(offset + i_VarComp);
+                        rowIndices.Add(variable.ReferenceIndex(i_VarComp));
                     }
                 }
 
@@ -680,7 +679,7 @@ namespace BRIDGES.Solvers.GuidedProjection
                     if (cstr.Weight == 0d) { return; }
 
 
-                    IReadOnlyList<Variable> variables = cstr.Variables;
+                    IReadOnlyList<IVariable> variables = cstr.Variables;
                     ConstraintType constraintType = cstr.Type;
 
                     int localSize = constraintType.LocalHi.ColumnCount;
@@ -743,7 +742,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <param name="variables"> Variables contained in LocalX. </param>
         /// <param name="rowIndices"> The row indices of the components composing LocalX. </param>
         /// <returns> The dense vector LocalX. </returns>
-        private DenseVector DeviseLocalX(int size, IReadOnlyList<Variable> variables, out int[] rowIndices)
+        private DenseVector DeviseLocalX(int size, IReadOnlyList<IVariable> variables, out int[] rowIndices)
         {
             // ----- Create the Row Indices ----- //
 
@@ -753,11 +752,10 @@ namespace BRIDGES.Solvers.GuidedProjection
             int counter = 0;
             for (int i_Variable = 0; i_Variable < variables.Count; i_Variable++)
             {
-                Variable variable = variables[i_Variable];
-                int offset = variable.Offset;
+                IVariable variable = variables[i_Variable];
                 for (int i_VarComp = 0; i_VarComp < variable.Dimension; i_VarComp++)
                 {
-                    rowIndices[counter] = offset + i_VarComp;
+                    rowIndices[counter] = variable.ReferenceIndex(i_VarComp);
                     counter++;
                 }
             }
@@ -854,7 +852,7 @@ namespace BRIDGES.Solvers.GuidedProjection
                     // Verifications
                     if (energy.Weight == 0d) { return; }
 
-                    IReadOnlyList<Variable> variables = energy.Variables;
+                    IReadOnlyList<IVariable> variables = energy.Variables;
                     EnergyType energyType = energy.Type;
 
                     int localSize = energyType.LocalKi.Size;
@@ -865,11 +863,10 @@ namespace BRIDGES.Solvers.GuidedProjection
                     List<int> rowIndices = new List<int>();
                     for (int i_Variable = 0; i_Variable < variables.Count; i_Variable++)
                     {
-                        Variable variable = variables[i_Variable];
-                        int offset = variable.Offset;
+                        IVariable variable = variables[i_Variable];
                         for (int i_VarComp = 0; i_VarComp < variable.Dimension; i_VarComp++)
                         {
-                            rowIndices.Add(offset + i_VarComp);
+                            rowIndices.Add(variable.ReferenceIndex(i_VarComp));
                         }
                     }
 

@@ -17,6 +17,6 @@ namespace BRIDGES
         /// <summary>
         /// Absolute linear precision.
         /// </summary>
-        public const double AbsolutePrecision = 1e-8;
+        public const double AbsolutePrecision = 1e-6;
     }
 }

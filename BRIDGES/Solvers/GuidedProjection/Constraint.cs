@@ -7,7 +7,7 @@ using BRIDGES.Solvers.GuidedProjection.Abstracts;
 namespace BRIDGES.Solvers.GuidedProjection
 {
     /// <summary>
-    /// Class defining a quadratic constraint for the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Class defining a quadratic constraint for the <see cref="Solver"/>.
     /// </summary>
     public sealed class Constraint
     {
@@ -16,7 +16,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <summary>
         /// Variables composing the local vector localX on which the <see cref="ConstraintType"/> is defined.
         /// </summary>
-        private readonly Variable[] _variables;
+        private readonly IVariable[] _variables;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <summary>
         /// Gets the variables composing the local vector localX.
         /// </summary>
-        public IReadOnlyList<Variable> Variables => _variables;
+        public IReadOnlyList<IVariable> Variables => _variables;
 
 
         /// <summary>
@@ -48,11 +48,11 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <param name="constraintType"> Constraint type defining the local quantities of this constraint. </param>
         /// <param name="variables"> Variables composing the local vector localX on which the local symmetric matrix Hi and the local vector Bi are defined.</param>
         /// <param name="weight"> Weight of this constraint. </param>
-        public Constraint(ConstraintType constraintType, IReadOnlyList<Variable> variables, double weight)
+        public Constraint(ConstraintType constraintType, IReadOnlyList<IVariable> variables, double weight)
         {
             this.Type = constraintType;
 
-            this._variables = new Variable[variables.Count];
+            this._variables = new IVariable[variables.Count];
             for (int i = 0; i < variables.Count; i++)
             {
                 _variables[i] = variables[i];

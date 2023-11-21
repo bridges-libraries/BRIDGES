@@ -7,7 +7,7 @@ using BRIDGES.Solvers.GuidedProjection.Abstracts;
 namespace BRIDGES.Solvers.GuidedProjection
 {
     /// <summary>
-    /// Class defining an energy for the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Class defining an energy for the <see cref="Solver"/>.
     /// </summary>
     public sealed class Energy
     {
@@ -16,7 +16,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <summary>
         /// Variables composing the local vector localX on which the <see cref="EnergyType"/> is defined.
         /// </summary>
-        private readonly Variable[] _variables;
+        private readonly IVariable[] _variables;
 
         #endregion
 
@@ -30,7 +30,7 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <summary>
         /// Gets the variables composing the local vector localX.
         /// </summary>
-        public IReadOnlyList<Variable> Variables => _variables;
+        public IReadOnlyList<IVariable> Variables => _variables;
 
 
         /// <summary>
@@ -48,11 +48,11 @@ namespace BRIDGES.Solvers.GuidedProjection
         /// <param name="energyType"> Energy type defining the local quantities of the energy. </param>
         /// <param name="variablesKi"> Variables composing the local vector localX. </param>
         /// <param name="weight"> Weight of the energy. </param>
-        public Energy(EnergyType energyType, IReadOnlyList<Variable> variablesKi, double weight)
+        public Energy(EnergyType energyType, IReadOnlyList<IVariable> variablesKi, double weight)
         {
             this.Type = energyType;
 
-            this._variables = new Variable[variablesKi.Count];
+            this._variables = new IVariable[variablesKi.Count];
             for (int i = 0; i < variablesKi.Count; i++)
             {
                 _variables[i] = variablesKi[i];
