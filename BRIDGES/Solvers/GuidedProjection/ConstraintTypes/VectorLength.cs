@@ -4,7 +4,7 @@ using BRIDGES.LinearAlgebra.Matrices.Sparse;
 using BRIDGES.Solvers.GuidedProjection.Abstracts;
 
 
-namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
+namespace BRIDGES.Solvers.GuidedProjection.ConstraintTypes
 {
     /// <summary>
     /// Constraint enforcing a vector variable to equal a fixed target length (computed with euclidean norm). The list of variables of this constraint consists in:
@@ -37,7 +37,7 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
             {
                 columnPointers[i + 1] = i + 1;
                 rowIndices[i] = i;
-                values[i] = -2.0;
+                values[i] = 2.0;
             }
 
             LocalHi = new CompressedColumn(dimension, dimension, columnPointers, rowIndices, values);
@@ -50,7 +50,7 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
 
             // ----- Define Ci ----- //
 
-            Ci = length * length;
+            Ci = - (length * length);
         }
 
         #endregion

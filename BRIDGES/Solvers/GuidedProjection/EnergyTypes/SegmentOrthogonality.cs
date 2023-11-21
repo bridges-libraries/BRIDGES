@@ -20,6 +20,7 @@ namespace BRIDGES.Solvers.GuidedProjection.EnergyTypes
     ///     </item>
     /// </list>
     /// </summary>
+    /// <remarks> If the target direction is a variable, refer to the homonymous constraint <see cref="ConstraintTypes.SegmentOrthogonality"/>. </remarks>
     public class SegmentOrthogonality : EnergyType
     {
         #region Constructors

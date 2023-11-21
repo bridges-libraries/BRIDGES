@@ -4,7 +4,7 @@ using BRIDGES.LinearAlgebra.Matrices.Sparse;
 using BRIDGES.Solvers.GuidedProjection.Abstracts;
 
 
-namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
+namespace BRIDGES.Solvers.GuidedProjection.ConstraintTypes
 {
     /// <summary>
     /// Constraint enforcing a scalar variable to match with the distance between two variables. The list of variables of this constraint consists in:
@@ -23,6 +23,7 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
     ///     </item>
     /// </list>
     /// </summary>
+    /// <remarks> If the target length is fixed, refer to the constraint <see cref="SegmentLength"/>. </remarks>
     public class CoherentLength : ConstraintType
     {
         #region Constructors

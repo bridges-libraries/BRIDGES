@@ -6,14 +6,14 @@ using BRIDGES.LinearAlgebra.Matrices.Sparse;
 using BRIDGES.Solvers.GuidedProjection.Abstracts;
 
 
-namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
+namespace BRIDGES.Solvers.GuidedProjection.ConstraintTypes
 {
     /// <summary>
-    /// Constraint enforcing a scalar variable to be larger than a fixed lower bound. The list of variables of this constraint consists in:
+    /// Constraint enforcing a scalar variable to be smaller than a fixed upper bound. The list of variables of this constraint consists in:
     /// <list type="bullet">
     ///     <item> 
     ///         <term>S</term>
-    ///         <description> Scalar variable to maintain above the fixed lower bound. </description>
+    ///         <description> Scalar variable to maintain under the fixed upper bound. </description>
     ///     </item>
     ///     <item> 
     ///         <term>X</term>
@@ -21,21 +21,21 @@ namespace BRIDGES.Solvers.GuidedProjection.QuadraticConstraintTypes
     ///     </item>
     /// </list>
     /// </summary>
-    public class LowerBound : ConstraintType
+    public class UpperBound : ConstraintType
     {
         #region Constructors
 
         /// <summary>
-        /// Initialises a new instance of the <see cref="LowerBound"/> class.
+        /// Initialises a new instance of the <see cref="UpperBound"/> class.
         /// </summary>
-        /// <param name="bound"> Value of the lower bound. </param>
-        public LowerBound(double bound)
+        /// <param name="bound"> Value of the upper bound. </param>
+        public UpperBound(double bound)
         {
             // ----- Define LocalHi ----- //
 
-            int[] columnPointers = new int[] { 0, 0, 1 };
-            int[] rowIndices = new int[] { 1 };
-            double[] values = new double[] { 2d };
+            int[] columnPointers = new int[3] { 0, 0, 1 };
+            int[] rowIndices = new int[1] { 1 };
+            double[] values = new double[1] { -2d };
 
             LocalHi = new CompressedColumn(2, 2, columnPointers, rowIndices, values);
 
