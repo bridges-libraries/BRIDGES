@@ -4,29 +4,29 @@ using BRIDGES.LinearAlgebra.Vectors;
 using BRIDGES.LinearAlgebra.Matrices;
 
 
-namespace BRIDGES.Solvers.GuidedProjection.Interfaces
+namespace BRIDGES.Solvers.GuidedProjection.Abstracts
 {
     /// <summary>
-    /// Interface defining a quadratic constraint type for the <see cref="GuidedProjectionAlgorithm"/>.
+    /// Abstract class defining a constraint type.
     /// </summary>
-    public interface IQuadraticConstraintType
+    public abstract class ConstraintType
     {
         #region Properties
 
         /// <summary>
         /// Gets the local symmetric matrix Hi of the energy.
         /// </summary>
-        SparseMatrix LocalHi { get; }
+        public SparseMatrix LocalHi { get; protected set; }
 
         /// <summary>
         /// Gets the local vector Bi of the energy.
         /// </summary>
-        SparseVector LocalBi { get; }
+        public SparseVector LocalBi { get; protected set; }
 
         /// <summary>
         /// Gets the scalar value Ci of the energy.
         /// </summary>
-        double Ci { get; }
+        public double Ci { get; protected set; }
 
         #endregion
     }
