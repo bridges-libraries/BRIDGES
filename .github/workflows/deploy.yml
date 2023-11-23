@@ -98,7 +98,9 @@ jobs:
 
   publish_nuget:
     needs : nuget_packaging         # Specify jobs needed to run this one
-    runs-on : ubuntu-latest        # Specify the runner os
+    runs-on : ubuntu-latest         # Specify the runner os
+    permissions:                    # Permissions for github.token (default is read)
+      packages: write
     steps:
       # Setup the .Net environment
       - name: Setup .Net environmnent
@@ -116,22 +118,21 @@ jobs:
         run: |
           dotnet nuget push ${{ env.PKG_OUTPUT_DIR }}/*.nupkg --api-key ${{ github.token }} --source ${{ vars.NUGET_SRC_URL }}
           dotnet nuget push ${{ env.PKG_OUTPUT_DIR }}/*.snupkg --api-key ${{ github.token }} --source ${{ vars.NUGET_SRC_URL }}
-      
+        
   create_tag:
     needs: [manage_version, nuget_packaging]       # Specify jobs needed to run this one
     runs-on : ubuntu-latest                        # Specify the runner os
+    permissions:                                   # Permissions for github.token (default is read)
+      contents: write
     steps:
-      # Create a tag on the latest commit of the branch
-      - name: Create tag
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/v${{ needs.manage_version.outputs.PKG_VERSION }}${{ needs.manage_version.outputs.PKG_RELEASE_TYPE }}',
-              sha: context.sha
-            })
+      # Create reference (see https://docs.github.com/rest/git/refs#create-a-reference)
+      - name: Create version tag
+        env:
+          TAG_NAME: v${{ needs.manage_version.outputs.PKG_VERSION }}${{ needs.manage_version.outputs.PKG_RELEASE_TYPE }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method POST -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+            /repos/${{ github.repository }}/git/refs -f ref='refs/heads/${{ env.TAG_NAME }}' -f sha=${{ github.sha }}
       
   create_release:
     needs : [manage_version, create_tag]
@@ -161,4 +162,4 @@ jobs:
         with :
           prerelease : ${{ env.IS_PRERELEASE }}
           artifacts: ${{ env.PKG_OUTPUT_DIR }}/*
-          tag : ${{ needs.manage_version.outputs.PKG_VERSION }}${{ needs.manage_version.outputs.PKG_RELEASE_TYPE }}
+          tag : v${{ needs.manage_version.outputs.PKG_VERSION }}${{ needs.manage_version.outputs.PKG_RELEASE_TYPE }}
