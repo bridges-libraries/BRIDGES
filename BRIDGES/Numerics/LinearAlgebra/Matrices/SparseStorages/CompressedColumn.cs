@@ -87,11 +87,16 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         public CompressedColumn(int rowCount, int columnCount, ref List<T> values, ref List<int> rowIndices, ref int[] columnPointers) 
             : base(rowCount, columnCount)
         {
+            //     -----     Verifications
+            if (columnPointers.Length != columnCount + 1) { throw new ArgumentException($"The length of the {nameof(columnPointers)} is different from '{nameof(columnCount)} + 1'."); } 
+
+
             // Initialises properties
             Values = values;
             RowIndices = rowIndices;
             ColumnPointers = columnPointers;
         }
+
 
         /// <summary>
         /// Initialises a new instance of the <see cref="CompressedColumn{T}"/> class by deep copying another <see cref="CompressedColumn{T}"/>.
@@ -551,6 +556,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
         }
 
+
         //     -----     TransposeMultiply(SparseStorage<T> right)     -----     //
 
         private CompressedColumn<T> TransposeMultiply(CompressedColumn<T> right)
@@ -613,6 +619,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
 
             return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
         }
+
 
         //     -----     MultiplyTranspose(SparseStorage<T> right)     -----     //
 
