@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Diagnostics.CodeAnalysis;
 using Xunit;
 
 using Mat = BRIDGES.Numerics.LinearAlgebra.Matrices;
@@ -1409,342 +1409,679 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             /// <remarks> The matrix M1 is a [2x3] matrix. </remarks>
             internal static class M1
             {
-                #region Static Fields
-
                 /// <summary>
-                /// Staticly stored matrix <see cref="M1"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.CompressedColumn{T}"/>
                 /// </summary>
-                private static readonly Mat.SparseMatrix<double> _m1 = CreateM1();
-
-                #endregion
-
-                #region Public Static Methods
-
-                /// <summary>
-                /// Provides a readable version of the data that must not be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M1"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Readable()
+                internal static class FromCC
                 {
-                    return [_m1];
-                }
+                    #region Static Fields
 
-                /// <summary>
-                /// Provides a writable version of the data that can be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M1"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Writable()
-                {
-                    return [CreateM1()];
-                }
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M1"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m1 = CreateM1();
 
+                    #endregion
 
-                //     -----     Properties
+                    #region Public Static Methods
 
-                /// <summary>
-                /// Provides the expected number of row of the matrix <see cref="M1"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the row count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S1.RowCount();
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M1"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m1];
+                    }
 
-                /// <summary>
-                /// Provides the expected number of columns of the matrix <see cref="M1"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the column count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S1.ColumnCount();
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M1"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM1()];
+                    }
 
 
-                //     -----     Public Static Methods
+                    //     -----     Properties
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M1<sup>t</sup>·M2</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] TransposeMultiply_M2()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.TransposeMultiply_S2();
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M1"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S1.RowCount();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M1·M2<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] MultiplyTranspose_M2()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.MultiplyTranspose_S2();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M1"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S1.ColumnCount();
 
 
-                /// <summary>
-                /// Provides the expected result of the transposition : <c>M1<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Transpose()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.Transpose();
+                    //     -----     Public Static Methods
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M1<sup>t</sup>·M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M2()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.TransposeMultiply_S2();
 
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
-                //     -----     Operators
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M1·M2<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M2()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.MultiplyTranspose_S2();
 
-                /// <summary>
-                /// Provides the expected result of the addition : <c>M1+M2</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Addition_M2()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.Addition_S2();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the subtraction : <c>M1-M2</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Subtraction_M2()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.Subtraction_S2();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the unary negation : <c>-M1</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] UnaryNegation()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.UnaryNegation();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                /// <summary>
-                /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M1·3.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RightMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S1.RightMultiplication_T();
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M1<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.Transpose();
 
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M1</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] LeftMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S1.LeftMultiplication_T();
-
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the scalar division by 4.0 : <c>M1/4.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Division_T()
-                {
-                    (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S1.Division_T();
-
-                    return [divisor, new Mat.SparseMatrix<double>(result)];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                //     -----     Methods
+                    //     -----     Operators
 
-                /// <summary>
-                /// Provides an array representation of the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S1.ToArray();
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M1+M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M2()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.Addition_S2();
 
-                /// <summary>
-                /// Provides the information to set a component in the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> Row index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 1 </term>
-                ///         <description> Column index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 2 </term>
-                ///         <description> Value of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 3 </term>
-                ///         <description> Expected matrix after the component is set. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] SetComponent()
-                {
-                    int rowIndex = 1;
-                    int columnIndex = 1;
-                    double value = -5;
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M1-M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M2()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.Subtraction_S2();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S1.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                    int rowCount = 2;
-                    int columnCount = 3;
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M1·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S1.RightMultiplication_T();
 
-                    // Presented in a tranposed way: each lines corresponds to a column 
-                    List<double> values = new List<double>
-                    ([
-                         1.0,     2.0,
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S1.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M1/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S1.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S1.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 1;
+                        int columnIndex = 1;
+                        double value = -5;
+
+
+                        int rowCount = 2;
+                        int columnCount = 3;
+
+                        // Presented in a tranposed way: each lines corresponds to a column 
+                        List<double> values = new List<double>
+                        ([
+                             1.0,     2.0,
                          4.0,    -5.0,
                         -2.0,     3.0
-                    ]);
+                        ]);
 
-                    List<int> rowIndices = new List<int>
-                    ([
+                        List<int> rowIndices = new List<int>
+                        ([
+                              0,    1,
                           0,    1,
                           0,    1,
-                          0,    1,
-                    ]);
+                        ]);
 
-                    int[] columnPointers = new int[] { 0, 2, 4, 6 };
+                        int[] columnPointers = new int[] { 0, 2, 4, 6 };
 
-                    Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
-                    Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
+                        Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
 
-                    return [rowIndex, columnIndex, value, result];
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M1"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM1()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> s1 = SparseStorages.CompressedColumn.DataStorages.S1.CreateS1();
+
+                        return new Mat.SparseMatrix<double>(s1);
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-
-                #region Other Static Methods
 
                 /// <summary>
-                /// Creates a matrix <see cref="M1"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.DictionaryOfKeys{T}"/>
                 /// </summary>
-                /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
-                private static Mat.SparseMatrix<double> CreateM1()
+                internal static class FromDOK
                 {
-                    Mat.SparseStorages.CompressedColumn<double> s1 = SparseStorages.CompressedColumn.DataStorages.S1.CreateS1();
+                    #region Static Fields
 
-                    return new Mat.SparseMatrix<double>(s1);
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M1"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m1 = CreateM1();
+
+                    #endregion
+
+                    #region Public Static Methods
+
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M1"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m1];
+                    }
+
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M1"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM1()];
+                    }
+
+
+                    //     -----     Properties
+
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M1"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.DictionaryOfKeys.DataStorages.S1.RowCount();
+
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M1"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.DictionaryOfKeys.DataStorages.S1.ColumnCount();
+
+
+                    //     -----     Public Static Methods
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M1<sup>t</sup>·M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M2()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S1.TransposeMultiply_S2();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M1·M2<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M2()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S1.MultiplyTranspose_S2();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M1<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S1.Transpose();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Operators
+
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M1+M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M2()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S1.Addition_S2();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M1-M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M2()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S1.Subtraction_S2();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S1.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M1·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S1.RightMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S1.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M1/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S1.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.DictionaryOfKeys.DataStorages.S1.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 1;
+                        int columnIndex = 1;
+                        double value = -5;
+
+
+                        int rowCount = 2;
+                        int columnCount = 3;
+
+                        Mat.SparseStorages.DictionaryOfKeys<double> dok = new Mat.SparseStorages.DictionaryOfKeys<double>(rowCount, columnCount, 5);
+
+                        dok.Add(0, 0, 1.0); dok.Add(0, 1,  4.0); dok.Add(0, 2, -2.0);
+                        dok.Add(1, 0, 2.0); dok.Add(1, 1, -5.0); dok.Add(1, 2,  3.0);
+
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(dok);
+
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M1"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM1()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> s1 = SparseStorages.DictionaryOfKeys.DataStorages.S1.CreateS1();
+
+                        return new Mat.SparseMatrix<double>(s1);
+                    }
+
+                    #endregion
                 }
-
-                #endregion
             }
 
             /// <summary>
@@ -1753,343 +2090,680 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             /// <remarks> The matrix M2 is a [2x3] matrix. </remarks>
             internal static class M2
             {
-                #region Static Fields
-
                 /// <summary>
-                /// Staticly stored matrix <see cref="M2"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.CompressedColumn{T}"/>
                 /// </summary>
-                private static readonly Mat.SparseMatrix<double> _m2 = CreateM2();
-
-                #endregion
-
-                #region Public Static Methods
-
-                /// <summary>
-                /// Provides a readable version of the data that must not be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M2"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Readable()
+                internal static class FromCC
                 {
-                    return [_m2];
-                }
+                    #region Static Fields
 
-                /// <summary>
-                /// Provides a writable version of the data that can be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M2"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Writable()
-                {
-                    return [CreateM2()];
-                }
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M2"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m2 = CreateM2();
 
+                    #endregion
 
-                //     -----     Properties
+                    #region Public Static Methods
 
-                /// <summary>
-                /// Provides the expected number of row of the matrix <see cref="M2"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the row count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S2.RowCount();
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M2"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m2];
+                    }
 
-                /// <summary>
-                /// Provides the expected number of columns of the matrix <see cref="M2"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the column count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S2.ColumnCount();
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M2"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM2()];
+                    }
 
 
-                //     -----     Public Static Methods
+                    //     -----     Properties
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M2<sup>t</sup>·M1</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] TransposeMultiply_M1()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.TransposeMultiply_S1();
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M2"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S2.RowCount();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M2·M1<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] MultiplyTranspose_M1()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.MultiplyTranspose_S1();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M2"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S2.ColumnCount();
 
 
-                /// <summary>
-                /// Provides the expected result of the transposition : <c>M2<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Transpose()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.Transpose();
+                    //     -----     Public Static Methods
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M2<sup>t</sup>·M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M1()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.TransposeMultiply_S1();
 
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
-                //     -----     Operators
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M2·M1<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M1()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.MultiplyTranspose_S1();
 
-                /// <summary>
-                /// Provides the expected result of the addition : <c>M2+M1</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Addition_M1()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.Addition_S1();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the subtraction : <c>M2-M1</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Subtraction_M1()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.Subtraction_S1();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the unary negation : <c>-M2</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] UnaryNegation()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.UnaryNegation();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                /// <summary>
-                /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M2·3.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RightMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S2.RightMultiplication_T();
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M2<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.Transpose();
 
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M2</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] LeftMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S2.LeftMultiplication_T();
-
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the scalar division by 4.0 : <c>M2/4.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Division_T()
-                {
-                    (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S2.Division_T();
-
-                    return [divisor, new Mat.SparseMatrix<double>(result)];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                //     -----     Methods
+                    //     -----     Operators
 
-                /// <summary>
-                /// Provides an array representation of the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S2.ToArray();
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M2+M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M1()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.Addition_S1();
 
-                /// <summary>
-                /// Provides the information to set a component in the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> Row index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 1 </term>
-                ///         <description> Column index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 2 </term>
-                ///         <description> Value of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 3 </term>
-                ///         <description> Expected matrix after the component is set. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] SetComponent()
-                {
-                    int rowIndex = 0;
-                    int columnIndex = 0;
-                    double value = 4;
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M2-M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M1()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.Subtraction_S1();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S2.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                    int rowCount = 2;
-                    int columnCount = 3;
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M2·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S2.RightMultiplication_T();
 
-                    // Presented in a tranposed way: each lines corresponds to a column 
-                    List<double> values = new List<double>
-                    ([
-                         4,    -2,
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S2.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M2/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S2.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S2.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 0;
+                        int columnIndex = 0;
+                        double value = 4;
+
+
+                        int rowCount = 2;
+                        int columnCount = 3;
+
+                        // Presented in a tranposed way: each lines corresponds to a column 
+                        List<double> values = new List<double>
+                        ([
+                             4,    -2,
                         -1,     1,
                          6,    -3
-                    ]);
+                        ]);
 
-                    List<int> rowIndices = new List<int>
-                    ([
+                        List<int> rowIndices = new List<int>
+                        ([
+                              0,      1,
                           0,      1,
                           0,      1,
-                          0,      1,
-                    ]);
+                        ]);
 
-                    int[] columnPointers = new int[] { 0, 2, 4, 6 };
+                        int[] columnPointers = new int[] { 0, 2, 4, 6 };
 
 
-                    Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
-                    Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
+                        Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
 
-                    return [rowIndex, columnIndex, value, result];
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M2"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM2()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> s2 = SparseStorages.CompressedColumn.DataStorages.S2.CreateS2();
+
+                        return new Mat.SparseMatrix<double>(s2);
+                    }
+
+                    #endregion
                 }
 
-                #endregion
-
-                #region Other Static Methods
 
                 /// <summary>
-                /// Creates a matrix <see cref="M2"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.DictionaryOfKeys{T}"/>
                 /// </summary>
-                /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
-                private static Mat.SparseMatrix<double> CreateM2()
+                internal static class FromDOK
                 {
-                    Mat.SparseStorages.CompressedColumn<double> s2 = SparseStorages.CompressedColumn.DataStorages.S2.CreateS2();
+                    #region Static Fields
 
-                    return new Mat.SparseMatrix<double>(s2);
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M2"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m2 = CreateM2();
+
+                    #endregion
+
+                    #region Public Static Methods
+
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M2"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m2];
+                    }
+
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M2"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM2()];
+                    }
+
+
+                    //     -----     Properties
+
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M2"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.DictionaryOfKeys.DataStorages.S2.RowCount();
+
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M2"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.DictionaryOfKeys.DataStorages.S2.ColumnCount();
+
+
+                    //     -----     Public Static Methods
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M2<sup>t</sup>·M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M1()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S2.TransposeMultiply_S1();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M2·M1<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M1()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S2.MultiplyTranspose_S1();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M2<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S2.Transpose();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Operators
+
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M2+M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M1()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S2.Addition_S1();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M2-M1</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M1()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S2.Subtraction_S1();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S2.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M2·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S2.RightMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M2</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S2.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M2/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S2.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.DictionaryOfKeys.DataStorages.S2.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 0;
+                        int columnIndex = 0;
+                        double value = 4;
+
+
+                        int rowCount = 2;
+                        int columnCount = 3;
+
+                        Mat.SparseStorages.DictionaryOfKeys<double> dok = new Mat.SparseStorages.DictionaryOfKeys<double>(rowCount, columnCount, 5);
+
+                        dok.Add(0, 0,  4.0); dok.Add(0, 1, -1.0); dok.Add(0, 2,  6.0);
+                        dok.Add(1, 0, -2.0); dok.Add(1, 1,  1.0); dok.Add(1, 2, -3.0);
+
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(dok);
+
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M2"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM2()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> s2 = SparseStorages.DictionaryOfKeys.DataStorages.S2.CreateS2();
+
+                        return new Mat.SparseMatrix<double>(s2);
+                    }
+
+                    #endregion
                 }
-
-                #endregion
             }
 
 
@@ -2099,405 +2773,801 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             /// <remarks> The matrix M3 is a [6x6] matrix. </remarks>
             internal static class M3
             {
-                #region Static Fields
-
                 /// <summary>
-                /// Staticly stored matrix <see cref="M3"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.CompressedColumn{T}"/>
                 /// </summary>
-                private static readonly Mat.SparseMatrix<double> _m3 = CreateM3();
-
-                #endregion
-
-                #region Public Static Methods
-
-                /// <summary>
-                /// Provides a readable version of the data that must not be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M3"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Readable()
+                internal static class FromCC
                 {
-                    return [_m3];
-                }
+                    #region Static Fields
 
-                /// <summary>
-                /// Provides a writable version of the data that can be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M3"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Writable()
-                {
-                    return [CreateM3()];
-                }
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M3"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m3 = CreateM3();
 
+                    #endregion
 
-                //     -----     Properties
+                    #region Public Static Methods
 
-                /// <summary>
-                /// Provides the expected number of row of the matrix <see cref="M3"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the row count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S3.RowCount();
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M3"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m3];
+                    }
 
-                /// <summary>
-                /// Provides the expected number of columns of the matrix <see cref="M3"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the column count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S3.ColumnCount();
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M3"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM3()];
+                    }
 
 
-                //     -----     Public Static Methods
+                    //     -----     Properties
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M3<sup>t</sup>·M4</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] TransposeMultiply_M4()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.TransposeMultiply_S4();
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M3"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S3.RowCount();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M3·M4<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] MultiplyTranspose_M4()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.MultiplyTranspose_S4();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M3"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S3.ColumnCount();
 
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M3<sup>t</sup>·V3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] TransposeMultiply_V3()
-                {
-                    double[] result = SparseStorages.CompressedColumn.DataStorages.S3.TransposeMultiply_V3();
+                    //     -----     Public Static Methods
 
-                    return [result];
-                }
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3<sup>t</sup>·M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M4()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.TransposeMultiply_S4();
 
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
-                /// <summary>
-                /// Provides the expected result of the transposition : <c>M3<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Transpose()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Transpose();
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3·M4<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M4()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.MultiplyTranspose_S4();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-
-                //     -----     Operators
-
-                /// <summary>
-                /// Provides the expected result of the addition : <c>M3+M4</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Addition_M4()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Addition_S4();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the subtraction : <c>M3-M4</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Subtraction_M4()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Subtraction_S4();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the unary negation : <c>-M3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] UnaryNegation()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.UnaryNegation();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M3·M4</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Multiplication_M4()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Multiplication_S4();
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3<sup>t</sup>·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_V3()
+                    {
+                        double[] result = SparseStorages.CompressedColumn.DataStorages.S3.TransposeMultiply_V3();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-
-                /// <summary>
-                /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M3·3.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RightMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S3.RightMultiplication_T();
-
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] LeftMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S3.LeftMultiplication_T();
-
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the scalar division by 4.0 : <c>M3/4.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Division_T()
-                {
-                    (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S3.Division_T();
-
-                    return [divisor, new Mat.SparseMatrix<double>(result)];
-                }
+                        return [result];
+                    }
 
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M3·V3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Multiplication_V3()
-                {
-                    double[] result = SparseStorages.CompressedColumn.DataStorages.S3.Multiplication_V3();
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M3<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Transpose();
 
-                    return [result];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                //     -----     Methods
+                    //     -----     Operators
 
-                /// <summary>
-                /// Provides an array representation of the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S3.ToArray();
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M3+M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M4()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Addition_S4();
 
-                /// <summary>
-                /// Provides the information to set a component in the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> Row index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 1 </term>
-                ///         <description> Column index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 2 </term>
-                ///         <description> Value of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 3 </term>
-                ///         <description> Expected matrix after the component is set. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] SetComponent()
-                {
-                    int rowIndex = 3;
-                    int columnIndex = 4;
-                    double value = 8;
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
-                    int rowCount = 6;
-                    int columnCount = 6;
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M3-M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M4()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Subtraction_S4();
 
-                    // Presented in a tranposed way: each lines corresponds to a column 
-                    List<double> values = new List<double>
-                    ([
-                        10,     7,    /*0,*/    6,    1,     2,
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3·M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_M4()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S3.Multiplication_S4();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M3·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S3.RightMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S3.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M3/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S3.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_V3()
+                    {
+                        double[] result = SparseStorages.CompressedColumn.DataStorages.S3.Multiplication_V3();
+
+                        return [result];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S3.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 3;
+                        int columnIndex = 4;
+                        double value = 8;
+
+                        int rowCount = 6;
+                        int columnCount = 6;
+
+                        // Presented in a tranposed way: each lines corresponds to a column 
+                        List<double> values = new List<double>
+                        ([
+                            10,     7,    /*0,*/    6,    1,     2,
                         15,    14,     -1,      4,    1,     4,
                         20,    21,      2,      2,    2,     8,
                         25,    28,     -3,     -2,    3,    16,
                         30,    35,      4,      8,    5,    32,
                         35,    42,     -5,     -6,    8,    64
-                    ]);
+                        ]);
 
-                    List<int> rowIndices = new List<int>
-                    ([
-                        0,    1,    /*2,*/    3,    4,    5,
+                        List<int> rowIndices = new List<int>
+                        ([
+                            0,    1,    /*2,*/    3,    4,    5,
                         0,    1,      2,      3,    4,    5,
                         0,    1,      2,      3,    4,    5,
                         0,    1,      2,      3,    4,    5,
                         0,    1,      2,      3,    4,    5,
                         0,    1,      2,      3,    4,    5
-                    ]);
+                        ]);
 
-                    int[] columnPointers = new int[] { 0, 5, 11, 17, 23, 29, 35 };
+                        int[] columnPointers = new int[] { 0, 5, 11, 17, 23, 29, 35 };
 
 
-                    Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
-                    Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
+                        Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
 
-                    return [rowIndex, columnIndex, value, result];
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M3"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM3()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> s3 = SparseStorages.CompressedColumn.DataStorages.S3.CreateS3();
+
+                        return new Mat.SparseMatrix<double>(s3);
+                    }
+
+                    #endregion
                 }
-
-                #endregion
-
-                #region Other Static Methods
 
                 /// <summary>
-                /// Creates a matrix <see cref="M3"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.DictionaryOfKeys{T}"/>
                 /// </summary>
-                /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
-                private static Mat.SparseMatrix<double> CreateM3()
+                internal static class FromDOK
                 {
-                    Mat.SparseStorages.CompressedColumn<double> s3 = SparseStorages.CompressedColumn.DataStorages.S3.CreateS3();
+                    #region Static Fields
 
-                    return new Mat.SparseMatrix<double>(s3);
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M3"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m3 = CreateM3();
+
+                    #endregion
+
+                    #region Public Static Methods
+
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M3"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m3];
+                    }
+
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M3"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM3()];
+                    }
+
+
+                    //     -----     Properties
+
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M3"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.DictionaryOfKeys.DataStorages.S3.RowCount();
+
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M3"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.DictionaryOfKeys.DataStorages.S3.ColumnCount();
+
+
+                    //     -----     Public Static Methods
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3<sup>t</sup>·M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M4()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.TransposeMultiply_S4();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3·M4<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M4()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.MultiplyTranspose_S4();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3<sup>t</sup>·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_V3()
+                    {
+                        double[] result = SparseStorages.DictionaryOfKeys.DataStorages.S3.TransposeMultiply_V3();
+
+                        return [result];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M3<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.Transpose();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Operators
+
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M3+M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M4()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.Addition_S4();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M3-M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M4()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.Subtraction_S4();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3·M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_M4()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S3.Multiplication_S4();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M3·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S3.RightMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S3.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M3/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S3.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M3·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_V3()
+                    {
+                        double[] result = SparseStorages.DictionaryOfKeys.DataStorages.S3.Multiplication_V3();
+
+                        return [result];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.DictionaryOfKeys.DataStorages.S3.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 3;
+                        int columnIndex = 4;
+                        double value = 8;
+
+                        int rowCount = 6;
+                        int columnCount = 6;
+
+                        Mat.SparseStorages.DictionaryOfKeys<double> dok = new Mat.SparseStorages.DictionaryOfKeys<double>(rowCount, columnCount, 35);
+
+                          dok.Add(0, 0, 10.0);   dok.Add(0, 1, 15.0); dok.Add(0, 2, 20.0); dok.Add(0, 3, 25.0); dok.Add(0, 4, 30.0); dok.Add(0, 5, 35.0);
+                          dok.Add(1, 0,  7.0);   dok.Add(1, 1, 14.0); dok.Add(1, 2, 21.0); dok.Add(1, 3, 28.0); dok.Add(1, 4, 35.0); dok.Add(1, 5, 42.0);
+                        /*dok.Add(2, 0,  0.0);*/ dok.Add(2, 1, -1.0); dok.Add(2, 2,  2.0); dok.Add(2, 3, -3.0); dok.Add(2, 4,  4.0); dok.Add(2, 5, -5.0);
+                          dok.Add(3, 0,  6.0);   dok.Add(3, 1,  4.0); dok.Add(3, 2,  2.0); dok.Add(3, 3, -2.0); dok.Add(3, 4,  8.0); dok.Add(3, 5, -6.0);
+                          dok.Add(4, 0,  1.0);   dok.Add(4, 1,  1.0); dok.Add(4, 2,  2.0); dok.Add(4, 3,  3.0); dok.Add(4, 4,  5.0); dok.Add(4, 5,  8.0);
+                          dok.Add(5, 0,  2.0);   dok.Add(5, 1,  4.0); dok.Add(5, 2,  8.0); dok.Add(5, 3, 16.0); dok.Add(5, 4, 32.0); dok.Add(5, 5, 64.0);
+
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(dok);
+
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M3"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM3()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> s3 = SparseStorages.DictionaryOfKeys.DataStorages.S3.CreateS3();
+
+                        return new Mat.SparseMatrix<double>(s3);
+                    }
+
+                    #endregion
                 }
-
-                #endregion
             }
 
 
@@ -2507,405 +3577,801 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             /// <remarks> The matrix M4 is a [6x6] matrix. </remarks>
             internal static class M4
             {
-                #region Static Fields
-
                 /// <summary>
-                /// Staticly stored matrix <see cref="M4"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.CompressedColumn{T}"/>
                 /// </summary>
-                private static readonly Mat.SparseMatrix<double> _m4 = CreateM4();
-
-                #endregion
-
-                #region Public Static Methods
-
-                /// <summary>
-                /// Provides a readable version of the data that must not be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M4"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Readable()
+                internal static class FromCC
                 {
-                    return [_m4];
-                }
+                    #region Static Fields
 
-                /// <summary>
-                /// Provides a writable version of the data that can be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M4"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Writable()
-                {
-                    return [CreateM4()];
-                }
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M4"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m4 = CreateM4();
 
+                    #endregion
 
-                //     -----     Properties
+                    #region Public Static Methods
 
-                /// <summary>
-                /// Provides the expected number of row of the matrix <see cref="M4"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the row count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S4.RowCount();
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M4"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m4];
+                    }
 
-                /// <summary>
-                /// Provides the expected number of columns of the matrix <see cref="M4"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the column count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S4.ColumnCount();
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M4"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM4()];
+                    }
 
 
-                //     -----     Public Static Methods
+                    //     -----     Properties
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M4<sup>t</sup>·M3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] TransposeMultiply_M3()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.TransposeMultiply_S3();
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M4"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S4.RowCount();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M4·M3<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] MultiplyTranspose_M3()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.MultiplyTranspose_S3();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M4"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S4.ColumnCount();
 
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M4<sup>t</sup>·V3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] TransposeMultiply_V3()
-                {
-                    double[] result = SparseStorages.CompressedColumn.DataStorages.S4.TransposeMultiply_V3();
+                    //     -----     Public Static Methods
 
-                    return [result];
-                }
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4<sup>t</sup>·M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M3()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.TransposeMultiply_S3();
 
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
-                /// <summary>
-                /// Provides the expected result of the transposition : <c>M4<sup>t</sup></c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Transpose()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Transpose();
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4·M3<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M3()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.MultiplyTranspose_S3();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-
-                //     -----     Operators
-
-                /// <summary>
-                /// Provides the expected result of the addition : <c>M4+M3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Addition_M3()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Addition_S3();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the subtraction : <c>M4-M3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Subtraction_M3()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Subtraction_S3();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the unary negation : <c>-M4</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] UnaryNegation()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.UnaryNegation();
-
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M4·M3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Multiplication_M3()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Multiplication_S3();
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4<sup>t</sup>·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_V3()
+                    {
+                        double[] result = SparseStorages.CompressedColumn.DataStorages.S4.TransposeMultiply_V3();
 
-                    return [new Mat.SparseMatrix<double>(result)];
-                }
-
-
-                /// <summary>
-                /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M4·3.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RightMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S4.RightMultiplication_T();
-
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M4</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] LeftMultiplication_T()
-                {
-                    (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S4.LeftMultiplication_T();
-
-                    return [factor, new Mat.SparseMatrix<double>(result)];
-                }
-
-                /// <summary>
-                /// Provides the expected result of the scalar division by 4.0 : <c>M4/4.0</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="double"/> representing the scalar factor. </description>
-                ///         <term> 1 </term>
-                ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Division_T()
-                {
-                    (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S4.Division_T();
-
-                    return [divisor, new Mat.SparseMatrix<double>(result)];
-                }
+                        return [result];
+                    }
 
 
-                /// <summary>
-                /// Provides the expected result of the multiplication : <c>M4·V3</c>
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Multiplication_V3()
-                {
-                    double[] result = SparseStorages.CompressedColumn.DataStorages.S4.Multiplication_V3();
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M4<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Transpose();
 
-                    return [result];
-                }
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
 
-                //     -----     Methods
+                    //     -----     Operators
 
-                /// <summary>
-                /// Provides an array representation of the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S4.ToArray();
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M4+M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M3()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Addition_S3();
 
-                /// <summary>
-                /// Provides the information to set a component in the matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> Row index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 1 </term>
-                ///         <description> Column index of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 2 </term>
-                ///         <description> Value of the component to set. </description>
-                ///     </item>
-                ///     <item>
-                ///         <term> 3 </term>
-                ///         <description> Expected matrix after the component is set. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] SetComponent()
-                {
-                    int rowIndex = 5;
-                    int columnIndex = 5;
-                    double value = 0;
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
 
-                    int rowCount = 6;
-                    int columnCount = 6;
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M4-M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M3()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Subtraction_S3();
 
-                    // Presented in a tranposed way: each lines corresponds to a column 
-                    List<double> values = new List<double>
-                    ([
-                        11,    21,    31,    41,    51,    61,
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4·M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_M3()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> result = SparseStorages.CompressedColumn.DataStorages.S4.Multiplication_S3();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M4·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S4.RightMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S4.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M4/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.CompressedColumn<double> result) = SparseStorages.CompressedColumn.DataStorages.S4.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_V3()
+                    {
+                        double[] result = SparseStorages.CompressedColumn.DataStorages.S4.Multiplication_V3();
+
+                        return [result];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S4.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 5;
+                        int columnIndex = 5;
+                        double value = 0;
+
+                        int rowCount = 6;
+                        int columnCount = 6;
+
+                        // Presented in a tranposed way: each lines corresponds to a column 
+                        List<double> values = new List<double>
+                        ([
+                            11,    21,    31,    41,    51,    61,
                         12,    22,    32,    42,    52,    62,
                         13,    23,    33,    43,    53,    63,
                         14,    24,    34,    44,    54,    64,
                         15,    25,    35,    45,    55,    65,
                         16,    26,    36,    46,    56,   /*0*/
-                    ]);
+                        ]);
 
-                    List<int> rowIndices = new List<int>
-                    ([
-                        0,    1,    2,    3,    4,     5,
+                        List<int> rowIndices = new List<int>
+                        ([
+                            0,    1,    2,    3,    4,     5,
                         0,    1,    2,    3,    4,     5,
                         0,    1,    2,    3,    4,     5,
                         0,    1,    2,    3,    4,     5,
                         0,    1,    2,    3,    4,     5,
                         0,    1,    2,    3,    4,   /*5*/
-                    ]);
+                        ]);
 
-                    int[] columnPointers = new int[] { 0, 6, 12, 18, 24, 30, 35 };
+                        int[] columnPointers = new int[] { 0, 6, 12, 18, 24, 30, 35 };
 
 
-                    Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
-                    Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
+                        Mat.SparseStorages.CompressedColumn<double> compressedColumn = new Mat.SparseStorages.CompressedColumn<double>(rowCount, columnCount, ref values, ref rowIndices, ref columnPointers);
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(compressedColumn);
 
-                    return [rowIndex, columnIndex, value, result];
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M4"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM4()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> s4 = SparseStorages.CompressedColumn.DataStorages.S4.CreateS4();
+
+                        return new Mat.SparseMatrix<double>(s4);
+                    }
+
+                    #endregion
                 }
-
-                #endregion
-
-                #region Other Static Methods
 
                 /// <summary>
-                /// Creates a matrix <see cref="M4"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.DictionaryOfKeys{T}"/>
                 /// </summary>
-                /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
-                private static Mat.SparseMatrix<double> CreateM4()
+                internal static class FromDOK
                 {
-                    Mat.SparseStorages.CompressedColumn<double> s4 = SparseStorages.CompressedColumn.DataStorages.S4.CreateS4();
+                    #region Static Fields
 
-                    return new Mat.SparseMatrix<double>(s4);
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M4"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m4 = CreateM4();
+
+                    #endregion
+
+                    #region Public Static Methods
+
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M4"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m4];
+                    }
+
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M4"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM4()];
+                    }
+
+
+                    //     -----     Properties
+
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M4"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.DictionaryOfKeys.DataStorages.S4.RowCount();
+
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M4"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.DictionaryOfKeys.DataStorages.S4.ColumnCount();
+
+
+                    //     -----     Public Static Methods
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4<sup>t</sup>·M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_M3()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.TransposeMultiply_S3();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4·M3<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] MultiplyTranspose_M3()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.MultiplyTranspose_S3();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4<sup>t</sup>·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] TransposeMultiply_V3()
+                    {
+                        double[] result = SparseStorages.DictionaryOfKeys.DataStorages.S4.TransposeMultiply_V3();
+
+                        return [result];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the transposition : <c>M4<sup>t</sup></c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the transposition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Transpose()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.Transpose();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    //     -----     Operators
+
+                    /// <summary>
+                    /// Provides the expected result of the addition : <c>M4+M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the addition. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Addition_M3()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.Addition_S3();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the subtraction : <c>M4-M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the subtraction. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Subtraction_M3()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.Subtraction_S3();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the unary negation : <c>-M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the unary negation. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] UnaryNegation()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.UnaryNegation();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4·M3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_M3()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> result = SparseStorages.DictionaryOfKeys.DataStorages.S4.Multiplication_S3();
+
+                        return [new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the right scalar multiplication by 3.0 : <c>M4·3.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the right scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RightMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S4.RightMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the left scalar multiplication by 5.0 : <c>5.0·M4</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the left scalar multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] LeftMultiplication_T()
+                    {
+                        (double factor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S4.LeftMultiplication_T();
+
+                        return [factor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+                    /// <summary>
+                    /// Provides the expected result of the scalar division by 4.0 : <c>M4/4.0</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="double"/> representing the scalar factor. </description>
+                    ///         <term> 1 </term>
+                    ///         <description> An <see cref="Mat.SparseMatrix{T}"/> representing the result of the scalar division. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Division_T()
+                    {
+                        (double divisor, Mat.SparseStorages.DictionaryOfKeys<double> result) = SparseStorages.DictionaryOfKeys.DataStorages.S4.Division_T();
+
+                        return [divisor, new Mat.SparseMatrix<double>(result)];
+                    }
+
+
+                    /// <summary>
+                    /// Provides the expected result of the multiplication : <c>M4·V3</c>
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An array of <see cref="double"/> representing the result of the multiplication. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Multiplication_V3()
+                    {
+                        double[] result = SparseStorages.DictionaryOfKeys.DataStorages.S4.Multiplication_V3();
+
+                        return [result];
+                    }
+
+
+                    //     -----     Methods
+
+                    /// <summary>
+                    /// Provides an array representation of the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A two dimensional array of <see cref="double"/> representing the matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.DictionaryOfKeys.DataStorages.S4.ToArray();
+
+                    /// <summary>
+                    /// Provides the information to set a component in the matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Row index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 1 </term>
+                    ///         <description> Column index of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 2 </term>
+                    ///         <description> Value of the component to set. </description>
+                    ///     </item>
+                    ///     <item>
+                    ///         <term> 3 </term>
+                    ///         <description> Expected matrix after the component is set. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] SetComponent()
+                    {
+                        int rowIndex = 5;
+                        int columnIndex = 5;
+                        double value = 0;
+
+                        int rowCount = 6;
+                        int columnCount = 6;
+
+                        Mat.SparseStorages.DictionaryOfKeys<double> dok = new Mat.SparseStorages.DictionaryOfKeys<double>(rowCount, columnCount, 35);
+
+                        dok.Add(0, 0, 11); dok.Add(0, 1, 12); dok.Add(0, 2, 13); dok.Add(0, 3, 14); dok.Add(0, 4, 15);   dok.Add(0, 5, 16);
+                        dok.Add(1, 0, 21); dok.Add(1, 1, 22); dok.Add(1, 2, 23); dok.Add(1, 3, 24); dok.Add(1, 4, 25);   dok.Add(1, 5, 26);
+                        dok.Add(2, 0, 31); dok.Add(2, 1, 32); dok.Add(2, 2, 33); dok.Add(2, 3, 34); dok.Add(2, 4, 35);   dok.Add(2, 5, 36);
+                        dok.Add(3, 0, 41); dok.Add(3, 1, 42); dok.Add(3, 2, 43); dok.Add(3, 3, 44); dok.Add(3, 4, 45);   dok.Add(3, 5, 46);
+                        dok.Add(4, 0, 51); dok.Add(4, 1, 52); dok.Add(4, 2, 53); dok.Add(4, 3, 54); dok.Add(4, 4, 55);   dok.Add(4, 5, 56);
+                        dok.Add(5, 0, 61); dok.Add(5, 1, 62); dok.Add(5, 2, 63); dok.Add(5, 3, 64); dok.Add(5, 4, 65); /*dok.Add(5, 5,  0);*/
+
+                        Mat.SparseMatrix<double> result = new Mat.SparseMatrix<double>(dok);
+
+                        return [rowIndex, columnIndex, value, result];
+                    }
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M4"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM4()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> s4 = SparseStorages.DictionaryOfKeys.DataStorages.S4.CreateS4();
+
+                        return new Mat.SparseMatrix<double>(s4);
+                    }
+
+                    #endregion
                 }
-
-                #endregion
             }
 
 
@@ -2915,124 +4381,255 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             /// <remarks> The matrix M5 is a [3x5] matrix. </remarks>
             internal static class M5
             {
-                #region Static Fields
-
                 /// <summary>
-                /// Staticly stored matrix <see cref="M4"/>.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.CompressedColumn{T}"/>
                 /// </summary>
-                private static readonly Mat.SparseMatrix<double> _m5 = CreateM5();
-
-                #endregion
-
-                #region Public Static Methods
-
-                /// <summary>
-                /// Provides a readable version of the data that must not be altered during the parametrised tests.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M5"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Readable()
+                internal static class FromCC
                 {
-                    return [_m5];
+                    #region Static Fields
+
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M4"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m5 = CreateM5();
+
+                    #endregion
+
+                    #region Public Static Methods
+
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M5"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m5];
+                    }
+
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M5"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM5()];
+                    }
+
+
+                    //     -----     Properties
+
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M5"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S5.RowCount();
+
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M5"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S5.ColumnCount();
+
+
+                    //     -----     Public Methods
+
+                    /// <summary>
+                    /// Provides the information to evaluate whether a component is contained in the sparse matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Two-dimensional array of <see cref="bool"/> evaluating whether a component at the given row and column has an entry in the sparse matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Contains() => SparseStorages.CompressedColumn.DataStorages.S5.Contains();
+
+
+                    /// <summary>
+                    /// Provides the value of each components of the represented matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Two-dimensional array containing the values of zero and non-zero components. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S5.ToArray();
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M5"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM5()
+                    {
+                        Mat.SparseStorages.CompressedColumn<double> s5 = SparseStorages.CompressedColumn.DataStorages.S5.CreateS5();
+
+                        return new Mat.SparseMatrix<double>(s5);
+                    }
+
+                    #endregion
                 }
 
                 /// <summary>
-                /// Provides a writable version of the data that can be altered during the parametrised tests.
+                /// The storage of the <see cref="Mat.SparseMatrix{T}"/> is a <see cref="Mat.SparseStorages.DictionaryOfKeys{T}"/>
                 /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M5"/>. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Writable()
+                internal static class FromDOK
                 {
-                    return [CreateM5()];
+                    #region Static Fields
+
+                    /// <summary>
+                    /// Staticly stored matrix <see cref="M4"/>.
+                    /// </summary>
+                    private static readonly Mat.SparseMatrix<double> _m5 = CreateM5();
+
+                    #endregion
+
+                    #region Public Static Methods
+
+                    /// <summary>
+                    /// Provides a readable version of the data that must not be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> The staticly stored <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M5"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Readable()
+                    {
+                        return [_m5];
+                    }
+
+                    /// <summary>
+                    /// Provides a writable version of the data that can be altered during the parametrised tests.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> A newly computed <see cref="Mat.SparseMatrix{T}"/> of type <see cref="M5"/>. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Writable()
+                    {
+                        return [CreateM5()];
+                    }
+
+
+                    //     -----     Properties
+
+                    /// <summary>
+                    /// Provides the expected number of row of the matrix <see cref="M5"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the row count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] RowCount() => SparseStorages.DictionaryOfKeys.DataStorages.S5.RowCount();
+
+                    /// <summary>
+                    /// Provides the expected number of columns of the matrix <see cref="M5"/>.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> An <see cref="int"/> representing the column count. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ColumnCount() => SparseStorages.DictionaryOfKeys.DataStorages.S5.ColumnCount();
+
+
+                    //     -----     Public Methods
+
+                    /// <summary>
+                    /// Provides the information to evaluate whether a component is contained in the sparse matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Two-dimensional array of <see cref="bool"/> evaluating whether a component at the given row and column has an entry in the sparse matrix. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] Contains() => SparseStorages.DictionaryOfKeys.DataStorages.S5.Contains();
+
+
+                    /// <summary>
+                    /// Provides the value of each components of the represented matrix.
+                    /// </summary>
+                    /// <returns> An <see cref="T:object[]"/> whose array item are :
+                    /// <list type="table">
+                    ///     <item>
+                    ///         <term> 0 </term>
+                    ///         <description> Two-dimensional array containing the values of zero and non-zero components. </description>
+                    ///     </item>
+                    /// </list>
+                    /// </returns>
+                    public static object[] ToArray() => SparseStorages.DictionaryOfKeys.DataStorages.S5.ToArray();
+
+                    #endregion
+
+                    #region Other Static Methods
+
+                    /// <summary>
+                    /// Creates a matrix <see cref="M5"/>.
+                    /// </summary>
+                    /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
+                    private static Mat.SparseMatrix<double> CreateM5()
+                    {
+                        Mat.SparseStorages.DictionaryOfKeys<double> s5 = SparseStorages.DictionaryOfKeys.DataStorages.S5.CreateS5();
+
+                        return new Mat.SparseMatrix<double>(s5);
+                    }
+
+                    #endregion
                 }
-
-
-                //     -----     Properties
-
-                /// <summary>
-                /// Provides the expected number of row of the matrix <see cref="M5"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the row count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] RowCount() => SparseStorages.CompressedColumn.DataStorages.S5.RowCount();
-
-                /// <summary>
-                /// Provides the expected number of columns of the matrix <see cref="M5"/>.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> An <see cref="int"/> representing the column count. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ColumnCount() => SparseStorages.CompressedColumn.DataStorages.S5.ColumnCount();
-
-
-                //     -----     Public Methods
-
-                /// <summary>
-                /// Provides the information to evaluate whether a component is contained in the sparse matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> Two-dimensional array of <see cref="bool"/> evaluating whether a component at the given row and column has an entry in the sparse matrix. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] Contains() => SparseStorages.CompressedColumn.DataStorages.S5.Contains();
-
-
-                /// <summary>
-                /// Provides the value of each components of the represented matrix.
-                /// </summary>
-                /// <returns> An <see cref="T:object[]"/> whose array item are :
-                /// <list type="table">
-                ///     <item>
-                ///         <term> 0 </term>
-                ///         <description> Two-dimensional array containing the values of zero and non-zero components. </description>
-                ///     </item>
-                /// </list>
-                /// </returns>
-                public static object[] ToArray() => SparseStorages.CompressedColumn.DataStorages.S5.ToArray();
-
-                #endregion
-
-                #region Other Static Methods
-
-                /// <summary>
-                /// Creates a matrix <see cref="M5"/>.
-                /// </summary>
-                /// <returns> The <see cref="Mat.SparseMatrix{T}"/>. </returns>
-                private static Mat.SparseMatrix<double> CreateM5()
-                {
-                    Mat.SparseStorages.CompressedColumn<double> s5 = SparseStorages.CompressedColumn.DataStorages.S5.CreateS5();
-
-                    return new Mat.SparseMatrix<double>(s5);
-                }
-
-                #endregion
             }
         }
 
@@ -3052,10 +4649,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.RowCount },
-                        { DataStorages.M2.Readable, DataStorages.M2.RowCount },
-                        { DataStorages.M3.Readable, DataStorages.M3.RowCount },
-                        { DataStorages.M4.Readable, DataStorages.M4.RowCount },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.RowCount },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.RowCount },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.RowCount },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.RowCount },
+                        // For DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.RowCount },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.RowCount },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.RowCount },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.RowCount },
                     };
             }
 
@@ -3067,10 +4670,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.ColumnCount },
-                        { DataStorages.M2.Readable, DataStorages.M2.ColumnCount },
-                        { DataStorages.M3.Readable, DataStorages.M3.ColumnCount },
-                        { DataStorages.M4.Readable, DataStorages.M4.ColumnCount },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.ColumnCount },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.ColumnCount },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.ColumnCount },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.ColumnCount },
+                        // For DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.ColumnCount },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.ColumnCount },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.ColumnCount },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.ColumnCount },
                     };
             }
 
@@ -3087,10 +4696,27 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M2.Readable, DataStorages.M1.Addition_M2 },
-                        { DataStorages.M2.Readable, DataStorages.M1.Readable, DataStorages.M2.Addition_M1 },
-                        { DataStorages.M3.Readable, DataStorages.M4.Readable, DataStorages.M3.Addition_M4 },
-                        { DataStorages.M4.Readable, DataStorages.M3.Readable, DataStorages.M4.Addition_M3 },
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.Addition_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.Addition_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Addition_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Addition_M3 },
+                        // For DictionaryOfKeys with DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.Addition_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.Addition_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Addition_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Addition_M3 },
+
+                        // For CompressedColumn with DictionaryOfKeys
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.Addition_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.Addition_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Addition_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Addition_M3 },
+                        // For DictionaryOfKeys with CompressedColumn
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.Addition_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.Addition_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Addition_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Addition_M3 },
                     };
             }
 
@@ -3103,10 +4729,27 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M2.Readable, DataStorages.M1.Subtraction_M2 },
-                        { DataStorages.M2.Readable, DataStorages.M1.Readable, DataStorages.M2.Subtraction_M1 },
-                        { DataStorages.M3.Readable, DataStorages.M4.Readable, DataStorages.M3.Subtraction_M4 },
-                        { DataStorages.M4.Readable, DataStorages.M3.Readable, DataStorages.M4.Subtraction_M3 },
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.Subtraction_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.Subtraction_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Subtraction_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Subtraction_M3 },
+                        // For DictionaryOfKeys with DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.Subtraction_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.Subtraction_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Subtraction_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Subtraction_M3 },
+                        
+                        // For CompressedColumn with DictionaryOfKeys
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.Subtraction_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.Subtraction_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Subtraction_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Subtraction_M3 },
+                        // For DictionaryOfKeys with CompressedColumn
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.Subtraction_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.Subtraction_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Subtraction_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Subtraction_M3 },
                     };
             }
 
@@ -3119,10 +4762,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.UnaryNegation },
-                        { DataStorages.M2.Readable, DataStorages.M2.UnaryNegation },
-                        { DataStorages.M3.Readable, DataStorages.M3.UnaryNegation },
-                        { DataStorages.M4.Readable, DataStorages.M4.UnaryNegation },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.UnaryNegation },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.UnaryNegation },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.UnaryNegation },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.UnaryNegation },
+                        // For DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.UnaryNegation },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.UnaryNegation },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.UnaryNegation },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.UnaryNegation },
                     };
             }
 
@@ -3135,8 +4784,19 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M3.Readable, DataStorages.M4.Readable, DataStorages.M3.Multiplication_M4 },
-                        { DataStorages.M4.Readable, DataStorages.M3.Readable, DataStorages.M4.Multiplication_M3 },
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Multiplication_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Multiplication_M3 },
+                        // For DictionaryOfKeys with DictionaryOfKeys
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Multiplication_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Multiplication_M3 },
+                        
+                        // For CompressedColumn with DictionaryOfKeys
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Multiplication_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Multiplication_M3 },
+                        // For DictionaryOfKeys with CompressedColumn
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Multiplication_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Multiplication_M3 },
                     };
             }
 
@@ -3149,10 +4809,27 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M2.Readable, DataStorages.M1.TransposeMultiply_M2 },
-                        { DataStorages.M2.Readable, DataStorages.M1.Readable, DataStorages.M2.TransposeMultiply_M1 },
-                        { DataStorages.M3.Readable, DataStorages.M4.Readable, DataStorages.M3.TransposeMultiply_M4 },
-                        { DataStorages.M4.Readable, DataStorages.M3.Readable, DataStorages.M4.TransposeMultiply_M3 },
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.TransposeMultiply_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.TransposeMultiply_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.TransposeMultiply_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.TransposeMultiply_M3 },
+                        // For DictionaryOfKeys with DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.TransposeMultiply_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.TransposeMultiply_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.TransposeMultiply_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.TransposeMultiply_M3 },
+                        
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.TransposeMultiply_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.TransposeMultiply_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.TransposeMultiply_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.TransposeMultiply_M3 },
+                        // For DictionaryOfKeys with CompressedColumn
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.TransposeMultiply_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.TransposeMultiply_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.TransposeMultiply_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.TransposeMultiply_M3 },
                     };
             }
 
@@ -3164,10 +4841,27 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M2.Readable, DataStorages.M1.MultiplyTranspose_M2 },
-                        { DataStorages.M2.Readable, DataStorages.M1.Readable, DataStorages.M2.MultiplyTranspose_M1 },
-                        { DataStorages.M3.Readable, DataStorages.M4.Readable, DataStorages.M3.MultiplyTranspose_M4 },
-                        { DataStorages.M4.Readable, DataStorages.M3.Readable, DataStorages.M4.MultiplyTranspose_M3 },
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.MultiplyTranspose_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromCC.MultiplyTranspose_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.MultiplyTranspose_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromCC.MultiplyTranspose_M3 },
+                        // For DictionaryOfKeys with DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.MultiplyTranspose_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromDOK.MultiplyTranspose_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.MultiplyTranspose_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromDOK.MultiplyTranspose_M3 },
+                        
+                        // For CompressedColumn with DictionaryOfKeys
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.MultiplyTranspose_M2 },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.MultiplyTranspose_M1 },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.MultiplyTranspose_M4 },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.MultiplyTranspose_M3 },
+                        // For DictionaryOfKeys with CompressedColumn
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M2.FromCC.Readable, DataStorages.M1.FromDOK.MultiplyTranspose_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M1.FromCC.Readable, DataStorages.M2.FromDOK.MultiplyTranspose_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M4.FromCC.Readable, DataStorages.M3.FromDOK.MultiplyTranspose_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M3.FromCC.Readable, DataStorages.M4.FromDOK.MultiplyTranspose_M3 },
                     };
             }
 
@@ -3181,10 +4875,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.RightMultiplication_T },
-                        { DataStorages.M2.Readable, DataStorages.M2.RightMultiplication_T },
-                        { DataStorages.M3.Readable, DataStorages.M3.RightMultiplication_T },
-                        { DataStorages.M4.Readable, DataStorages.M4.RightMultiplication_T },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.RightMultiplication_T },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.RightMultiplication_T },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.RightMultiplication_T },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.RightMultiplication_T },
+                        // For DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.RightMultiplication_T },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.RightMultiplication_T },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.RightMultiplication_T },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.RightMultiplication_T },
                     };
             }
 
@@ -3197,10 +4897,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.LeftMultiplication_T },
-                        { DataStorages.M2.Readable, DataStorages.M2.LeftMultiplication_T },
-                        { DataStorages.M3.Readable, DataStorages.M3.LeftMultiplication_T },
-                        { DataStorages.M4.Readable, DataStorages.M4.LeftMultiplication_T },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.LeftMultiplication_T },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.LeftMultiplication_T },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.LeftMultiplication_T },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.LeftMultiplication_T },
+                        // For DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.LeftMultiplication_T },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.LeftMultiplication_T },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.LeftMultiplication_T },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.LeftMultiplication_T },
                     };
             }
 
@@ -3213,10 +4919,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.Division_T },
-                        { DataStorages.M2.Readable, DataStorages.M2.Division_T },
-                        { DataStorages.M3.Readable, DataStorages.M3.Division_T },
-                        { DataStorages.M4.Readable, DataStorages.M4.Division_T },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.Division_T },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.Division_T },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.Division_T },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.Division_T },
+                        // For DictionaryOfKeys
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.Division_T },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.Division_T },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.Division_T },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.Division_T },
                     };
             }
 
@@ -3231,10 +4943,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
-                        { DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
-                        { DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
-                        { DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
+                        // For CompressedColumn with DenseMatrix
+                        { DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
+                        { DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
+                        { DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
+                        { DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
+                        // For DictionaryOfKeys with DenseMatrix
+                        { DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
                     };
             }
 
@@ -3247,10 +4965,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
-                        { DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
-                        { DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
-                        { DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
+                        // For CompressedColumn with DenseMatrix
+                        { DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
+                        { DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
+                        { DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
+                        { DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
+                        // For DictionaryOfKeys with DenseMatrix
+                        { DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
                     };
             }
 
@@ -3264,8 +4988,12 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
-                        { DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
+                        // For CompressedColumn with DenseMatrix
+                        { DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
+                        { DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
+                        // For DictionaryOfKeys with DenseMatrix
+                        { DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
                     };
             }
 
@@ -3278,10 +5006,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2 },
-                        { DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1 },
-                        { DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4 },
-                        { DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3 },
+                        // For CompressedColumn with DenseMatrix
+                        { DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2 },
+                        { DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1 },
+                        { DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4 },
+                        { DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3 },
+                        // For DictionaryOfKeys with DenseMatrix
+                        { DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3 },
                     };
             }
 
@@ -3293,10 +5027,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2 },
-                        { DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1 },
-                        { DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4 },
-                        { DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3 },
+                        // For CompressedColumn with DenseMatrix
+                        { DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2 },
+                        { DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1 },
+                        { DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4 },
+                        { DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3 },
+                        // For DictionaryOfKeys with DenseMatrix
+                        { DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2 },
+                        { DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1 },
+                        { DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4 },
+                        { DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3 },
                     };
             }
 
@@ -3311,8 +5051,12 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M3.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M3.Multiplication_V3 },
-                        { DataStorages.M4.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M4.Multiplication_V3 },
+                        // For CompressedColumn with SparseVector
+                        { DataStorages.M3.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M3.FromCC.Multiplication_V3 },
+                        { DataStorages.M4.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M4.FromCC.Multiplication_V3 },
+                        // For DictionaryOfKeys with SparseVector
+                        { DataStorages.M3.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M3.FromDOK.Multiplication_V3 },
+                        { DataStorages.M4.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M4.FromDOK.Multiplication_V3 },
                     };
             }
 
@@ -3325,8 +5069,12 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M3.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M3.Multiplication_V3 },
-                        { DataStorages.M4.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M4.Multiplication_V3 },
+                        // For CompressedColumn with DenseVector
+                        { DataStorages.M3.FromCC.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M3.FromCC.Multiplication_V3 },
+                        { DataStorages.M4.FromCC.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M4.FromCC.Multiplication_V3 },
+                        // For DictionaryOfKeys with DenseVector
+                        { DataStorages.M3.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M3.FromDOK.Multiplication_V3 },
+                        { DataStorages.M4.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M4.FromDOK.Multiplication_V3 },
                     };
             }
 
@@ -3339,8 +5087,12 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M3.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M3.TransposeMultiply_V3 },
-                        { DataStorages.M4.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M4.TransposeMultiply_V3 },
+                        // For CompressedColumn with SparseVector
+                        { DataStorages.M3.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M3.FromCC.TransposeMultiply_V3 },
+                        { DataStorages.M4.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M4.FromCC.TransposeMultiply_V3 },
+                        // For DictionaryOfKeys with SparseVector
+                        { DataStorages.M3.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M3.FromDOK.TransposeMultiply_V3 },
+                        { DataStorages.M4.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, DataStorages.M4.FromDOK.TransposeMultiply_V3 },
                     };
             }
 
@@ -3352,8 +5104,12 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M3.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M3.TransposeMultiply_V3 },
-                        { DataStorages.M4.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M4.TransposeMultiply_V3 },
+                        // For CompressedColumn with DenseVector
+                        { DataStorages.M3.FromCC.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M3.FromCC.TransposeMultiply_V3 },
+                        { DataStorages.M4.FromCC.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M4.FromCC.TransposeMultiply_V3 },
+                        // For DictionaryOfKeys with DenseVector
+                        { DataStorages.M3.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M3.FromDOK.TransposeMultiply_V3 },
+                        { DataStorages.M4.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, DataStorages.M4.FromDOK.TransposeMultiply_V3 },
                     };
             }
 
@@ -3374,11 +5130,18 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Readable, DataStorages.M1.ToArray },
-                        { DataStorages.M2.Readable, DataStorages.M2.ToArray },
-                        { DataStorages.M3.Readable, DataStorages.M3.ToArray },
-                        { DataStorages.M4.Readable, DataStorages.M4.ToArray },
-                        { DataStorages.M5.Readable, DataStorages.M5.ToArray },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.ToArray },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.ToArray },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.ToArray },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.ToArray },
+                        { DataStorages.M5.FromCC.Readable, DataStorages.M5.FromCC.ToArray },
+                        // For DictionaryOfKeys 
+                        { DataStorages.M1.FromDOK.Readable, DataStorages.M1.FromDOK.ToArray },
+                        { DataStorages.M2.FromDOK.Readable, DataStorages.M2.FromDOK.ToArray },
+                        { DataStorages.M3.FromDOK.Readable, DataStorages.M3.FromDOK.ToArray },
+                        { DataStorages.M4.FromDOK.Readable, DataStorages.M4.FromDOK.ToArray },
+                        { DataStorages.M5.FromDOK.Readable, DataStorages.M5.FromDOK.ToArray },
                     };
             }
 
@@ -3390,10 +5153,16 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M1.Writable, DataStorages.M1.SetComponent },
-                        { DataStorages.M2.Writable, DataStorages.M2.SetComponent },
-                        { DataStorages.M3.Writable, DataStorages.M3.SetComponent },
-                        { DataStorages.M4.Writable, DataStorages.M4.SetComponent },
+                        // For CompressedColumn
+                        { DataStorages.M1.FromCC.Writable, DataStorages.M1.FromCC.SetComponent },
+                        { DataStorages.M2.FromCC.Writable, DataStorages.M2.FromCC.SetComponent },
+                        { DataStorages.M3.FromCC.Writable, DataStorages.M3.FromCC.SetComponent },
+                        { DataStorages.M4.FromCC.Writable, DataStorages.M4.FromCC.SetComponent },
+                        // For DictionaryOfKeys 
+                        { DataStorages.M1.FromDOK.Writable, DataStorages.M1.FromDOK.SetComponent },
+                        { DataStorages.M2.FromDOK.Writable, DataStorages.M2.FromDOK.SetComponent },
+                        { DataStorages.M3.FromDOK.Writable, DataStorages.M3.FromDOK.SetComponent },
+                        { DataStorages.M4.FromDOK.Writable, DataStorages.M4.FromDOK.SetComponent },
                     };
             }
 
@@ -3405,7 +5174,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
-                        { DataStorages.M5.Readable,  DataStorages.M5.Contains },
+                        // For CompressedColumn
+                        { DataStorages.M5.FromCC.Readable,  DataStorages.M5.FromCC.Contains },
+                        // For DictionaryOfKeys 
+                        { DataStorages.M5.FromDOK.Readable,  DataStorages.M5.FromDOK.Contains },
                     };
             }
 

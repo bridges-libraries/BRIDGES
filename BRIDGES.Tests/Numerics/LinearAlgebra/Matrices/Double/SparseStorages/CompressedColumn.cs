@@ -69,7 +69,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
 
 
         /// <summary>
-        /// Tests the method <see cref="Mat.SparseStorages.CompressedColumn{T}.this(int, int)"/>.
+        /// Tests the method <see cref="Mat.SparseStorages.SparseStorage{T}.this(int, int)"/>.
         /// </summary>
         /// <param name="storage"> Sparse storage to operate on. </param>
         /// <param name="values"> Two-dimensional array containing the values of zero and non-zero components. </param>
@@ -891,6 +891,18 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// </returns>
                 public static object[] ColumnCount() => [3];
 
+                /// <summary>
+                /// Provides the expected number of entries of the storage <see cref="S1"/>.
+                /// </summary>
+                /// <returns> An <see cref="T:object[]"/> whose array item are :
+                /// <list type="table">
+                ///     <item>
+                ///         <term> 0 </term>
+                ///         <description> An <see cref="int"/> representing the number of entries in the storage. </description>
+                ///     </item>
+                /// </list>
+                /// </returns>
+                public static object[] Count() => [6];
 
                 //     -----     Public Static Methods
 
@@ -1389,6 +1401,19 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// </list>
                 /// </returns>
                 public static object[] ColumnCount() => [3];
+
+                /// <summary>
+                /// Provides the expected number of entries of the storage <see cref="S2"/>.
+                /// </summary>
+                /// <returns> An <see cref="T:object[]"/> whose array item are :
+                /// <list type="table">
+                ///     <item>
+                ///         <term> 0 </term>
+                ///         <description> An <see cref="int"/> representing the number of entries in the storage. </description>
+                ///     </item>
+                /// </list>
+                /// </returns>
+                public static object[] Count() => [6];
 
 
                 //     -----     Public Static Methods
@@ -1897,6 +1922,19 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// </returns>
                 public static object[] ColumnCount() => [6];
 
+                /// <summary>
+                /// Provides the expected number of entries of the storage <see cref="S3"/>.
+                /// </summary>
+                /// <returns> An <see cref="T:object[]"/> whose array item are :
+                /// <list type="table">
+                ///     <item>
+                ///         <term> 0 </term>
+                ///         <description> An <see cref="int"/> representing the number of entries in the storage. </description>
+                ///     </item>
+                /// </list>
+                /// </returns>
+                public static object[] Count() => [35];
+
 
                 //     -----     Public Static Methods
 
@@ -2182,7 +2220,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// <list type="table">
                 ///     <item>
                 ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.DenseMatrix{T}"/> representing the result of the multiplication. </description>
+                ///         <description> An <see cref="Mat.SparseStorages.CompressedColumn{T}"/> representing the result of the multiplication. </description>
                 ///     </item>
                 /// </list>
                 /// </returns>
@@ -2518,6 +2556,19 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// </returns>
                 public static object[] ColumnCount() => [6];
 
+                /// <summary>
+                /// Provides the expected number of entries of the storage <see cref="S4"/>.
+                /// </summary>
+                /// <returns> An <see cref="T:object[]"/> whose array item are :
+                /// <list type="table">
+                ///     <item>
+                ///         <term> 0 </term>
+                ///         <description> An <see cref="int"/> representing the number of entries in the storage. </description>
+                ///     </item>
+                /// </list>
+                /// </returns>
+                public static object[] Count() => [36];
+
 
                 //     -----     Public Static Methods
 
@@ -2805,7 +2856,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// <list type="table">
                 ///     <item>
                 ///         <term> 0 </term>
-                ///         <description> An <see cref="Mat.DenseMatrix{T}"/> representing the result of the multiplication. </description>
+                ///         <description> An <see cref="Mat.SparseStorages.CompressedColumn{T}"/> representing the result of the multiplication. </description>
                 ///     </item>
                 /// </list>
                 /// </returns>
@@ -4019,6 +4070,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
+                        { DataStorages.S1.Readable, DataStorages.S1.RowCount },
+                        { DataStorages.S1.Readable, DataStorages.S2.RowCount },
+                        { DataStorages.S3.Readable, DataStorages.S3.RowCount },
+                        { DataStorages.S4.Readable, DataStorages.S4.RowCount },
                         { DataStorages.S5.Readable, DataStorages.S5.RowCount },
                     };
             }
@@ -4031,6 +4086,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
+                        { DataStorages.S1.Readable, DataStorages.S1.ColumnCount },
+                        { DataStorages.S1.Readable, DataStorages.S2.ColumnCount },
+                        { DataStorages.S3.Readable, DataStorages.S3.ColumnCount },
+                        { DataStorages.S4.Readable, DataStorages.S4.ColumnCount },
                         { DataStorages.S5.Readable, DataStorages.S5.ColumnCount },
                     };
             }
@@ -4043,6 +4102,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseStorages
                 /// <inheritdoc/>
                 internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
                     {
+                        { DataStorages.S1.Readable, DataStorages.S1.Count },
+                        { DataStorages.S1.Readable, DataStorages.S2.Count },
+                        { DataStorages.S3.Readable, DataStorages.S3.Count },
+                        { DataStorages.S4.Readable, DataStorages.S4.Count },
                         { DataStorages.S5.Readable, DataStorages.S5.Count },
                     };
             }

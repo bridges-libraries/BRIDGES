@@ -160,56 +160,34 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// <inheritdoc/>
         public override CompressedColumn<T> ToCompressedColumn()
         {
-            // Sort the keys of the storage by column, and then by row.
-            List<(int RowIndex, int ColumnIndex)> keys = new List<(int, int)>(_storage.Keys);
-            keys.Sort((a, b) =>
+            List<(int RowIndex, T Value)>[] rightColumns = new List<(int RowIndex, T Value)>[ColumnCount];
+            for (int i_RightColumn = 0; i_RightColumn < rightColumns.Length; i_RightColumn++) { rightColumns[i_RightColumn] = new List<(int, T)>(); }
+
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> rightComponent in _storage)
             {
-                if (a.ColumnIndex > b.ColumnIndex) { return 1; }
-                else if (a.ColumnIndex < b.ColumnIndex) { return -1; }
-                else
-                {
-                    if (a.RowIndex > b.RowIndex) { return 1; }
-                    else if (a.RowIndex < b.RowIndex) { return -1; }
-                    else { return 0; }
-                }
-            });
+                rightColumns[rightComponent.Key.ColumnIndex].Add((rightComponent.Key.RowIndex, rightComponent.Value));
+            }
+
+            for (int i_RightColumn = 0; i_RightColumn < rightColumns.Length; i_RightColumn++)
+            {
+                rightColumns[i_RightColumn].Sort((x, y) => x.RowIndex.CompareTo(y.RowIndex));
+            }
 
 
             List<T> values = new List<T>(Count);
             List<int> rowIndices = new List<int>(Count);
             int[] columnPointers = new int[ColumnCount + 1];
 
-            // Initialise the column pointer array
-            int prev_ColumnIndex = keys[0].ColumnIndex;
-            for (int i_Column = 0; i_Column < prev_ColumnIndex + 1; i_Column++)
+            columnPointers[0] = 0;
+            for (int i_Column = 0; i_Column < ColumnCount; i_Column++)
             {
-                columnPointers[i_Column] = 0;
-            }
-
-            // Fill the necessary fields for the compressed column
-            for (int i_Key = 0; i_Key < keys.Count; i_Key++)
-            {
-                (int RowIndex, int ColumnIndex) key = keys[i_Key];
-
-                // Manage change of column
-                if(key.ColumnIndex != prev_ColumnIndex)
+                List<(int RowIndex, T Value)> rightColumn = rightColumns[i_Column];
+                for (int i_Right = 0; i_Right < rightColumn.Count; i_Right++)
                 {
-                    for (int i_Column = prev_ColumnIndex; i_Column < key.ColumnIndex; i_Column++)
-                    {
-                        columnPointers[i_Column] = i_Key;
-                    }
-
-                    prev_ColumnIndex = key.ColumnIndex;
+                    rowIndices.Add(rightColumn[i_Right].RowIndex);
+                    values.Add(rightColumn[i_Right].Value);
                 }
-
-                rowIndices.Add(key.RowIndex);
-                values.Add(_storage[key]);
-            }
-
-            // Finalise the column pointer array
-            for (int i_Column = prev_ColumnIndex; i_Column < columnPointers.Length; i_Column++)
-            {
-                columnPointers[i_Column] = keys.Count;
+                columnPointers[i_Column + 1] = values.Count;
             }
 
 
@@ -368,7 +346,10 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 if (result._storage.ContainsKey(rightComponent.Key))
                 {
-                    result._storage[rightComponent.Key] = result._storage[rightComponent.Key] + rightComponent.Value;
+                    T value = result._storage[rightComponent.Key] + rightComponent.Value;
+
+                    if (value != T.Zero) { result._storage[rightComponent.Key] = value; }
+                    else { result._storage.Remove(rightComponent.Key); }
                 }
                 else { result._storage.Add(rightComponent.Key, rightComponent.Value); }
             }
@@ -391,11 +372,14 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 for (int i = right.ColumnPointers[i_Column]; i < right.ColumnPointers[i_Column + 1]; i++)
                 {
-                    (int, int) resultKey = (i_Column, right.RowIndices[i_Column]);
+                    (int, int) resultKey = (right.RowIndices[i], i_Column);
 
                     if (result._storage.ContainsKey(resultKey))
                     {
-                        result._storage[resultKey] = result._storage[resultKey] + right.Values[i];
+                        T value = result._storage[resultKey] + right.Values[i];
+
+                        if (value != T.Zero) { result._storage[resultKey] = value; }
+                        else { result._storage.Remove(resultKey); }
                     }
                     else { result._storage.Add(resultKey, right.Values[i]); }
                 }
@@ -423,7 +407,10 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 if (result._storage.ContainsKey(rightComponent.Key))
                 {
-                    result._storage[rightComponent.Key] = result._storage[rightComponent.Key] - rightComponent.Value;
+                    T value = result._storage[rightComponent.Key] - rightComponent.Value;
+
+                    if (value != T.Zero) { result._storage[rightComponent.Key] = value; }
+                    else { result._storage.Remove(rightComponent.Key); }
                 }
                 else { result._storage.Add(rightComponent.Key, -rightComponent.Value); }
             }
@@ -446,11 +433,14 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 for (int i = right.ColumnPointers[i_Column]; i < right.ColumnPointers[i_Column + 1]; i++)
                 {
-                    (int, int) resultKey = (i_Column, right.RowIndices[i_Column]);
+                    (int, int) resultKey = (right.RowIndices[i], i_Column);
 
                     if (result._storage.ContainsKey(resultKey))
                     {
-                        result._storage[resultKey] = result._storage[resultKey] - right.Values[i];
+                        T value = result._storage[resultKey] - right.Values[i];
+
+                        if (value != T.Zero) { result._storage[resultKey] = value; }
+                        else { result._storage.Remove(resultKey); }
                     }
                     else { result._storage.Add(resultKey, -right.Values[i]); }
                 }
@@ -494,6 +484,11 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
                 }
             }
 
+            // Remove zero-valued components
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> resultComponent in result._storage)
+            {
+                if (resultComponent.Value == T.Zero) { result._storage.Remove(resultComponent.Key); }
+            }
 
             return result;
         }
@@ -532,6 +527,12 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             }
 
 
+            // Remove zero-valued components
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> resultComponent in result._storage)
+            {
+                if (resultComponent.Value == T.Zero) { result._storage.Remove(resultComponent.Key); }
+            }
+
             return result;
         }
 
@@ -569,13 +570,17 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
                 }
             }
 
+            // Remove zero-valued components
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> resultComponent in result._storage)
+            {
+                if(resultComponent.Value == T.Zero) { result._storage.Remove(resultComponent.Key); }
+            }
 
             return result;
         }
 
         private DictionaryOfKeys<T> TransposeMultiply(CompressedColumn<T> right)
         {
-
             //     -----     Verifications
 
             if (RowCount != right.RowCount)
@@ -607,6 +612,12 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
                 }
             }
 
+
+            // Remove zero-valued components
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> resultComponent in result._storage)
+            {
+                if (resultComponent.Value == T.Zero) { result._storage.Remove(resultComponent.Key); }
+            }
 
             return result;
         }
@@ -646,6 +657,12 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             }
 
 
+            // Remove zero-valued components
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> resultComponent in result._storage)
+            {
+                if (resultComponent.Value == T.Zero) { result._storage.Remove(resultComponent.Key); }
+            }
+
             return result;
         }
 
@@ -682,6 +699,12 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
                 }
             }
 
+
+            // Remove zero-valued components
+            foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> resultComponent in result._storage)
+            {
+                if (resultComponent.Value == T.Zero) { result._storage.Remove(resultComponent.Key); }
+            }
 
             return result;
         }
@@ -818,7 +841,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             DenseMatrix<T> result = -right;
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> component in _storage)
             {
-                result[component.Key.RowIndex, component.Key.ColumnIndex] = component.Value - result[component.Key.RowIndex, component.Key.ColumnIndex];
+                result[component.Key.RowIndex, component.Key.ColumnIndex] = component.Value + result[component.Key.RowIndex, component.Key.ColumnIndex];
             }
 
 
@@ -967,7 +990,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 for (int i_LeftRow = 0; i_LeftRow < left.RowCount; i_LeftRow++)
                 {
-                    result[i_LeftRow, rightComponent.Key.ColumnIndex] = left[i_LeftRow, rightComponent.Key.RowIndex] * rightComponent.Value;
+                    result[i_LeftRow, rightComponent.Key.ColumnIndex] += left[i_LeftRow, rightComponent.Key.RowIndex] * rightComponent.Value;
                 }
             }
 
@@ -995,7 +1018,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 for (int i_LeftColumn = 0; i_LeftColumn < left.ColumnCount; i_LeftColumn++)
                 {
-                    result[i_LeftColumn, rightComponent.Key.ColumnIndex] = left[rightComponent.Key.RowIndex, i_LeftColumn] * rightComponent.Value;
+                    result[i_LeftColumn, rightComponent.Key.ColumnIndex] += left[rightComponent.Key.RowIndex, i_LeftColumn] * rightComponent.Value;
                 }
             }
 
@@ -1020,7 +1043,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             {
                 for (int i_LeftRow = 0; i_LeftRow < left.RowCount; i_LeftRow++)
                 {
-                    result[i_LeftRow, rightComponent.Key.RowIndex] = left[i_LeftRow, rightComponent.Key.ColumnIndex] * rightComponent.Value;
+                    result[i_LeftRow, rightComponent.Key.RowIndex] += left[i_LeftRow, rightComponent.Key.ColumnIndex] * rightComponent.Value;
                 }
             }
 
@@ -1034,6 +1057,11 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// <inheritdoc/>
         protected override SparseStorage<T> RightMultiplyOperator(T factor)
         {
+            //     -----     Verification
+
+            if(factor == T.Zero) { return new DictionaryOfKeys<T>(RowCount, ColumnCount, 0); }
+
+
             DictionaryOfKeys<T> result = new DictionaryOfKeys<T>(RowCount, ColumnCount, Count);
 
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> component in _storage) { result._storage.Add(component.Key, component.Value * factor); }
@@ -1044,6 +1072,11 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// <inheritdoc/>
         protected override SparseStorage<T> LeftMultiplyOperator(T factor)
         {
+            //     -----     Verification
+
+            if (factor == T.Zero) { return new DictionaryOfKeys<T>(RowCount, ColumnCount, 0); }
+
+
             DictionaryOfKeys<T> result = new DictionaryOfKeys<T>(RowCount, ColumnCount, Count);
 
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> component in _storage) { result._storage.Add(component.Key, factor * component.Value ); }
@@ -1136,7 +1169,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             T[] array = new T[this.ColumnCount];
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> component in _storage)
             {
-                if (vector.Contains(component.Key.ColumnIndex))
+                if (vector.Contains(component.Key.RowIndex))
                 {
                     array[component.Key.ColumnIndex] += component.Value * vector[component.Key.RowIndex];
                 }

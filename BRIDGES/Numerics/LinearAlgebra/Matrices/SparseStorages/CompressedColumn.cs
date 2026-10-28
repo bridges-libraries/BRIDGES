@@ -3,6 +3,7 @@ using System.Numerics;
 using System.Collections.Generic;
 
 using Vect = BRIDGES.Numerics.LinearAlgebra.Vectors;
+using System.Collections.Immutable;
 
 
 namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
@@ -417,6 +418,13 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             return new CompressedColumn<T>(RowCount, ColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
         }
 
+        private CompressedColumn<T> AdditionOperator(DictionaryOfKeys<T> right)
+        {
+            CompressedColumn<T> rightCC = right.ToCompressedColumn();
+
+            return AdditionOperator(rightCC);
+        }
+
 
         //     -----     SubtractionOperator(SparseStorage<T> right)     -----     //
 
@@ -491,6 +499,13 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             return new CompressedColumn<T>(RowCount, ColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
         }
 
+        private CompressedColumn<T> SubtractionOperator(DictionaryOfKeys<T> right)
+        {
+            CompressedColumn<T> rightCC = right.ToCompressedColumn();
+
+            return SubtractionOperator(rightCC);
+        }
+
 
         //     -----     MultiplyOperator(SparseStorage<T> right)     -----     //
 
@@ -556,6 +571,53 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
         }
 
+        private CompressedColumn<T> MultiplyOperator(DictionaryOfKeys<T> right)
+        {
+            //     -----     Verifications
+
+            if (ColumnCount != right.RowCount)
+            {
+                throw new ArgumentException($"The number of rows of the sparse matrix storage must be equal to the number of columns of this sparse matrix storage.");
+            }
+
+
+            int resultRowCount = RowCount;
+            int resultColumnCount = right.ColumnCount;
+
+            List<T> resultValues = new List<T>();
+            List<int> resultRowIndices = new List<int>();
+            int[] resultColumnPointers = new int[resultColumnCount + 1];
+
+            resultColumnPointers[0] = 0;
+            for (int i_ResultColumn = 0; i_ResultColumn < resultColumnCount; i_ResultColumn++)
+            {
+                T[] resultColumnValues = new T[resultRowCount];
+
+                for (int i_LeftColumn = 0; i_LeftColumn < ColumnCount; i_LeftColumn++)
+                {
+                    for (int i_Left = ColumnPointers[i_LeftColumn]; i_Left < ColumnPointers[i_LeftColumn + 1]; i_Left++)
+                    {
+                        if (right.Storage.TryGetValue((i_LeftColumn, i_ResultColumn), out T? rightValue))
+                        {
+                            resultColumnValues[RowIndices[i_Left]] += Values[i_Left] * rightValue;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < resultColumnValues.Length; i++)
+                {
+                    if (resultColumnValues[i] != T.Zero)
+                    {
+                        resultRowIndices.Add(i);
+                        resultValues.Add(resultColumnValues[i]);
+                    }
+                }
+                resultColumnPointers[i_ResultColumn + 1] = resultValues.Count;
+            }
+
+            return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
+        }
+
 
         //     -----     TransposeMultiply(SparseStorage<T> right)     -----     //
 
@@ -611,6 +673,50 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
                     {
                         resultValues.Add(resultComponent);
                         resultRowIndices.Add(i_ResultRow);
+                    }
+                }
+
+                resultColumnPointers[i_ResultColumn + 1] = resultValues.Count;
+            }
+
+            return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
+        }
+
+        private CompressedColumn<T> TransposeMultiply(DictionaryOfKeys<T> right)
+        {
+            //     -----     Verifications
+
+            if (RowCount != right.RowCount)
+            {
+                throw new ArgumentException($"The number of rows of the sparse matrix storage must be equal to the number of rows of this sparse matrix storage");
+            }
+
+
+            int resultRowCount = ColumnCount;
+            int resultColumnCount = right.ColumnCount;
+
+            List<T> resultValues = new List<T>();
+            List<int> resultRowIndices = new List<int>();
+            int[] resultColumnPointers = new int[resultColumnCount + 1];
+
+            resultColumnPointers[0] = 0;
+            for (int i_ResultColumn = 0; i_ResultColumn < resultColumnCount; i_ResultColumn++)
+            {
+                for (int i_ResultRow = 0; i_ResultRow < resultRowCount; i_ResultRow++)
+                {
+                    T resultValue = T.Zero;
+                    for (int i_Left = ColumnPointers[i_ResultRow]; i_Left < ColumnPointers[i_ResultRow + 1]; i_Left++)
+                    {
+                        if (right.Storage.TryGetValue((RowIndices[i_Left], i_ResultColumn), out T? rightValue))
+                        {
+                            resultValue += Values[i_Left] * rightValue;
+                        }
+                    }
+
+                    if(resultValue != T.Zero) 
+                    {
+                        resultRowIndices.Add(i_ResultRow);
+                        resultValues.Add(resultValue);
                     }
                 }
 
@@ -700,6 +806,53 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
         }
 
+        private CompressedColumn<T> MultiplyTranspose(DictionaryOfKeys<T> right)
+        {
+            //     -----     Verifications
+
+            if (ColumnCount != right.ColumnCount)
+            {
+                throw new ArgumentException($"The number of columns of the sparse matrix storage must be equal to the number of columns of this sparse matrix storage");
+            }
+
+
+            int resultRowCount = RowCount;
+            int resultColumnCount = right.RowCount;
+
+            List<T> resultValues = new List<T>();
+            List<int> resultRowIndices = new List<int>();
+            int[] resultColumnPointers = new int[resultColumnCount + 1];
+
+            resultColumnPointers[0] = 0;
+            for (int i_ResultColumn = 0; i_ResultColumn < resultColumnCount; i_ResultColumn++)
+            {
+                T[] resultColumnValues = new T[resultRowCount];
+
+                for (int i_LeftColumn = 0; i_LeftColumn < ColumnCount; i_LeftColumn++)
+                {
+                    for (int i_Left = ColumnPointers[i_LeftColumn]; i_Left < ColumnPointers[i_LeftColumn + 1]; i_Left++)
+                    {
+                        if (right.Storage.TryGetValue((i_ResultColumn, i_LeftColumn), out T? rightValue))
+                        {
+                            resultColumnValues[RowIndices[i_Left]] += Values[i_Left] * rightValue;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < resultColumnValues.Length; i++)
+                {
+                    if (resultColumnValues[i] != T.Zero)
+                    {
+                        resultRowIndices.Add(i);
+                        resultValues.Add(resultColumnValues[i]);
+                    }
+                }
+                resultColumnPointers[i_ResultColumn + 1] = resultValues.Count;
+            }
+
+            return new CompressedColumn<T>(resultRowCount, resultColumnCount, ref resultValues, ref resultRowIndices, ref resultColumnPointers);
+        }
+
         #endregion
 
 
@@ -713,7 +866,8 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// </exception>
         protected override SparseStorage<T> AdditionOperator(SparseStorage<T> right)
         {
-            if (right is CompressedColumn<T> rightCompressedColumn) { return AdditionOperator(rightCompressedColumn); }
+            if (right is CompressedColumn<T> rightCC) { return AdditionOperator(rightCC); }
+            else if (right is DictionaryOfKeys<T> rightDOK) { return AdditionOperator(rightDOK); }
             else
             {
                 throw new NotImplementedException($"The addition of this sparse matrix storage with a {right.GetType()} as a {typeof(SparseStorage<T>)} is not implemented.");
@@ -726,7 +880,8 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// </exception>
         protected override SparseStorage<T> SubtractionOperator(SparseStorage<T> right)
         {
-            if (right is CompressedColumn<T> rightCompressedColumn) { return SubtractionOperator(rightCompressedColumn); }
+            if (right is CompressedColumn<T> rightCC) { return SubtractionOperator(rightCC); }
+            else if (right is DictionaryOfKeys<T> rightDOK) { return SubtractionOperator(rightDOK); }
             else
             {
                 throw new NotImplementedException($"The subtraction of this sparse matrix storage with a {right.GetType()} as a {typeof(SparseStorage<T>)} is not implemented.");
@@ -755,7 +910,8 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// </exception>
         protected override SparseStorage<T> MultiplyOperator(SparseStorage<T> right)
         {
-            if (right is CompressedColumn<T> rightCompressedColumn) { return MultiplyOperator(rightCompressedColumn); }
+            if (right is CompressedColumn<T> rightCC) { return MultiplyOperator(rightCC); }
+            else if (right is DictionaryOfKeys<T> rightDOK) { return MultiplyOperator(rightDOK); }
             else
             {
                 throw new NotImplementedException($"The multiplication of this sparse matrix storage with a {right.GetType()} as a {typeof(SparseStorage<T>)} is not implemented.");
@@ -771,7 +927,8 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// </exception>
         protected override SparseStorage<T> TransposeMultiply(SparseStorage<T> right)
         {
-            if (right is CompressedColumn<T> rightCompressedColumn) { return TransposeMultiply(rightCompressedColumn); }
+            if (right is CompressedColumn<T> rightCC) { return TransposeMultiply(rightCC); }
+            else if (right is DictionaryOfKeys<T> rightDOK) { return TransposeMultiply(rightDOK); }
             else
             {
                 throw new NotImplementedException($"The multiplication of this transposed sparse matrix storage with a {right.GetType()} as a {typeof(SparseStorage<T>)} is not implemented.");
@@ -784,7 +941,8 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
         /// </exception>
         protected override SparseStorage<T> MultiplyTranspose(SparseStorage<T> right)
         {
-            if (right is CompressedColumn<T> rightCompressedColumn) { return MultiplyTranspose(rightCompressedColumn); }
+            if (right is CompressedColumn<T> rightCC) { return MultiplyTranspose(rightCC); }
+            else if (right is DictionaryOfKeys<T> rightDOK) { return MultiplyTranspose(rightDOK); }
             else
             {
                 throw new NotImplementedException($"The multiplication of this sparse matrix storage with a transposed {right.GetType()} as a {typeof(SparseStorage<T>)} is not implemented.");
