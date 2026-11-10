@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<Title>BRIDGES</Title>
-		<Authors>École des Ponts ParisTech</Authors>
+		<Authors>Nicolas MONTAGNE, Romain MESNIL</Authors>
 		<Company>École des Ponts ParisTech</Company>
 		<Description>Tools from the Build'in platform for Geometry and Structural Design.</Description>
 
@@ -17,9 +17,12 @@
 
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<IncludeSymbols>true</IncludeSymbols>
-		
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
 		<PackageId>BRIDGES</PackageId>
+		<PackageVersion>0.1.0</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	</PropertyGroup>
 
 	<!-- NuGet Dependencies -->
