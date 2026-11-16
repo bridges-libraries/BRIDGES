@@ -116,69 +116,13 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         //     -----     Other Operations : DenseMatrix<T>     -----     //
 
-        /// <summary>
-        /// Computes the multiplication of a transposed dense matrix with another dense matrix : <c>M<sup>t</sup>·N</c>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> to transpose and multiply. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> to multiply. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the operation. </returns>
-        /// <exception cref="ArgumentException"> The number of rows of <paramref name="left"/> and <paramref name="right"/> are different. </exception>
-        public static DenseMatrix<T> TransposeMultiply(DenseMatrix<T> left, DenseMatrix<T> right)
-        {
-            //     -----     Verifications
+        /// <inheritdoc cref="Operations.MatrixOperations.TransposeMultiply{T}(DenseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> TransposeMultiply(DenseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.TransposeMultiply(left, right);
 
-            if (left.RowCount != right.RowCount) { throw new ArgumentException($"The number of rows of {nameof(left)} and {nameof(right)} are different."); }
+        /// <inheritdoc cref="Operations.MatrixOperations.MultiplyTranspose{T}(DenseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> MultiplyTranspose(DenseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.MultiplyTranspose(left, right);
 
 
-            DenseMatrix<T> result = new DenseMatrix<T>(left.ColumnCount, right.ColumnCount);
-            for (int i_ResultRow = 0; i_ResultRow < result.RowCount; i_ResultRow++)
-            {
-                for (int i_ResultColumn = 0; i_ResultColumn < result.ColumnCount; i_ResultColumn++)
-                {
-                    T component = default!;
-                    for (int i_InitialRow = 0; i_InitialRow < right.RowCount; i_InitialRow++)
-                    {
-                        component += left[i_InitialRow, i_ResultRow] * right[i_InitialRow, i_ResultColumn];
-                    }
-                    result[i_ResultRow, i_ResultColumn] = component;
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Computes the multiplication of a dense matrix with another transposed dense matrix : <c>M·N<sup>t</sup></c>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> to multiply. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> to transpose and multiply. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the operation. </returns>
-        /// <exception cref="ArgumentException"> The number of columns of <paramref name="left"/> and <paramref name="right"/> are different. </exception>
-        public static DenseMatrix<T> MultiplyTranspose(DenseMatrix<T> left, DenseMatrix<T> right)
-        {
-            //     -----     Verifications
-
-            if (left.ColumnCount != right.ColumnCount) { throw new ArgumentException($"The number of columns of {nameof(left)} and {nameof(right)} are different."); }
-
-
-            DenseMatrix<T> result = new DenseMatrix<T>(left.RowCount, right.RowCount);
-            for (int i_ResultRow = 0; i_ResultRow < result.RowCount; i_ResultRow++)
-            {
-                for (int i_ResultColumn = 0; i_ResultColumn < result.ColumnCount; i_ResultColumn++)
-                {
-                    T component = default!;
-                    for (int i_InitialColumn = 0; i_InitialColumn < left.ColumnCount; i_InitialColumn++)
-                    {
-                        component += left[i_ResultRow, i_InitialColumn] * right[i_ResultColumn, i_InitialColumn];
-                    }
-                    result[i_ResultRow, i_ResultColumn] = component;
-                }
-            }
-
-            return result;
-        }
-        
-        
         //     -----     -----     Right Embedding : SparseMatrix<T>     -----     -----     //
 
         /// <inheritdoc cref="operator +(DenseMatrix{T}, SparseMatrix{T})"/>
@@ -194,27 +138,11 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         //     -----     Other Right Operations : SparseMatrix<T>     -----     //
 
-        /// <summary>
-        /// Computes the multiplication of a transposed dense matrix with a sparse matrix : <c>M<sup>t</sup>·N</c>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> to transpose and multiply. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> to multiply. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the operation. </returns>
-        public static DenseMatrix<T> TransposeMultiply(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseMatrix<T>.TransposeMultiply(left, right);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.TransposeMultiply{T}(DenseMatrix{T}, SparseMatrix{T})"/>
+        public static DenseMatrix<T> TransposeMultiply(DenseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.TransposeMultiply(left, right);
 
-        /// <summary>
-        /// Computes the multiplication of a dense matrix with a transposed sparse matrix : <c>M·N<sup>t</sup></c>.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> to multiply. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> to transpose and multiply. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the operation. </returns>
-        public static DenseMatrix<T> MultiplyTranspose(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseMatrix<T>.MultiplyTranspose(left, right);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.MultiplyTranspose{T}(DenseMatrix{T}, SparseMatrix{T})"/>
+        public static DenseMatrix<T> MultiplyTranspose(DenseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.MultiplyTranspose(left, right);
 
 
         //     -----      -----     Group Action : T     -----     -----     //
@@ -241,65 +169,11 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         //     -----      Other Operations : Vectors     -----     //
 
-        /// <summary>
-        /// Computes the multiplication of a transposed dense matrix with a dense vector : <c>M<sup>t</sup>·V</c>.
-        /// </summary>
-        /// <param name="matrix"> <see cref="DenseMatrix{T}"/> to transpose then multiply. </param>
-        /// <param name="vector"> <see cref="Vect.DenseVector{T}"/> to multiply. </param>
-        /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
-        /// <exception cref="ArgumentException"> The number of rows of <paramref name="matrix"/> and the size of <paramref name="vector"/> must be equal. </exception>
-        public static Vect.DenseVector<T> TransposeMultiply(DenseMatrix<T> matrix, Vect.DenseVector<T> vector)
-        {
-            //     -----     Verifications
+        /// <inheritdoc cref="Operations.MatrixOperations.TransposeMultiply{T}(DenseMatrix{T}, Vect.DenseVector{T})"/>
+        public static Vect.DenseVector<T> TransposeMultiply(DenseMatrix<T> matrix, Vect.DenseVector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
 
-            if (matrix.RowCount != vector.Size)
-            {
-                throw new ArgumentException($"The number of rows of {nameof(matrix)} and the size of {nameof(vector)} must be equal.");
-            }
-
-            Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.ColumnCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
-            {
-                T component = default!;
-                for (int i = 0; i < matrix.RowCount; i++)
-                {
-                    component += matrix[i, i_Result] * vector[i];
-                }
-                result[i_Result] = component;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Computes the multiplication of a transposed dense matrix with a sparse vector : <c>M<sup>t</sup>·V</c>.
-        /// </summary>
-        /// <param name="matrix"> <see cref="DenseMatrix{T}"/> to transpose then multiply. </param>
-        /// <param name="vector"> <see cref="Vect.SparseVector{T}"/> to multiply. </param>
-        /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
-        /// <exception cref="ArgumentException"> The number of rows of <paramref name="matrix"/> and the size of <paramref name="vector"/> must be equal. </exception>
-        public static Vect.DenseVector<T> TransposeMultiply(DenseMatrix<T> matrix, Vect.SparseVector<T> vector)
-        {
-            //     -----     Verifications
-
-            if (matrix.RowCount != vector.Size)
-            {
-                throw new ArgumentException($"The number of rows of {nameof(matrix)} and the size of {nameof(vector)} must be equal.");
-            }
-
-            Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.ColumnCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
-            {
-                T component = default!;
-                foreach ((int index, T vectorComponent) in vector.NonZeros())
-                {
-                    component += matrix[index, i_Result] * vectorComponent;
-                }
-                result[i_Result] = component;
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.TransposeMultiply{T}(DenseMatrix{T}, Vect.SparseVector{T})"/>
+        public static Vect.DenseVector<T> TransposeMultiply(DenseMatrix<T> matrix, Vect.SparseVector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
 
 
         //     -----     -----     Other Operations     -----     -----     //
@@ -346,272 +220,54 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         //     -----     -----     Algebraic Near Ring : DenseMatrix<T>     -----     -----     //
 
-        /// <summary>
-        /// Computes the addition of two dense matrices.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> for the addition. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> for the addition. </param>
-        /// <returns> The <see cref="DenseMatrix{T}"/> resulting from the addition. </returns>
-        /// <exception cref="ArgumentException"> The two matrices must have the same number of rows and columns. </exception>
-        public static DenseMatrix<T> operator +(DenseMatrix<T> left, DenseMatrix<T> right)
-        {
-            //     -----     Verifications
+        /// <inheritdoc cref="Operations.MatrixOperations.Add{T}(DenseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator +(DenseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.Add(left, right);
 
-            if(left.RowCount != right.RowCount | left.ColumnCount != right.ColumnCount)
-            {
-                throw new ArgumentException("The two matrices must have the same number of rows and columns.");
-            }
-
-            DenseMatrix<T> result = new DenseMatrix<T>(left.RowCount, left.ColumnCount);
-            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
-            {
-                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
-                {
-                    result[i_Row, i_Column] = left[i_Row, i_Column] + right[i_Row, i_Column];
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Computes the subtraction of two dense matrices.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> to subtract. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> to subtract with. </param>
-        /// <returns> The <see cref="DenseMatrix{T}"/> resulting from the subtraction. </returns>
-        /// <exception cref="ArgumentException"> The two matrices must have the same number of rows and columns. </exception>
-        public static DenseMatrix<T> operator -(DenseMatrix<T> left, DenseMatrix<T> right)
-        {
-            //     -----     Verifications
-
-            if (left.RowCount != right.RowCount | left.ColumnCount != right.ColumnCount)
-            {
-                throw new ArgumentException("The two matrices must have the same number of rows and columns.");
-            }
-
-            DenseMatrix<T> result = new DenseMatrix<T>(left.RowCount, left.ColumnCount);
-            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
-            {
-                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
-                {
-                    result[i_Row, i_Column] = left[i_Row, i_Column] - right[i_Row, i_Column];
-                }
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Subtract{T}(DenseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator -(DenseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.Subtract(left, right);
 
 
-        /// <summary>
-        /// Computes the unary negation of a dense matrix.
-        /// </summary>
-        /// <param name="operand"> <see cref="DenseMatrix{T}"/> to operate from. </param>
-        /// <returns> The <see cref="DenseMatrix{T}"/> resulting from the unary negation. </returns>
-        public static DenseMatrix<T> operator -(DenseMatrix<T> operand)
-        {
-            DenseMatrix<T> result = new DenseMatrix<T>(operand.RowCount, operand.ColumnCount);
-            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
-            {
-                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
-                {
-                    result[i_Row, i_Column] = -operand[i_Row, i_Column];
-                }
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Negate{T}(DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator -(DenseMatrix<T> operand) => Operations.MatrixOperations.Negate(operand);
 
 
-        /// <summary>
-        /// Computes the multiplication of two dense matrices.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> for the multiplication. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> for the multiplication. </param>
-        /// <returns> The <see cref="DenseMatrix{T}"/> resulting from the multiplication. </returns>
-        /// <exception cref="ArgumentException">
-        /// The number of column of <paramref name="left"/> matrix and the number of rows of <paramref name="right"/> matrix must be equal.
-        /// </exception>
-        public static DenseMatrix<T> operator *(DenseMatrix<T> left, DenseMatrix<T> right)
-        {
-            //     -----     Verifications
-
-            if (left.ColumnCount != right.RowCount)
-            {
-                throw new ArgumentException($"The number of columns of {nameof(left)} matrix and the number of rows of {nameof(right)} matrix must be equal.");
-            }
-
-            DenseMatrix<T> result = new DenseMatrix<T>(left.RowCount, right.ColumnCount);
-            for (int i_ResultRow = 0; i_ResultRow < result.RowCount; i_ResultRow++)
-            {
-                for (int i_ResultColumn = 0; i_ResultColumn < result.ColumnCount; i_ResultColumn++)
-                {
-                    T component = default!;
-                    for (int i_InitialColumn = 0; i_InitialColumn < left.ColumnCount; i_InitialColumn++)
-                    {
-                        component += left[i_ResultRow, i_InitialColumn] * right[i_InitialColumn, i_ResultColumn];
-                    }
-                    result[i_ResultRow, i_ResultColumn] = component;
-                }
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(DenseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator *(DenseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.Multiply(left, right);
 
 
         //     -----     -----     Right Embedding : SparseMatrix<T>     -----     -----     //
 
-        /// <summary>
-        /// Computes the addition of a dense matrix with a sparse matrix.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> for the addition. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> for the addition. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the addition. </returns>
-        public static DenseMatrix<T> operator +(DenseMatrix<T> left, SparseMatrix<T> right) =>  SparseMatrix<T>.AdditionOperator(left, right);
+        /// <inheritdoc cref="Operations.MatrixOperations.Add{T}(DenseMatrix{T}, SparseMatrix{T})"/>
+        public static DenseMatrix<T> operator +(DenseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.Add(left, right);
 
-        /// <summary>
-        /// Computes the subtraction of a dense matrix with a sparse matrix.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> to subtract. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> to subtract with. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the subtraction. </returns>
-        public static DenseMatrix<T> operator -(DenseMatrix<T> left, SparseMatrix<T> right) => SparseMatrix<T>.SubtractionOperator(left, right);
+        /// <inheritdoc cref="Operations.MatrixOperations.Subtract{T}(DenseMatrix{T}, SparseMatrix{T})"/>
+        public static DenseMatrix<T> operator -(DenseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.Subtract(left, right);
 
 
-        /// <summary>
-        /// Computes the multiplication of a dense matrix with a sparse matrix.
-        /// </summary>
-        /// <param name="left"> Left <see cref="DenseMatrix{T}"/> for the multiplication. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> for the multiplication. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the multiplication. </returns>
-        public static DenseMatrix<T> operator *(DenseMatrix<T> left, SparseMatrix<T> right) => SparseMatrix<T>.MultiplyOperator(left, right);
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(DenseMatrix{T}, SparseMatrix{T})"/>
+        public static DenseMatrix<T> operator *(DenseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.Multiply(left, right);
 
 
         //     -----      -----      Group Action : T      -----     -----     //
 
-        /// <summary>
-        /// Computes the right scalar multiplication of a dense matrix with a <typeparamref name="T"/> number.
-        /// </summary>
-        /// <param name="operand"> <see cref="DenseMatrix{T}"/> to multiply on the right. </param>
-        /// <param name="factor"> <typeparamref name="T"/> number to multiply with. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the right scalar multiplication. </returns>
-        public static DenseMatrix<T> operator *(DenseMatrix<T> operand, T factor)
-        {
-            DenseMatrix<T> result = new DenseMatrix<T>(operand.RowCount, operand.ColumnCount);
-            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
-            {
-                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
-                {
-                    result[i_Row, i_Column] = operand[i_Row, i_Column] * factor;
-                }
-            }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(DenseMatrix{T}, T)"/>
+        public static DenseMatrix<T> operator *(DenseMatrix<T> operand, T factor) => Operations.MatrixOperations.Multiply(operand, factor);
 
-            return result;
-        }
-
-        /// <summary>
-        /// Computes the left scalar multiplication of a dense matrix with a <typeparamref name="T"/> number.
-        /// </summary>
-        /// <param name="factor"> <typeparamref name="T"/> number to multiply with. </param>
-        /// <param name="operand"> <see cref="DenseMatrix{T}"/> to multiply on the left. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the left scalar multiplication. </returns>
-        public static DenseMatrix<T> operator *(T factor, DenseMatrix<T> operand)
-        {
-            DenseMatrix<T> result = new DenseMatrix<T>(operand.RowCount, operand.ColumnCount);
-            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
-            {
-                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
-                {
-                    result[i_Row, i_Column] = factor * operand[i_Row, i_Column];
-                }
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(T, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator *(T factor, DenseMatrix<T> operand) => Operations.MatrixOperations.Multiply(factor, operand);
 
 
-        /// <summary>
-        /// Computes the scalar division of a dense matrix with a <typeparamref name="T"/> number.
-        /// </summary>
-        /// <param name="operand"> <see cref="DenseMatrix{T}"/> to divide. </param>
-        /// <param name="divisor"> <typeparamref name="T"/> number to divide with. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the scalar division. </returns>
-        public static DenseMatrix<T> operator /(DenseMatrix<T> operand, T divisor)
-        {
-            DenseMatrix<T> result = new DenseMatrix<T>(operand.RowCount, operand.ColumnCount);
-            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
-            {
-                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
-                {
-                    result[i_Row, i_Column] = operand[i_Row, i_Column] / divisor;
-                }
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Divide{T}(DenseMatrix{T}, T)"/>
+        public static DenseMatrix<T> operator /(DenseMatrix<T> operand, T divisor) => Operations.MatrixOperations.Divide(operand, divisor);
 
 
         //     -----      -----      Vectors      -----     -----     //
 
-        /// <summary>
-        /// Computes the right multiplication of a dense matrix with a dense vector : <c>M·V</c>.
-        /// </summary>
-        /// <param name="matrix"> <see cref="DenseMatrix{T}"/> to multiply on the right. </param>
-        /// <param name="vector"> <see cref="Vect.DenseVector{T}"/> to multiply with. </param>
-        /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
-        /// <exception cref="ArgumentException"> The number of columns of <paramref name="matrix"/> and the size of <paramref name="vector"/> must be equal. </exception>
-        public static Vect.DenseVector<T> operator *(DenseMatrix<T> matrix, Vect.DenseVector<T> vector)
-        {
-            //     -----     Verifications
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(DenseMatrix{T}, Vect.DenseVector{T})"/>
+        public static Vect.DenseVector<T> operator *(DenseMatrix<T> matrix, Vect.DenseVector<T> vector) => Operations.MatrixOperations.Multiply(matrix, vector);
 
-            if (matrix.ColumnCount != vector.Size)
-            {
-                throw new ArgumentException($"The number of columns of {nameof(matrix)} and the size of {nameof(vector)} must be equal.");
-            }
-
-            Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.RowCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
-            {
-                T component = default!;
-                for (int i = 0; i < matrix.ColumnCount; i++)
-                {
-                    component += matrix[i_Result, i] * vector[i];
-                }
-                result[i_Result] = component;
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// Computes the right multiplication of a dense matrix with a sparse vector : <c>M·V</c>.
-        /// </summary>
-        /// <param name="matrix"> <see cref="DenseMatrix{T}"/> to multiply on the right. </param>
-        /// <param name="vector"> <see cref="Vect.SparseVector{T}"/> to multiply with. </param>
-        /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
-        /// <exception cref="ArgumentException"> The number of columns of <paramref name="matrix"/> and the size of <paramref name="vector"/> must be equal. </exception>
-        public static Vect.DenseVector<T> operator *(DenseMatrix<T> matrix, Vect.SparseVector<T> vector)
-        {
-            //     -----     Verifications
-
-            if (matrix.ColumnCount != vector.Size)
-            {
-                throw new ArgumentException($"The number of columns of {nameof(matrix)} and the size of {nameof(vector)} must be equal.");
-            }
-
-            Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.RowCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
-            {
-                T component = default!;
-                foreach((int index, T vectorComponent) in vector.NonZeros())
-                {
-                    component += matrix[i_Result, index] * vectorComponent;
-                }
-                result[i_Result] = component;
-            }
-
-            return result;
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(DenseMatrix{T}, Vect.SparseVector{T})"/>
+        public static Vect.DenseVector<T> operator *(DenseMatrix<T> matrix, Vect.SparseVector<T> vector) => Operations.MatrixOperations.Multiply(matrix, vector);
 
         #endregion
 
@@ -621,12 +277,6 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         public override T GetComponent(int row, int column)
         {
             return _storage[row, column];
-        }
-
-        /// <inheritdoc/>
-        public override void SetComponent(int row, int column, T value)
-        {
-            _storage[row, column] = value;
         }
 
         
@@ -703,136 +353,6 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
             }
             return columns;
 
-        }
-
-        #endregion
-
-
-        #region Protected Inheritence : Matrix<T>
-
-        //     -----     -----     Algebraic Near Ring : Matrix<T>    -----     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException"> 
-        /// The addition of this dense matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented. 
-        /// </exception>
-        protected override Matrix<T> MatrixAdditionOperator(Matrix<T> right)
-        {
-            if (right is DenseMatrix<T> denseRight) { return this + denseRight; }
-            else if (right is SparseMatrix<T> sparseRight) { return this + sparseRight; }
-            else
-            {
-                throw new NotImplementedException($"The addition of this dense matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException"> 
-        /// The subtraction of this dense matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented. 
-        /// </exception>
-        protected override Matrix<T> MatrixSubtractionOperator(Matrix<T> right)
-        {
-            if (right is DenseMatrix<T> denseRight) { return this - denseRight; }
-            else if (right is SparseMatrix<T> sparseRight) { return this - sparseRight; }
-            else
-            {
-                throw new NotImplementedException($"The subtraction of this dense matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixUnaryNegationOperator() => -this;
-
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The multiplication of this dense matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented.
-        /// </exception>
-        protected override Matrix<T> MatrixMultiplyOperator(Matrix<T> right)
-        {
-            if (right is DenseMatrix<T> denseRight) { return this * denseRight; }
-            else if (right is SparseMatrix<T> sparseRight) { return this * sparseRight; }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-
-        //     -----     Other Operations : Matrix<T>     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The multiplication of this transposed dense matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented.
-        /// </exception>
-        protected override Matrix<T> MatrixTransposeMultiply(Matrix<T> right)
-        {
-            if (right is DenseMatrix<T> denseRight) { return DenseMatrix<T>.TransposeMultiply(this, denseRight); }
-            else if (right is SparseMatrix<T> sparseRight) { return DenseMatrix<T>.TransposeMultiply(this, sparseRight); }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this transposed dense matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The multiplication of this dense matrix with transposed <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented.
-        /// </exception>
-        protected override Matrix<T> MatrixMultiplyTranspose(Matrix<T> right)
-        {
-            if (right is DenseMatrix<T> denseRight) { return DenseMatrix<T>.MultiplyTranspose(this, denseRight); }
-            else if (right is SparseMatrix<T> sparseRight) { return DenseMatrix<T>.MultiplyTranspose(this, sparseRight); }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this dense matrix with a transposed {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-
-        //     -----     -----     Group Action : T     -----     -----     //
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixRightMultiplyOperator(T factor) => this * factor;
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixLeftMultiplyOperator(T factor) => factor * this;
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixDivisionOperator(T divisor) => this / divisor;
-
-
-        //     -----     -----     Vectors     -----     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The right multiplication of this dense matrix with <paramref name="vector"/> as a <see cref="Vect.Vector{T}"/> is not implemented.
-        /// </exception>
-        protected override Vect.Vector<T> MatrixMultiplyOperator(Vect.Vector<T> vector)
-        {
-            if (vector is Vect.DenseVector<T> denseVector) { return this * denseVector; }
-            else if (vector is Vect.SparseVector<T> sparseVector) { return this * sparseVector; }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this dense matrix with a {vector.GetType()} as a {typeof(Vect.Vector<T>)} is not implemented.");
-            }
-        }
-
-        //     -----     Other Operations : Vector<T>     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The right multiplication of this transposed dense matrix with <paramref name="vector"/> as a <see cref="Vect.Vector{T}"/> is not implemented.
-        /// </exception>
-        protected override Vect.Vector<T> MatrixTransposeMultiply(Vect.Vector<T> vector)
-        {
-            if (vector is Vect.DenseVector<T> denseVector) { return DenseMatrix<T>.TransposeMultiply(this, denseVector); }
-            else if (vector is Vect.SparseVector<T> sparseVector) { return DenseMatrix<T>.TransposeMultiply(this, sparseVector); }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this transposed dense matrix with a {vector.GetType()} as a {typeof(Vect.Vector<T>)} is not implemented.");
-            }
         }
 
         #endregion

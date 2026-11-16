@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Numerics;
 
+using BRIDGES.Numerics.LinearAlgebra.Matrices.SparseBuilders;
 using BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages;
 
 using Vect = BRIDGES.Numerics.LinearAlgebra.Vectors;
+
 
 
 namespace BRIDGES.Numerics.LinearAlgebra.Matrices
@@ -21,7 +23,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         #endregion
 
-        #region Properties
+        #region Public Properties
 
         /// <summary>
         /// Gets the number of non-zero values in this matrix. 
@@ -34,7 +36,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// The sparse storage must have an existing entry for the component.
         /// </summary>
         /// <remarks>
-        /// For efficiency reasons, no checks is performed on the non-zero condition of the <paramref name="value"/>.
+        /// For efficiency reasons, no checks is performed on the non-zero condition of the <see langword="value"/>.
         /// </remarks>
         /// <param name="row"> Row index of the component to get or set. </param>
         /// <param name="column"> Column index of the component to get or set. </param>
@@ -42,8 +44,22 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         public T this[int row, int column]
         {
             get { return _storage[row, column]; }
-            set { _storage.Replace(row, column, value); }
         }
+
+
+        /// <summary>
+        /// Gets the storage format of this sparse matrix.
+        /// </summary>
+        public SparseStorageFormat StorageFormat => _storage.StorageFormat;
+
+        #endregion
+
+        #region Other Properties
+
+        /// <summary>
+        /// Gets the storage of this sparse matrix.
+        /// </summary>
+        internal SparseStorage<T> Storage => _storage;
 
         #endregion
 
@@ -62,6 +78,27 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         #endregion
 
         #region Public Static Methods
+
+        //     -----     -----     Factory    -----     -----     //
+
+        /// <summary>
+        /// Builds a <see cref="SparseMatrix{T}"/> storage from the <see cref="DictionaryOfKeys{T}"/> sparse matrix builder.
+        /// </summary>
+        /// <param name="rowCount"> Number of rows for the matrix. </param>
+        /// <param name="columnCount"> Number of columns for the matrix. </param>
+        /// <param name="dok"> Sparse matrix builder containing the unsorted components for the matrix.</param>
+        /// <param name="format"> </param>
+        /// <param name="validityChecks"> Evaluates whether the component indices and the component values should be verified.</param>
+        /// <returns> The <see cref="CompressedColumn{T}"/> storage.</returns>
+        public static SparseMatrix<T> Build(int rowCount, int columnCount, DictionaryOfKeys<T> dok, SparseStorageFormat format = SparseStorageFormat.CompressedColumn, bool validityChecks = true)
+        {
+            return format switch
+            {
+                SparseStorageFormat.CompressedColumn => new SparseMatrix<T>(CompressedColumn<T>.Build(rowCount, columnCount, dok, validityChecks)),
+                // General fallback
+                _ => throw new NotImplementedException()
+            };
+        }
 
         //     -----     -----     Algebraic Near Ring : SparseMatrix<T>     -----     -----     //
 
@@ -88,11 +125,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="left"> Left <see cref="SparseMatrix{T}"/> to transpose and multiply. </param>
         /// <param name="right"> Right <see cref="SparseMatrix{T}"/> to multiply. </param>
         /// <returns> The new <see cref="SparseMatrix{T}"/> resulting from the operation. </returns>
-        public static SparseMatrix<T> TransposeMultiply(SparseMatrix<T> left, SparseMatrix<T> right)
-        {
-            SparseStorage<T> result = SparseStorage<T>.TransposeMultiply(left._storage, right._storage);
-            return new SparseMatrix<T>(result);
-        }
+        public static SparseMatrix<T> TransposeMultiply(SparseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.TransposeMultiply(left, right);
 
         /// <summary>
         /// Computes the multiplication of a sparse matrix with another transposed sparse matrix : <c>M·N<sup>t</sup></c>.
@@ -100,11 +133,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="left"> Left <see cref="SparseMatrix{T}"/> to multiply. </param>
         /// <param name="right"> Right <see cref="SparseMatrix{T}"/> to transpose and multiply. </param>
         /// <returns> The new <see cref="SparseMatrix{T}"/> resulting from the operation. </returns>
-        public static SparseMatrix<T> MultiplyTranspose(SparseMatrix<T> left, SparseMatrix<T> right)
-        {
-            SparseStorage<T> result = SparseStorage<T>.MultiplyTranspose(left._storage, right._storage);
-            return new SparseMatrix<T>(result);
-        }
+        public static SparseMatrix<T> MultiplyTranspose(SparseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.MultiplyTranspose(left, right);
 
 
         //     -----     -----     Right Embedding : DenseMatrix<T>     -----     -----     //
@@ -128,10 +157,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="left"> Left <see cref="SparseMatrix{T}"/> to transpose and multiply. </param>
         /// <param name="right"> Right <see cref="DenseMatrix{T}"/> to multiply. </param>
         /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the operation. </returns>
-        public static DenseMatrix<T> TransposeMultiply(SparseMatrix<T> left, DenseMatrix<T> right)
-        {
-            return SparseStorage<T>.RightTransposeMultiply(left._storage, right);
-        }
+        public static DenseMatrix<T> TransposeMultiply(SparseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.TransposeMultiply(left, right);
 
         /// <summary>
         /// Computes the multiplication of a sparse matrix with a transposed dense matrix : <c>M·N<sup>t</sup></c>.
@@ -139,10 +165,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="left"> Left <see cref="SparseMatrix{T}"/> to multiply. </param>
         /// <param name="right"> Right <see cref="DenseMatrix{T}"/> to transpose and multiply. </param>
         /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the operation. </returns>
-        public static DenseMatrix<T> MultiplyTranspose(SparseMatrix<T> left, DenseMatrix<T> right)
-        {
-            return SparseStorage<T>.RightMultiplyTranspose(left._storage, right);
-        }
+        public static DenseMatrix<T> MultiplyTranspose(SparseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.MultiplyTranspose(left, right);
 
 
         //     -----      -----     Group Action : T     -----     -----     //
@@ -175,10 +198,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="matrix"> <see cref="SparseMatrix{T}"/> to transpose then multiply. </param>
         /// <param name="vector"> <see cref="Vect.SparseVector{T}"/> to multiply. </param>
         /// <returns> The new <see cref="Vect.SparseVector{T}"/> resulting from the multiplication. </returns>
-        public static Vect.SparseVector<T> TransposeMultiply(SparseMatrix<T> matrix, Vect.SparseVector<T> vector)
-        {
-            return SparseStorage<T>.TransposeMultiply(matrix._storage, vector);
-        }
+        public static Vect.SparseVector<T> TransposeMultiply(SparseMatrix<T> matrix, Vect.SparseVector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
 
         /// <summary>
         /// Computes the multiplication of a transposed sparse matrix with a dense vector : <c>M<sup>t</sup>·V</c>.
@@ -186,49 +206,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="matrix"> <see cref="SparseMatrix{T}"/> to transpose then multiply. </param>
         /// <param name="vector"> <see cref="Vect.DenseVector{T}"/> to multiply. </param>
         /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
-        public static Vect.DenseVector<T> TransposeMultiply(SparseMatrix<T> matrix, Vect.DenseVector<T> vector)
-        {
-            return SparseStorage<T>.TransposeMultiply(matrix._storage, vector);
-        }
-
-        #endregion
-
-        #region Internal Static Methods
-
-        //     -----      Left Embedding : DenseMatrix<T>     -----     //
-
-        /// <inheritdoc cref="DenseMatrix{T}.operator+(DenseMatrix{T}, SparseMatrix{T})"/>
-        internal static DenseMatrix<T> AdditionOperator(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseStorage<T>.LeftAdditionOperator(left, right._storage);
-        }
-
-        /// <inheritdoc cref="DenseMatrix{T}.operator-(DenseMatrix{T}, SparseMatrix{T})"/>
-        internal static DenseMatrix<T> SubtractionOperator(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseStorage<T>.LeftSubtractionOperator(left, right._storage);
-        }
-
-        /// <inheritdoc cref="DenseMatrix{T}.operator*(DenseMatrix{T}, SparseMatrix{T})"/>
-        internal static DenseMatrix<T> MultiplyOperator(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseStorage<T>.LeftMultiplyOperator(left, right._storage);
-        }
-
-
-        //     -----      Other Left Operations : DenseMatrix<T>     -----     //
-
-        /// <inheritdoc cref="DenseMatrix{T}.TransposeMultiply(DenseMatrix{T}, SparseMatrix{T})"/>
-        internal static DenseMatrix<T> TransposeMultiply(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseStorage<T>.LeftTransposeMultiply(left, right._storage);
-        }
-
-        /// <inheritdoc cref="DenseMatrix{T}.MultiplyTranspose(DenseMatrix{T}, SparseMatrix{T})"/>
-        internal static DenseMatrix<T> MultiplyTranspose(DenseMatrix<T> left, SparseMatrix<T> right)
-        {
-            return SparseStorage<T>.LeftMultiplyTranspose(left, right._storage);
-        }
+        public static Vect.DenseVector<T> TransposeMultiply(SparseMatrix<T> matrix, Vect.DenseVector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
 
         #endregion
 
@@ -236,155 +214,54 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         //     -----     -----     Algebraic Near Ring : SparseMatrix<T>     -----     -----     //
 
-        /// <summary>
-        /// Computes the addition of two sparse matrices.
-        /// </summary>
-        /// <param name="left"> Left <see cref="SparseMatrix{T}"/> for the addition. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> for the addition. </param>
-        /// <returns> The <see cref="SparseMatrix{T}"/> resulting from the addition. </returns>
-        public static SparseMatrix<T> operator +(SparseMatrix<T> left, SparseMatrix<T> right)
-        {
-            SparseStorage<T> result = SparseStorage<T>.AdditionOperator(left._storage, right._storage);
-            return new SparseMatrix<T>(result);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Add{T}(SparseMatrix{T}, SparseMatrix{T})"/>
+        public static SparseMatrix<T> operator +(SparseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.Add(left, right);
 
-        /// <summary>
-        /// Computes the subtraction of two sparse matrices.
-        /// </summary>
-        /// <param name="left"> Left <see cref="SparseMatrix{T}"/> to subtract. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> to subtract with. </param>
-        /// <returns> The <see cref="SparseMatrix{T}"/> resulting from the subtraction. </returns>
-        public static SparseMatrix<T> operator -(SparseMatrix<T> left, SparseMatrix<T> right)
-        {
-            SparseStorage<T> result = SparseStorage<T>.SubtractionOperator(left._storage, right._storage);
-            return new SparseMatrix<T>(result);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Subtract{T}(SparseMatrix{T}, SparseMatrix{T})"/>
+        public static SparseMatrix<T> operator -(SparseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.Subtract(left, right);
 
-        /// <summary>
-        /// Computes the unary negation of a sparse matrix.
-        /// </summary>
-        /// <param name="operand"> <see cref="SparseMatrix{T}"/> to operate from. </param>
-        /// <returns> The <see cref="SparseMatrix{T}"/> resulting from the unary negation. </returns>
-        public static SparseMatrix<T> operator -(SparseMatrix<T> operand)
-        {
-            SparseStorage<T> result = SparseStorage<T>.UnaryNegationOperator(operand._storage);
-            return new SparseMatrix<T>(result);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Negate{T}(SparseMatrix{T})"/>
+        public static SparseMatrix<T> operator -(SparseMatrix<T> operand) => Operations.MatrixOperations.Negate(operand);
 
 
-        /// <summary>
-        /// Computes the multiplication of two sparse matrices.
-        /// </summary>
-        /// <param name="left"> Left <see cref="SparseMatrix{T}"/> for the multiplication. </param>
-        /// <param name="right"> Right <see cref="SparseMatrix{T}"/> for the multiplication. </param>
-        /// <returns> The <see cref="SparseMatrix{T}"/> resulting from the multiplication. </returns>
-        public static SparseMatrix<T> operator *(SparseMatrix<T> left, SparseMatrix<T> right)
-        {
-            SparseStorage<T> result = SparseStorage<T>.MultiplyOperator(left._storage, right._storage);
-            return new SparseMatrix<T>(result);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(SparseMatrix{T}, SparseMatrix{T})"/>
+        public static SparseMatrix<T> operator *(SparseMatrix<T> left, SparseMatrix<T> right) => Operations.MatrixOperations.Multiply(left, right);
 
 
         //     -----     -----     Right Embedding : DenseMatrix<T>     -----     -----     //
 
-        /// <summary>
-        /// Computes the addition of a sparse matrix with a dense matrix.
-        /// </summary>
-        /// <param name="left"> Left <see cref="SparseMatrix{T}"/> for the addition. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> for the addition. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the addition. </returns>
-        public static DenseMatrix<T> operator +(SparseMatrix<T> left, DenseMatrix<T> right)
-        {
-            return SparseStorage<T>.RightAdditionOperator(left._storage, right);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Add{T}(SparseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator +(SparseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.Add(left, right);
 
-        /// <summary>
-        /// Computes the subtraction of a sparse matrix with a dense matrix.
-        /// </summary>
-        /// <param name="left"> Left <see cref="SparseMatrix{T}"/> to subtract. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> to subtract with. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the subtraction. </returns>
-        public static DenseMatrix<T> operator -(SparseMatrix<T> left, DenseMatrix<T> right)
-        {
-            return SparseStorage<T>.RightSubtractionOperator(left._storage, right);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Subtract{T}(SparseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator -(SparseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.Subtract(left, right);
 
 
-        /// <summary>
-        /// Computes the right multiplication of a sparse matrix with a dense matrix.
-        /// </summary>
-        /// <param name="left"> Left <see cref="SparseMatrix{T}"/> for the multiplication. </param>
-        /// <param name="right"> Right <see cref="DenseMatrix{T}"/> for the multiplication. </param>
-        /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the multiplication. </returns>
-        public static DenseMatrix<T> operator *(SparseMatrix<T> left, DenseMatrix<T> right)
-        {
-            return SparseStorage<T>.RightMultiplyOperator(left._storage, right);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(SparseMatrix{T}, DenseMatrix{T})"/>
+        public static DenseMatrix<T> operator *(SparseMatrix<T> left, DenseMatrix<T> right) => Operations.MatrixOperations.Multiply(left, right);
 
 
 
         //     -----      -----     Group Action : T     -----     -----     //
 
-        /// <summary>
-        /// Computes the right scalar multiplication of a sparse matrix with a <typeparamref name="T"/> number.
-        /// </summary>
-        /// <param name="operand"> <see cref="SparseMatrix{T}"/> to multiply on the right. </param>
-        /// <param name="factor"> <typeparamref name="T"/> number to multiply with. </param>
-        /// <returns> The new <see cref="SparseMatrix{T}"/> resulting from the right scalar multiplication. </returns>
-        public static SparseMatrix<T> operator *(SparseMatrix<T> operand, T factor)
-        {
-            SparseStorage<T> result = SparseStorage<T>.RightMultiplyOperator(operand._storage, factor);
-            return new SparseMatrix<T>(result);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(SparseMatrix{T}, T)"/>
+        public static SparseMatrix<T> operator *(SparseMatrix<T> operand, T factor) => Operations.MatrixOperations.Multiply(operand, factor);
 
-        /// <summary>
-        /// Computes the left scalar multiplication of a sparse matrix with a <typeparamref name="T"/> number.
-        /// </summary>
-        /// <param name="operand"> <see cref="SparseMatrix{T}"/> to multiply on the left. </param>
-        /// <param name="factor"> <typeparamref name="T"/> number to multiply with. </param>
-        /// <returns> The new <see cref="SparseMatrix{T}"/> resulting from the left scalar multiplication. </returns>
-        public static SparseMatrix<T> operator *(T factor, SparseMatrix<T> operand)
-        {
-            SparseStorage<T> result = SparseStorage<T>.LeftMultiplyOperator(factor, operand._storage);
-            return new SparseMatrix<T>(result);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(T, SparseMatrix{T})"/>
+        public static SparseMatrix<T> operator *(T factor, SparseMatrix<T> operand) => Operations.MatrixOperations.Multiply(factor, operand);
 
-        /// <summary>
-        /// Computes the scalar division of a sparse matrix with a <typeparamref name="T"/> number.
-        /// </summary>
-        /// <param name="operand"> <see cref="SparseMatrix{T}"/> to divide. </param>
-        /// <param name="divisor"> <typeparamref name="T"/> number to divide with. </param>
-        /// <returns> The new <see cref="SparseMatrix{T}"/> resulting from the scalar division. </returns>
-        public static SparseMatrix<T> operator /(SparseMatrix<T> operand, T divisor)
-        {
-            SparseStorage<T> result = SparseStorage<T>.DivisionOperator(operand._storage, divisor);
-            return new SparseMatrix<T>(result);
-        }
+
+        /// <inheritdoc cref="Operations.MatrixOperations.Divide{T}(SparseMatrix{T}, T)"/>
+        public static SparseMatrix<T> operator /(SparseMatrix<T> operand, T divisor) => Operations.MatrixOperations.Multiply(operand, divisor);
 
 
         //     -----      -----     Vectors     -----     -----     //
 
-        /// <summary>
-        /// Computes the right multiplication of a sparse matrix with a sparse vector : <c>M·V</c>.
-        /// </summary>
-        /// <param name="matrix"> <see cref="SparseMatrix{T}"/> to multiply on the right. </param>
-        /// <param name="vector"> <see cref="Vect.SparseVector{T}"/> to multiply with. </param>
-        /// <returns> The new <see cref="Vect.SparseVector{T}"/> resulting from the multiplication. </returns>
-        public static Vect.SparseVector<T> operator *(SparseMatrix<T> matrix, Vect.SparseVector<T> vector)
-        {
-            return SparseStorage<T>.MultiplyOperator(matrix._storage, vector);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(SparseMatrix{T}, Vect.SparseVector{T})"/>
+        public static Vect.SparseVector<T> operator *(SparseMatrix<T> matrix, Vect.SparseVector<T> vector) => Operations.MatrixOperations.Multiply(matrix, vector);
 
-        /// <summary>
-        /// Computes the right multiplication of a sparse matrix with a dense vector : <c>M·V</c>.
-        /// </summary>
-        /// <param name="matrix"> <see cref="SparseMatrix{T}"/> to multiply on the right. </param>
-        /// <param name="vector"> <see cref="Vect.DenseVector{T}"/> to multiply with. </param>
-        /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
-        public static Vect.DenseVector<T> operator *(SparseMatrix<T> matrix, Vect.DenseVector<T> vector)
-        {
-            return SparseStorage<T>.MultiplyOperator(matrix._storage, vector);
-        }
+        /// <inheritdoc cref="Operations.MatrixOperations.Multiply{T}(SparseMatrix{T}, Vect.DenseVector{T})"/>
+        public static Vect.DenseVector<T> operator *(SparseMatrix<T> matrix, Vect.DenseVector<T> vector) => Operations.MatrixOperations.Multiply(matrix, vector);
 
         #endregion
 
@@ -394,20 +271,6 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         public override T GetComponent(int row, int column)
         {
             return _storage.TryGet(row, column, out T? value) ? value! : T.Zero;
-        }
-
-        /// <inheritdoc/>
-        public override void SetComponent(int row, int column, T value)
-        {
-            if (_storage.Contains(row, column))
-            {
-                if (value != T.Zero) { _storage.Replace(row, column, value, false); }
-                else { _storage.Remove(row, column); }
-            }
-            else
-            {
-                if (value != T.Zero) { _storage.Add(row, column, value); }
-            }
         }
 
 
@@ -452,137 +315,6 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// Gets the sparse storage of this sparse matrix.
         /// </summary>
         internal SparseStorage<T> GetSparseStorage() => _storage;
-
-        #endregion
-
-
-        #region Protected Inheritence : Matrix<T>
-
-        //     -----     Algebraic Near Ring : Matrix<T>    -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException"> 
-        /// The addition of this sparse matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented. 
-        /// </exception>
-        protected override Matrix<T> MatrixAdditionOperator(Matrix<T> right)
-        {
-            if (right is SparseMatrix<T> sparseRight) { return this + sparseRight; } 
-            else if (right is DenseMatrix<T> denseRight) { return this + denseRight; }
-            else
-            {
-                throw new NotImplementedException($"The addition of this sparse matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException"> 
-        /// The subtraction of this sparse matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented. 
-        /// </exception>
-        protected override Matrix<T> MatrixSubtractionOperator(Matrix<T> right)
-        {
-            if (right is SparseMatrix<T> sparseRight) { return this - sparseRight; }
-            else if (right is DenseMatrix<T> denseRight) { return this - denseRight; }
-            else
-            {
-                throw new NotImplementedException($"The subtraction of this sparse matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixUnaryNegationOperator() => -this;
-
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The multiplication of this sparse matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented.
-        /// </exception>
-        protected override Matrix<T> MatrixMultiplyOperator(Matrix<T> right)
-        {
-            if (right is SparseMatrix<T> sparseRight) { return this * sparseRight; }
-            else if (right is DenseMatrix<T> denseRight) { return this * denseRight; }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this sparse matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-
-        //     -----     Other Operations : Matrix<T>     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The multiplication of this transposed sparse matrix with <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented.
-        /// </exception>
-        protected override Matrix<T> MatrixTransposeMultiply(Matrix<T> right)
-        {
-            if (right is SparseMatrix<T> sparseRight) { return SparseMatrix<T>.TransposeMultiply(this, sparseRight); }
-            else if (right is DenseMatrix<T> denseRight) { return SparseMatrix<T>.TransposeMultiply(this, denseRight); }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this transposed sparse matrix with a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The multiplication of this sparse matrix with transposed <paramref name="right"/> as a <see cref="Matrix{T}"/> is not implemented.
-        /// </exception>
-        protected override Matrix<T> MatrixMultiplyTranspose(Matrix<T> right)
-        {
-            if (right is SparseMatrix<T> sparseRight) { return SparseMatrix<T>.MultiplyTranspose(this, sparseRight); }
-            else if (right is DenseMatrix<T> denseRight) { return SparseMatrix<T>.MultiplyTranspose(this, denseRight); }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this sparse matrix with transposed a {right.GetType()} as a {typeof(Matrix<T>)} is not implemented.");
-            }
-        }
-
-
-        //     -----     Group Action : T     -----     //
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixRightMultiplyOperator(T factor) => this * factor;
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixLeftMultiplyOperator(T factor) => factor * this;
-
-        /// <inheritdoc/>
-        protected override Matrix<T> MatrixDivisionOperator(T divisor) => this / divisor;
-
-
-        //     -----     -----     Vectors     -----     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The right multiplication of this sparse matrix with <paramref name="vector"/> as a <see cref="Vect.Vector{T}"/> is not implemented.
-        /// </exception>
-        protected override Vect.Vector<T> MatrixMultiplyOperator(Vect.Vector<T> vector)
-        {
-            if (vector is Vect.SparseVector<T> sparseVector) { return this * sparseVector; }
-            else if (vector is Vect.DenseVector<T> denseVector) { return this * denseVector; }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this sparse matrix with a {vector.GetType()} as a {typeof(Vect.Vector<T>)} is not implemented.");
-            }
-        }
-
-
-        //     -----     Other Operations : Vector<T>     -----     //
-
-        /// <inheritdoc/>
-        /// <exception cref="NotImplementedException">
-        /// The right multiplication of this transposed sparse matrix with <paramref name="vector"/> as a <see cref="Vect.Vector{T}"/> is not implemented.
-        /// </exception>
-        protected override Vect.Vector<T> MatrixTransposeMultiply(Vect.Vector<T> vector)
-        {
-            if (vector is Vect.SparseVector<T> sparseVector) { return SparseMatrix<T>.TransposeMultiply(this, sparseVector); }
-            else if (vector is Vect.DenseVector<T> denseVector) { return SparseMatrix<T>.TransposeMultiply(this, denseVector); }
-            else
-            {
-                throw new NotImplementedException($"The multiplication of this transposed sparse matrix with a {vector.GetType()} as a {typeof(Vect.Vector<T>)} is not implemented.");
-            }
-        }
 
         #endregion
     }

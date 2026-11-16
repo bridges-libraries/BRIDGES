@@ -5,11 +5,12 @@ using CSp_Stor = CSparse.Storage;
 using Mat = BRIDGES.Numerics.LinearAlgebra.Matrices;
 using Vect = BRIDGES.Numerics.LinearAlgebra.Vectors;
 
+using SStor = BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages;
 
 namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Double
 {
     /// <summary>
-    /// Class containing extension methods for <see cref="SparseStorages.CompressedColumn{T}"/> with <see cref="double"/>-precision values.
+    /// Class containing extension methods for <see cref="SStor.CompressedColumn{T}"/> with <see cref="double"/>-precision values.
     /// </summary>
     public static class SparseMatrixExtensions
     {
@@ -21,15 +22,16 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Double
         /// <param name="matrix"> The sparse matrix A. </param>
         /// <param name="vector"> The vector y. </param>
         /// <returns> The vector x. </returns>
+        /// <exception cref="NotImplementedException"></exception>
         public static Vect.DenseVector<double> SolveCholesky(this SparseMatrix<double> matrix, Vect.DenseVector<double> vector)
         {
-            Mat.SparseStorages.SparseStorage<double> storage = matrix.GetSparseStorage();
+            if (matrix.StorageFormat is not SStor.SparseStorageFormat.CompressedColumn)
+            {
+                throw new NotImplementedException("This operation is currently only available for compressed column storage.");
+            }
 
-            Mat.SparseStorages.CompressedColumn<double> ccs;
-            if (storage.StorageType == SparseStorages.SparseStorageType.CompressedColumn) { ccs = (Mat.SparseStorages.CompressedColumn<double>)storage; }
-            else { ccs = storage.ToCompressedColumn(); }
-
-            CSp_Stor.CompressedColumnStorage<double> sparseStorage = new CSparse.Double.SparseMatrix(ccs.RowCount, ccs.ColumnCount, ccs.Values.ToArray(), ccs.RowIndices.ToArray(), ccs.ColumnPointers);
+            SStor.CompressedColumn<double>? ccs = matrix.GetSparseStorage() as SStor.CompressedColumn<double>;
+            CSp_Stor.CompressedColumnStorage<double> sparseStorage = new CSparse.Double.SparseMatrix(ccs!.RowCount, ccs!.ColumnCount, ccs!._values, ccs!._rowIndices, ccs!._columnPointers);
 
             var cholesky = CSparse.Double.Factorization.SparseCholesky.Create(sparseStorage, CSparse.ColumnOrdering.MinimumDegreeAtPlusA);
 
@@ -47,13 +49,13 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Double
         /// <returns> The vector x. </returns>
         public static Vect.SparseVector<double> SolveCholesky(this SparseMatrix<double> matrix, Vect.SparseVector<double> vector)
         {
-            Mat.SparseStorages.SparseStorage<double> storage = matrix.GetSparseStorage();
+            if (matrix.StorageFormat is not SStor.SparseStorageFormat.CompressedColumn)
+            {
+                throw new NotImplementedException("This operation is currently only available for compressed column storage.");
+            }
 
-            Mat.SparseStorages.CompressedColumn<double> ccs;
-            if (storage.StorageType == SparseStorages.SparseStorageType.CompressedColumn) { ccs = (Mat.SparseStorages.CompressedColumn<double>)storage; }
-            else { ccs = storage.ToCompressedColumn(); }
-
-            CSp_Stor.CompressedColumnStorage<double> sparseStorage = new CSparse.Double.SparseMatrix(ccs.RowCount, ccs.ColumnCount, ccs.Values.ToArray(), ccs.RowIndices.ToArray(), ccs.ColumnPointers);
+            SStor.CompressedColumn<double>? ccs = matrix.GetSparseStorage() as SStor.CompressedColumn<double>;
+            CSp_Stor.CompressedColumnStorage<double> sparseStorage = new CSparse.Double.SparseMatrix(ccs!.RowCount, ccs!.ColumnCount, ccs!._values, ccs!._rowIndices, ccs!._columnPointers);
 
             var cholesky = CSparse.Double.Factorization.SparseCholesky.Create(sparseStorage, CSparse.ColumnOrdering.MinimumDegreeAtPlusA);
 
