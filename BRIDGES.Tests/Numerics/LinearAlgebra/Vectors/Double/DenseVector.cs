@@ -16,7 +16,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
         #region Tests : Properties
 
         /// <summary>
-        /// Tests the property <see cref="Vect.Vector{T}.Size"/>.
+        /// Tests the property <see cref="Vect.Vector{T}.RowCount"/>.
         /// </summary>
         /// <param name="vector"> Vector to evaluate. </param>
         /// <param name="expected"> Expected size of the vector. </param>
@@ -27,7 +27,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Arrange
 
             //Act
-            int size = vector.Size;
+            int size = vector.RowCount;
 
             // Assert
             Assert.Equal(expected, size);
@@ -47,8 +47,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             //Act
 
             // Assert
-            Assert.Equal(components.Length, vector.Size);
-            for (int i = 0; i < vector.Size; i++)
+            Assert.Equal(components.Length, vector.RowCount);
+            for (int i = 0; i < vector.RowCount; i++)
             {
                 Assert.Equal(components[i], vector[i]);
             }
@@ -72,7 +72,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = new Vect.DenseVector<double>(size);
 
             // Assert
-            Assert.Equal(size, result.Size);
+            Assert.Equal(size, result.RowCount);
             for (int i = 0; i < size; i++)
             {
                 Assert.Equal(0.0, result[0]);
@@ -93,7 +93,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = new Vect.DenseVector<double>(components);
 
             // Assert
-            Assert.Equal(components.Length, result.Size);
+            Assert.Equal(components.Length, result.RowCount);
             for (int i = 0; i < components.Length; i++)
             {
                 Assert.Equal(components[i], result[i]);
@@ -114,8 +114,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = new Vect.DenseVector<double>(expected);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < expected.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < expected.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -137,8 +137,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = new Vect.DenseVector<double>(sparse);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < expected.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < expected.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -166,8 +166,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Add(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -189,8 +189,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Subtract(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -212,8 +212,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Opposite(operand);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -261,8 +261,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Add(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -284,8 +284,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Subtract(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -311,8 +311,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Multiply(operand, factor);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -334,8 +334,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Multiply(factor, operand);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -358,8 +358,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.DenseVector<double>.Divide(operand, divisor);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -387,8 +387,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = left + right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -410,8 +410,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = left - right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -433,8 +433,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = -operand;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -460,8 +460,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = left + right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -483,8 +483,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = left - right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -510,8 +510,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = operand * factor;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -533,8 +533,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = factor * operand;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -557,8 +557,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = operand / divisor;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -580,9 +580,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Arrange
 
             // Act & Assert
-            for (int i = 0; i < vector.Size; i++)
+            for (int i = 0; i < vector.RowCount; i++)
             {
-                Assert.Equal(components[i], vector.GetComponent(i));
+                Assert.Equal(components[i], vector.Get(i));
             }
         }
 
@@ -600,11 +600,11 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Arrange
 
             // Act
-            vector.SetComponent(index, value);
+            vector[index] = value;
 
             // Assert
-            Assert.Equal(expected.Size, vector.Size);
-            for (int i = 0; i < vector.Size; i++)
+            Assert.Equal(expected.RowCount, vector.RowCount);
+            for (int i = 0; i < vector.RowCount; i++)
             {
                 Assert.Equal(expected[i], vector[i]);
             }

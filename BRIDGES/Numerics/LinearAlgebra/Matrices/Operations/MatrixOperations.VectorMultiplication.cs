@@ -50,7 +50,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
             EnsureMultiplicationCompatibility(matrix, vector);
 
             Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.RowCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
+            for (int i_Result = 0; i_Result < result.RowCount; i_Result++)
             {
                 T component = default!;
                 for (int i = 0; i < matrix.ColumnCount; i++)
@@ -76,10 +76,10 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
             EnsureMultiplicationCompatibility(matrix, vector);
 
             Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.RowCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
+            for (int i_Result = 0; i_Result < result.RowCount; i_Result++)
             {
                 T component = default!;
-                foreach ((int index, T vectorComponent) in vector.NonZeros())
+                foreach ((int index, T vectorComponent) in vector)
                 {
                     component += matrix[i_Result, index] * vectorComponent;
                 }
@@ -167,13 +167,13 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
             }
 
 
-            Vect.SparseVector<T> result = new Vect.SparseVector<T>(storage.RowCount);
-            for (int i = 0; i < result.Size; i++)
+            Dictionary<int, T> components = new Dictionary<int, T>();
+            for (int i = 0; i < storage.RowCount; i++)
             {
-                if (array[i] != T.Zero) { result.Add(i, array[i]); }
+                if (array[i] != T.Zero) { components.Add(i, array[i]); }
             }
 
-            return result;
+            return new Vect.SparseVector<T>(storage.RowCount, components); ;
         }
 
         #endregion
@@ -219,7 +219,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
             EnsureTransposeMultiplicationCompatibility(matrix, vector);
 
             Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.ColumnCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
+            for (int i_Result = 0; i_Result < result.RowCount; i_Result++)
             {
                 T component = default!;
                 for (int i = 0; i < matrix.RowCount; i++)
@@ -245,10 +245,10 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
             EnsureTransposeMultiplicationCompatibility(matrix, vector);
 
             Vect.DenseVector<T> result = new Vect.DenseVector<T>(matrix.ColumnCount);
-            for (int i_Result = 0; i_Result < result.Size; i_Result++)
+            for (int i_Result = 0; i_Result < result.RowCount; i_Result++)
             {
                 T component = default!;
-                foreach ((int index, T vectorComponent) in vector.NonZeros())
+                foreach ((int index, T vectorComponent) in vector)
                 {
                     component += matrix[index, i_Result] * vectorComponent;
                 }
@@ -323,7 +323,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
         internal static Vect.SparseVector<T> TransposeMultiply<T>(SStor.CompressedColumn<T> storage, Vect.SparseVector<T> vector)
             where T : INumberBase<T>
         {
-            Vect.SparseVector<T> result = new Vect.SparseVector<T>(storage.ColumnCount);
+            Dictionary<int, T> components = new Dictionary<int, T>(); 
             for (int i_StorageColumn = 0; i_StorageColumn < storage.ColumnCount; i_StorageColumn++)
             {
                 T component = default!;
@@ -335,10 +335,10 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
                     }
                 }
 
-                if (component != T.Zero) { result.Add(i_StorageColumn, component); }
+                if (component != T.Zero) { components.Add(i_StorageColumn, component); }
             }
 
-            return result;
+            return new Vect.SparseVector<T>(storage.ColumnCount, components); ;
         }
 
         #endregion

@@ -6,6 +6,7 @@ using Mat = BRIDGES.Numerics.LinearAlgebra.Matrices;
 using Vect = BRIDGES.Numerics.LinearAlgebra.Vectors;
 
 using SStor = BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages;
+using System.Collections.Generic;
 
 namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Double
 {
@@ -62,14 +63,14 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Double
             double[] x = new double[matrix.ColumnCount];
             cholesky.Solve(vector.ToArray(), x);
 
-            Vect.SparseVector<double> sparseX = new Vect.SparseVector<double>(x.Length);
+            Dictionary<int, double> components = new Dictionary<int, double>();
             for (int i = 0; i < x.Length; i++)
             {
                 double value = x[i];
-                if (value != 0.0) { sparseX.Add(i, value); }
+                if (value != 0.0) { components.Add(i, value); }
             }
 
-            return sparseX;
+            return new Vect.SparseVector<double>(x.Length, components);
         }
 
         #endregion

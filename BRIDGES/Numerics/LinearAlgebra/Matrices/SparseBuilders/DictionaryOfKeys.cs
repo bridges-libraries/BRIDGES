@@ -60,8 +60,6 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseBuilders
         /// <summary>
         /// Initialises a new instance of the <see cref="DictionaryOfKeys{T}"/> class with its size and capacity.
         /// </summary>
-        /// <param name="rowCount"> Number of rows for the matrix. </param>
-        /// <param name="columnCount"> Number of columns for the matrix. </param>
         /// <param name="capacity"> Number of values that the matrix can hold. </param>
         public DictionaryOfKeys(int capacity)
         {
@@ -83,6 +81,18 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseBuilders
         #region Public Methods
 
         /// <summary>
+        /// Gets the value of a component at the given row and column.
+        /// </summary>
+        /// <param name="row"> Row index of the component to get. </param>
+        /// <param name="column"> Column index of the component to get. </param>
+        /// <returns> The value of the component. </returns>
+        public T Get(int row, int column)
+        {
+            return _storage[(row, column)];
+        }
+
+
+        /// <summary>
         /// Attemps to get the value of a component at the given row and column.
         /// </summary>
         /// <param name="row"> Row index of the component to get. </param>
@@ -96,7 +106,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseBuilders
 
 
         /// <summary>
-        /// Adds a component to this sparse storage.
+        /// Adds a component to this sparse storage. If the component exists, the <paramref name="value"/> is added.
         /// </summary>
         /// <remarks> For efficiency reasons, no checks is performed on the non-zero condition of the <paramref name="value"/>. </remarks>
         /// <param name="row"> Row index of the component to insert. </param>
@@ -113,7 +123,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseBuilders
         }
 
         /// <summary>
-        /// Adds a non-zero component to this sparse storage.
+        /// Adds a non-zero component to this sparse storage. If the component exists, the <paramref name="value"/> is added.
         /// </summary>
         /// <param name="row"> Row index of the component to insert. </param>
         /// <param name="column"> Column index of the component to insert. </param>

@@ -15,7 +15,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
         #region Tests : Properties
 
         /// <summary>
-        /// Tests the property <see cref="Vect.Vector{T}.Size"/>.
+        /// Tests the property <see cref="Vect.Vector{T}.RowCount"/>.
         /// </summary>
         /// <param name="vector"> Vector to evaluate. </param>
         /// <param name="expected"> Expected size of the vector. </param>
@@ -26,7 +26,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Arrange
 
             //Act
-            int size = vector.Size;
+            int size = vector.RowCount;
 
             // Assert
             Assert.Equal(expected, size);
@@ -54,10 +54,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = Vect.Vector<double>.Add(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -77,10 +77,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = Vect.Vector<double>.Subtract(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -100,10 +100,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = Vect.Vector<double>.Opposite(operand);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -149,10 +149,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = Vect.Vector<double>.Multiply(operand, factor);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -172,10 +172,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = Vect.Vector<double>.Multiply(factor, operand);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -196,10 +196,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = Vect.Vector<double>.Divide(operand, divisor);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -225,10 +225,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = left + right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -248,10 +248,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = left - right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -271,10 +271,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = -operand;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -297,10 +297,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = operand * factor;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -320,10 +320,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = factor * operand;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 
@@ -344,10 +344,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.Vector<double> result = operand / divisor;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
+                Assert.Equal(expected.Get(i), result.Get(i));
             }
         }
 

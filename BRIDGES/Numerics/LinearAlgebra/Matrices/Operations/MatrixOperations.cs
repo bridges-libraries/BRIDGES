@@ -56,7 +56,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
         internal static void EnsureMultiplicationCompatibility<T>(Matrix<T> matrix, Vect.Vector<T> vector)
             where T : INumberBase<T>
         {
-            if (matrix.ColumnCount != vector.Size)
+            if (matrix.ColumnCount != vector.RowCount)
             {
                 throw new InvalidOperationException($"The number of columns of {nameof(matrix)} and the size of {nameof(vector)} must be equal.");
             }
@@ -93,7 +93,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
         internal static void EnsureTransposeMultiplicationCompatibility<T>(Matrix<T> matrix, Vect.Vector<T> vector)
             where T : INumberBase<T>
         {
-            if (matrix.RowCount != vector.Size)
+            if (matrix.RowCount != vector.RowCount)
             {
                 throw new InvalidOperationException($"The number of rows of {nameof(matrix)} and the size of {nameof(vector)} must be equal.");
             }

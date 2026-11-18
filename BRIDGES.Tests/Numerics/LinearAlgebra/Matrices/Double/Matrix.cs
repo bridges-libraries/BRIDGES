@@ -332,10 +332,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.Vector<double> result = Mat.Matrix<double>.Multiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i], result.GetComponent(i));
+                Assert.Equal(expected[i], result.Get(i));
             }
         }
 
@@ -358,10 +358,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.Vector<double> result = Mat.Matrix<double>.TransposeMultiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i], result.GetComponent(i));
+                Assert.Equal(expected[i], result.Get(i));
             }
         }
 
@@ -585,10 +585,10 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.Vector<double> result = matrix * vector;
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i], result.GetComponent(i));
+                Assert.Equal(expected[i], result.Get(i));
             }
         }
 
@@ -617,35 +617,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 for (int i_Row = 0; i_Row < expected.GetLength(0); i_Row++)
                 {
                     Assert.Equal(expected[i_Row, i_Column], matrix.GetComponent(i_Row, i_Column));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Tests the method <see cref="Mat.Matrix{T}.SetComponent(int, int, T)"/>.
-        /// </summary>
-        /// <param name="matrix"> Matrix to operate on. </param>
-        /// <param name="rowIndex"> Row index of the component to set. </param>
-        /// <param name="columnIndex"> Column index of the component to set. </param>
-        /// <param name="value"> Value of the component to set. </param>
-        /// <param name="expected"> Expected sparse storage after the component iis set. </param>
-        [Theory(DisplayName = "SetComponent(int, int, T)")]
-        [ClassData(typeof(DataClasses.SetComponent))]
-        public void SetComponent__Int_Int(Mat.Matrix<double> matrix, int rowIndex, int columnIndex, double value, Mat.Matrix<double> expected)
-        {
-            // Arrange
-
-            // Act
-            matrix.SetComponent(rowIndex, columnIndex, value);
-
-            // Assert
-            Assert.Equal(expected.RowCount, matrix.RowCount);
-            Assert.Equal(expected.ColumnCount, matrix.ColumnCount);
-            for (int i_Column = 0; i_Column < expected.ColumnCount; i_Column++)
-            {
-                for (int i_Row = 0; i_Row < expected.RowCount; i_Row++)
-                {
-                    Assert.Equal(expected.GetComponent(i_Row, i_Column), matrix.GetComponent(i_Row, i_Column));
                 }
             }
         }
@@ -747,7 +718,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
         public void RowVectors(Mat.Matrix<double> matrix, double[,] values)
         {
             // Arrange
-            Vect.Vector<double>[] expected = new Vect.DenseVector<double>[values.GetLength(0)];
+            Vect.DenseVector<double>[] expected = new Vect.DenseVector<double>[values.GetLength(0)];
 
             for (int i_Row = 0; i_Row < values.GetLength(0); i_Row++)
             {
@@ -755,7 +726,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
                 for (int i_Column = 0; i_Column < values.GetLength(1); i_Column++)
                 {
-                    expected[i_Row].SetComponent(i_Column, values[i_Row, i_Column]);
+                    expected[i_Row][i_Column] = values[i_Row, i_Column];
                 }
             }
 
@@ -769,11 +740,11 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 Vect.Vector<double> expectedRow = expected[i_Row];
                 Vect.Vector<double> resultRow = result[i_Row];
 
-                Assert.Equal(expectedRow.Size, resultRow.Size);
+                Assert.Equal(expectedRow.RowCount, resultRow.RowCount);
 
-                for (int i = 0; i < expectedRow.Size; i++)
+                for (int i = 0; i < expectedRow.RowCount; i++)
                 {
-                    Assert.Equal(expectedRow.GetComponent(i), resultRow.GetComponent(i));
+                    Assert.Equal(expectedRow.Get(i), resultRow.Get(i));
                 }
             }
         }
@@ -788,7 +759,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
         public void ColumnVectors(Mat.Matrix<double> matrix, double[,] values)
         {
             // Arrange
-            Vect.Vector<double>[] expected = new Vect.DenseVector<double>[values.GetLength(1)];
+            Vect.DenseVector<double>[] expected = new Vect.DenseVector<double>[values.GetLength(1)];
 
             for (int i_Column = 0; i_Column < values.GetLength(1); i_Column++)
             {
@@ -796,7 +767,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
                 for (int i_Row = 0; i_Row < values.GetLength(0); i_Row++)
                 {
-                    expected[i_Column].SetComponent(i_Row, values[i_Row, i_Column]);
+                    expected[i_Column][i_Row] = values[i_Row, i_Column];
                 }
             }
 
@@ -810,11 +781,11 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 Vect.Vector<double> expectedColumn = expected[i_Column];
                 Vect.Vector<double> resultColumn = result[i_Column];
 
-                Assert.Equal(expectedColumn.Size, resultColumn.Size);
+                Assert.Equal(expectedColumn.RowCount, resultColumn.RowCount);
 
-                for (int i = 0; i < expectedColumn.Size; i++)
+                for (int i = 0; i < expectedColumn.RowCount; i++)
                 {
-                    Assert.Equal(expectedColumn.GetComponent(i), resultColumn.GetComponent(i));
+                    Assert.Equal(expectedColumn.Get(i), resultColumn.Get(i));
                 }
             }
         }
@@ -846,11 +817,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.RowCount },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.RowCount },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.RowCount },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.RowCount },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.RowCount },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.RowCount },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.RowCount },
                     };
             }
 
@@ -872,11 +838,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.ColumnCount },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.ColumnCount },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.ColumnCount },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.ColumnCount },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.ColumnCount },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.ColumnCount },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.ColumnCount },
                     };
             }
 
@@ -903,44 +864,18 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.Addition_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Addition_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Addition_M3 },
-                        // For DictionaryOfKeys with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Addition_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Addition_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Addition_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Addition_M3 },
 
                         // For DenseMatrix with CompressedColumn
                         { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
                         { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
                         { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
                         { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
-                        { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
-                        { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
-                        { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
 
                         // For CompressedColumn with DenseMatrix
                         { SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
-                        // For CompressedColumn with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.Addition_M2 },
-                        { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.Addition_M1 },
-                        { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Addition_M4 },
-                        { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Addition_M3 },
-
-                        // For DictionaryOfKeys with DenseMatrix
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Addition_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Addition_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Addition_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Addition_M3 },
-                        // For DictionaryOfKeys with CompressedColumn
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.Addition_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.Addition_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Addition_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Addition_M3 },
                     };
             }
 
@@ -963,44 +898,18 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.Subtraction_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Subtraction_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Subtraction_M3 },
-                        // For DictionaryOfKeys with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Subtraction_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Subtraction_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Subtraction_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Subtraction_M3 },
 
                         // For DenseMatrix with CompressedColumn
                         { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
                         { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
                         { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
                         { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
-                        { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
-                        { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
-                        { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
 
                         // For CompressedColumn with DenseMatrix
                         { SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
-                        // For CompressedColumn with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.Subtraction_M2 },
-                        { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.Subtraction_M1 },
-                        { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Subtraction_M4 },
-                        { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Subtraction_M3 },
-
-                        // For DictionaryOfKeys with DenseMatrix
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.Subtraction_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.Subtraction_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Subtraction_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Subtraction_M3 },
-                        // For DictionaryOfKeys with CompressedColumn
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.Subtraction_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.Subtraction_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Subtraction_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Subtraction_M3 },
                     };
             }
 
@@ -1023,11 +932,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.UnaryNegation },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.UnaryNegation },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.UnaryNegation },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.UnaryNegation },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.UnaryNegation },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.UnaryNegation },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.UnaryNegation },
                     };
             }
 
@@ -1046,30 +950,14 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         // For CompressedColumn with CompressedColumn
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Multiplication_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Multiplication_M3 },
-                        // For DictionaryOfKeys with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Multiplication_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Multiplication_M3 },
                         
                         // For DenseMatrix with CompressedColumn
                         { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
                         { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
-                        { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
 
                         // For CompressedColumn with DenseMatrix
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
-                        // For CompressedColumn with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Multiplication_M4 },
-                        { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Multiplication_M3 },
-
-                        // For DictionaryOfKeys with DenseMatrix
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.Multiplication_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.Multiplication_M3 },
-                        // For DictionaryOfKeys with CompressedColumn
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Multiplication_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Multiplication_M3 },
                     };
             }
 
@@ -1092,44 +980,18 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.TransposeMultiply_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.TransposeMultiply_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.TransposeMultiply_M3 },
-                        // For DictionaryOfKeys with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.TransposeMultiply_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.TransposeMultiply_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.TransposeMultiply_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.TransposeMultiply_M3 },
 
                         // For DenseMatrix with CompressedColumn
                         { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2 },
                         { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1 },
                         { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4 },
                         { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2 },
-                        { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1 },
-                        { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4 },
-                        { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3 },
 
                         // For CompressedColumn with DenseMatrix
                         { SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2 },
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3 },
-                        // For CompressedColumn with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.TransposeMultiply_M2 },
-                        { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.TransposeMultiply_M1 },
-                        { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.TransposeMultiply_M4 },
-                        { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.TransposeMultiply_M3 },
-
-                        // For DictionaryOfKeys with DenseMatrix
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.TransposeMultiply_M2  },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.TransposeMultiply_M1  },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.TransposeMultiply_M4  },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.TransposeMultiply_M3  },
-                        // For DictionaryOfKeys with CompressedColumn
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.TransposeMultiply_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.TransposeMultiply_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.TransposeMultiply_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.TransposeMultiply_M3 },
                     };
             }
 
@@ -1151,44 +1013,18 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.MultiplyTranspose_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.MultiplyTranspose_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.MultiplyTranspose_M3 },
-                        // For DictionaryOfKeys with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.MultiplyTranspose_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.MultiplyTranspose_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.MultiplyTranspose_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.MultiplyTranspose_M3 },
 
                         // For DenseMatrix with CompressedColumn
                         { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2 },
                         { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1 },
                         { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4 },
                         { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DenseMatrix.DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2 },
-                        { DenseMatrix.DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1 },
-                        { DenseMatrix.DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4 },
-                        { DenseMatrix.DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3 },
 
                         // For CompressedColumn with DenseMatrix
                         { SparseMatrix.DataStorages.M1.FromCC.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2 },
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1 },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3 },
-                        // For CompressedColumn with DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.MultiplyTranspose_M2 },
-                        { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.MultiplyTranspose_M1 },
-                        { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.MultiplyTranspose_M4 },
-                        { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.MultiplyTranspose_M3 },
-
-                        // For DictionaryOfKeys with DenseMatrix
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M1.MultiplyTranspose_M2  },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M2.MultiplyTranspose_M1  },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M3.MultiplyTranspose_M4  },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M4.MultiplyTranspose_M3  },
-                        // For DictionaryOfKeys with CompressedColumn
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M1.FromDOK.MultiplyTranspose_M2 },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M2.FromDOK.MultiplyTranspose_M1 },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M3.FromDOK.MultiplyTranspose_M4 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M4.FromDOK.MultiplyTranspose_M3 },
                     };
             }
 
@@ -1212,11 +1048,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.RightMultiplication_T },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.RightMultiplication_T },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.RightMultiplication_T },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.RightMultiplication_T },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.RightMultiplication_T },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.RightMultiplication_T },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.RightMultiplication_T },
                     };
             }
 
@@ -1239,11 +1070,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.LeftMultiplication_T },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.LeftMultiplication_T },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.LeftMultiplication_T },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.LeftMultiplication_T },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.LeftMultiplication_T },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.LeftMultiplication_T },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.LeftMultiplication_T },
                     };
             }
 
@@ -1266,11 +1092,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.Division_T },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Division_T },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Division_T },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.Division_T },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.Division_T },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.Division_T },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.Division_T },
                     };
             }
 
@@ -1298,13 +1119,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         // For CompressedColumn with SparseVector
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M3.FromCC.Multiplication_V3 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M4.FromCC.Multiplication_V3 },
-
-                        // For DictionaryOfKeys with DenseVector
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M3.FromDOK.Multiplication_V3 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Multiplication_V3 },
-                        // For DictionaryOfKeys with SparseVector
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M3.FromDOK.Multiplication_V3 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Multiplication_V3 },
                     };
             }
 
@@ -1329,13 +1143,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         // For CompressedColumn with SparseVector
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M3.FromCC.TransposeMultiply_V3 },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M4.FromCC.TransposeMultiply_V3 },
-
-                        // For DictionaryOfKeys with DenseVector
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M3.FromDOK.TransposeMultiply_V3 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, Vectors.Double.DenseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M4.FromDOK.TransposeMultiply_V3 },
-                        // For DictionaryOfKeys with SparseVector
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M3.FromDOK.TransposeMultiply_V3 },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, Vectors.Double.SparseVector.DataStorages.V3.Readable, SparseMatrix.DataStorages.M4.FromDOK.TransposeMultiply_V3 },
                     };
             }
 
@@ -1367,41 +1174,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.ToArray },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.ToArray },
                         { SparseMatrix.DataStorages.M5.FromCC.Readable, SparseMatrix.DataStorages.M5.FromCC.ToArray },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Readable, SparseMatrix.DataStorages.M1.FromDOK.ToArray },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Readable, SparseMatrix.DataStorages.M2.FromDOK.ToArray },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Readable, SparseMatrix.DataStorages.M3.FromDOK.ToArray },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Readable, SparseMatrix.DataStorages.M4.FromDOK.ToArray },
-                        { SparseMatrix.DataStorages.M5.FromDOK.Readable, SparseMatrix.DataStorages.M5.FromDOK.ToArray },
                     };
             }
-
-            /// <summary>
-            /// Class data for <see cref="Matrix.SetComponent__Int_Int(Mat.Matrix{double}, int, int, double, Mat.Matrix{double})"/>.
-            /// </summary>
-            internal class SetComponent : BaseDataClass
-            {
-                /// <inheritdoc/>
-                internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
-                    {
-                        // For DenseMatrix
-                        { DenseMatrix.DataStorages.M1.Writable, DenseMatrix.DataStorages.M1.SetComponent },
-                        { DenseMatrix.DataStorages.M2.Writable, DenseMatrix.DataStorages.M2.SetComponent },
-                        { DenseMatrix.DataStorages.M3.Writable, DenseMatrix.DataStorages.M3.SetComponent },
-                        { DenseMatrix.DataStorages.M4.Writable, DenseMatrix.DataStorages.M4.SetComponent },
-                        // For CompressedColumn
-                        { SparseMatrix.DataStorages.M1.FromCC.Writable, SparseMatrix.DataStorages.M1.FromCC.SetComponent },
-                        { SparseMatrix.DataStorages.M2.FromCC.Writable, SparseMatrix.DataStorages.M2.FromCC.SetComponent },
-                        { SparseMatrix.DataStorages.M3.FromCC.Writable, SparseMatrix.DataStorages.M3.FromCC.SetComponent },
-                        { SparseMatrix.DataStorages.M4.FromCC.Writable, SparseMatrix.DataStorages.M4.FromCC.SetComponent },
-                        // For DictionaryOfKeys
-                        { SparseMatrix.DataStorages.M1.FromDOK.Writable, SparseMatrix.DataStorages.M1.FromDOK.SetComponent },
-                        { SparseMatrix.DataStorages.M2.FromDOK.Writable, SparseMatrix.DataStorages.M2.FromDOK.SetComponent },
-                        { SparseMatrix.DataStorages.M3.FromDOK.Writable, SparseMatrix.DataStorages.M3.FromDOK.SetComponent },
-                        { SparseMatrix.DataStorages.M4.FromDOK.Writable, SparseMatrix.DataStorages.M4.FromDOK.SetComponent },
-                    };
-            }
-
 
             #endregion
         }

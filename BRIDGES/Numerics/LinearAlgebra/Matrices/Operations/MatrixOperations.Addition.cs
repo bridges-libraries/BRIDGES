@@ -38,7 +38,6 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
         /// <param name="left"> Left <see cref="DenseMatrix{T}"/> for the addition. </param>
         /// <param name="right"> Right <see cref="DenseMatrix{T}"/> for the addition. </param>
         /// <returns> The <see cref="DenseMatrix{T}"/> resulting from the addition. </returns>
-        /// <exception cref="ArgumentException"> The two matrices must have the same number of rows and columns. </exception>
         internal static DenseMatrix<T> Add<T>(DenseMatrix<T> left, DenseMatrix<T> right)
             where T : INumberBase<T>
         {

@@ -16,7 +16,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
         #region Tests : Properties
 
         /// <summary>
-        /// Tests the property <see cref="Vect.Vector{T}.Size"/>.
+        /// Tests the property <see cref="Vect.Vector{T}.RowCount"/>.
         /// </summary>
         /// <param name="vector"> Vector to evaluate. </param>
         /// <param name="expected"> Expected size of the vector. </param>
@@ -27,7 +27,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Arrange
 
             //Act
-            int size = vector.Size;
+            int size = vector.RowCount;
 
             // Assert
             Assert.Equal(expected, size);
@@ -49,8 +49,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(components.Length, vector.Size);
-            for (int i = 0; i < vector.Size; i++)
+            Assert.Equal(components.Length, vector.RowCount);
+            for (int i = 0; i < vector.RowCount; i++)
             {
                 if (vector.Contains(i))
                 {
@@ -83,26 +83,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.SparseVector<double> result = new Vect.SparseVector<double>(size);
 
             // Assert
-            Assert.Equal(size, result.Size);
-            Assert.Equal(0, result.NonZeroCount);
-        }
-
-        /// <summary>
-        /// Tests the property <see cref="Vect.SparseVector{T}.SparseVector(int,int)"/>.
-        /// </summary>
-        /// <param name="size"> Expected size of the vector. </param>
-        /// <param name="capacity"> Expected capacity of the vector. </param>
-        [Theory(DisplayName = "SparseVector<T>(int,int)")]
-        [ClassData(typeof(ClassDatas.Constructor__Int_Int))]
-        public void Constructor__Int_Int(int size, int capacity)
-        {
-            // Arrange
-
-            //Act
-            Vect.SparseVector<double> result = new Vect.SparseVector<double>(size, capacity);
-
-            // Assert
-            Assert.Equal(size, result.Size);
+            Assert.Equal(size, result.RowCount);
             Assert.Equal(0, result.NonZeroCount);
         }
 
@@ -125,9 +106,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -162,9 +143,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -199,9 +180,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -228,9 +209,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -267,9 +248,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -298,9 +279,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -329,9 +310,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -384,8 +365,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.SparseVector<double>.Add(left, right);
             
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -407,8 +388,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = Vect.SparseVector<double>.Subtract(left, right);
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -436,9 +417,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -467,9 +448,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -499,9 +480,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -536,9 +517,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -567,9 +548,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -598,9 +579,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -631,8 +612,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = left + right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -654,8 +635,8 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Vect.DenseVector<double> result = left - right;
 
             // Assert
-            Assert.Equal(expected.Size, result.Size);
-            for (int i = 0; i < result.Size; i++)
+            Assert.Equal(expected.RowCount, result.RowCount);
+            for (int i = 0; i < result.RowCount; i++)
             {
                 Assert.Equal(expected[i], result[i]);
             }
@@ -683,9 +664,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -714,9 +695,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -746,9 +727,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Assert
             int nonZeroCount = 0;
 
-            Assert.Equal(expected.Size, result.Size);
+            Assert.Equal(expected.RowCount, result.RowCount);
             Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
-            for (int i = 0; i < result.Size; i++)
+            for (int i = 0; i < result.RowCount; i++)
             {
                 if (result.Contains(i))
                 {
@@ -775,36 +756,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Arrange
 
             // Act & Assert
-            for (int i = 0; i < vector.Size; i++)
+            for (int i = 0; i < vector.RowCount; i++)
             {
-                Assert.Equal(components[i], vector.GetComponent(i));
-            }
-        }
-
-        /// <summary>
-        /// Tests the method <see cref="Vect.DenseVector{T}.SetValue(int,T)"/>.
-        /// </summary>
-        /// <param name="vector"> Vector to operate on. </param>
-        /// <param name="index"> Index of the component to set. </param>
-        /// <param name="value"> Value of the component to set. </param>
-        /// <param name="expected"> Expected vector a</param>
-        [Theory(DisplayName = "SetComponent(int,T)")]
-        [ClassData(typeof(ClassDatas.SetComponent__Int_T))]
-        public void SetComponent__Int_T(Vect.SparseVector<double> vector, int index, double value, Vect.SparseVector<double> expected)
-        {
-            // Arrange
-
-            // Act
-            vector.SetComponent(index, value);
-
-            // Assert
-            Assert.Equal(expected.Size, vector.Size);
-            for (int i = 0; i < vector.Size; i++)
-            {
-                if (expected.Contains(i))
-                {
-                    Assert.Equal(expected[i], vector[i]);
-                }
+                Assert.Equal(components[i], vector.Get(i));
             }
         }
 
@@ -1657,19 +1611,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
                     {
                         { DataStorages.V1.Size },
                         { DataStorages.V2.Size },
-                    };
-            }
-
-            /// <summary>
-            /// Class data for <see cref="SparseVector.Constructor__Int_Int(int, int)"/>.
-            /// </summary>
-            internal class Constructor__Int_Int : BaseDataClass
-            {
-                /// <inheritdoc/>
-                internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
-                    {
-                        { DataStorages.V1.Size, DataStorages.V1.Capacity },
-                        { DataStorages.V2.Size, DataStorages.V2.Capacity },
                     };
             }
 

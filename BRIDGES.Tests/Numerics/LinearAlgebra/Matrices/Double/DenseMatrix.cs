@@ -501,7 +501,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.DenseVector<double> result = Mat.DenseMatrix<double>.Multiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], result[i]);
@@ -524,7 +524,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.DenseVector<double> result = Mat.DenseMatrix<double>.Multiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], result[i]);
@@ -550,7 +550,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.DenseVector<double> result = Mat.DenseMatrix<double>.TransposeMultiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], result[i]);
@@ -574,7 +574,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.DenseVector<double> result = Mat.DenseMatrix<double>.TransposeMultiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], result[i]);
@@ -914,7 +914,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.DenseVector<double> result = Mat.DenseMatrix<double>.Multiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], result[i]);
@@ -937,7 +937,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Vect.DenseVector<double> result = Mat.DenseMatrix<double>.Multiply(matrix, vector);
 
             // Assert
-            Assert.Equal(expected.Length, result.Size);
+            Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
                 Assert.Equal(expected[i], result[i]);
@@ -969,35 +969,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 for (int i_Row = 0; i_Row < expected.GetLength(0); i_Row++)
                 {
                     Assert.Equal(expected[i_Row, i_Column], matrix.GetComponent(i_Row, i_Column));
-                }
-            }
-        }
-
-        /// <summary>
-        /// Tests the method <see cref="Mat.DenseMatrix{T}.SetComponent(int, int, T)"/>.
-        /// </summary>
-        /// <param name="matrix"> Matrix to operate on. </param>
-        /// <param name="rowIndex"> Row index of the component to set. </param>
-        /// <param name="columnIndex"> Column index of the component to set. </param>
-        /// <param name="value"> Value of the component to set. </param>
-        /// <param name="expected"> Expected sparse storage after the component iis set. </param>
-        [Theory(DisplayName = "SetComponent(int, int, T)")]
-        [ClassData(typeof(DataClasses.SetComponent))]
-        public void SetComponent__Int_Int(Mat.DenseMatrix<double> matrix, int rowIndex, int columnIndex, double value, Mat.DenseMatrix<double> expected)
-        {
-            // Arrange
-            
-            // Act
-            matrix.SetComponent(rowIndex, columnIndex, value);
-
-            // Assert
-            Assert.Equal(expected.RowCount, matrix.RowCount);
-            Assert.Equal(expected.ColumnCount, matrix.ColumnCount);
-            for (int i_Column = 0; i_Column < expected.ColumnCount; i_Column++)
-            {
-                for (int i_Row = 0; i_Row < expected.RowCount; i_Row++)
-                {
-                    Assert.Equal(expected[i_Row, i_Column], matrix[i_Row, i_Column]);
                 }
             }
         }
@@ -1121,9 +1092,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 Vect.DenseVector<double> expectedRow = expected[i_Row];
                 Vect.DenseVector<double> resultRow = result[i_Row];
 
-                Assert.Equal(expectedRow.Size, resultRow.Size);
+                Assert.Equal(expectedRow.RowCount, resultRow.RowCount);
 
-                for (int i = 0; i < expectedRow.Size; i++)
+                for (int i = 0; i < expectedRow.RowCount; i++)
                 {
                     Assert.Equal(expectedRow[i], resultRow[i]);
                 }
@@ -1162,9 +1133,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 Vect.DenseVector<double> expectedColumn = expected[i_Column];
                 Vect.DenseVector<double> resultColumn = result[i_Column];
 
-                Assert.Equal(expectedColumn.Size, resultColumn.Size);
+                Assert.Equal(expectedColumn.RowCount, resultColumn.RowCount);
 
-                for (int i = 0; i < expectedColumn.Size; i++)
+                for (int i = 0; i < expectedColumn.RowCount; i++)
                 {
                     Assert.Equal(expectedColumn[i], resultColumn[i]);
                 }
@@ -3133,11 +3104,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DataStorages.M2.Addition_M1 },
                         { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DataStorages.M3.Addition_M4 },
                         { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DataStorages.M4.Addition_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DataStorages.M1.Addition_M2 },
-                        { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DataStorages.M2.Addition_M1 },
-                        { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DataStorages.M3.Addition_M4 },
-                        { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DataStorages.M4.Addition_M3 },
                     };
             }
 
@@ -3156,11 +3122,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DataStorages.M2.Subtraction_M1 },
                         { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DataStorages.M3.Subtraction_M4 },
                         { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DataStorages.M4.Subtraction_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DataStorages.M1.Subtraction_M2 },
-                        { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DataStorages.M2.Subtraction_M1 },
-                        { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DataStorages.M3.Subtraction_M4 },
-                        { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DataStorages.M4.Subtraction_M3 },
                     };
             }
 
@@ -3178,9 +3139,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         // For DenseMatrix with CompressedColumn
                         { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DataStorages.M3.Multiplication_M4 },
                         { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DataStorages.M4.Multiplication_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DataStorages.M3.Multiplication_M4 },
-                        { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DataStorages.M4.Multiplication_M3 },
                     };
             }
 
@@ -3199,11 +3157,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DataStorages.M2.TransposeMultiply_M1 },
                         { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DataStorages.M3.TransposeMultiply_M4 },
                         { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DataStorages.M4.TransposeMultiply_M3 },
-                        // For DenseMatrix with DictionaryOfKeys
-                        { DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DataStorages.M1.TransposeMultiply_M2 },
-                        { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DataStorages.M2.TransposeMultiply_M1 },
-                        { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DataStorages.M3.TransposeMultiply_M4 },
-                        { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DataStorages.M4.TransposeMultiply_M3 },
                     };
             }
 
@@ -3221,11 +3174,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromCC.Readable, DataStorages.M2.MultiplyTranspose_M1 },
                         { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromCC.Readable, DataStorages.M3.MultiplyTranspose_M4 },
                         { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromCC.Readable, DataStorages.M4.MultiplyTranspose_M3 },
-                        // For DenseMatrix with CompressedColumn
-                        { DataStorages.M1.Readable, SparseMatrix.DataStorages.M2.FromDOK.Readable, DataStorages.M1.MultiplyTranspose_M2 },
-                        { DataStorages.M2.Readable, SparseMatrix.DataStorages.M1.FromDOK.Readable, DataStorages.M2.MultiplyTranspose_M1 },
-                        { DataStorages.M3.Readable, SparseMatrix.DataStorages.M4.FromDOK.Readable, DataStorages.M3.MultiplyTranspose_M4 },
-                        { DataStorages.M4.Readable, SparseMatrix.DataStorages.M3.FromDOK.Readable, DataStorages.M4.MultiplyTranspose_M3 },
                     };
             }
 

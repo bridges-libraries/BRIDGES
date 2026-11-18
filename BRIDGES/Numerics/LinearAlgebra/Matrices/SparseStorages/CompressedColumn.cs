@@ -192,7 +192,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             int nonZeroCount = 0;
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), T> component in dok.Storage)
             {
-                if (0 <= rowCount | rowCount <= component.Key.RowIndex)
+                if (component.Key.RowIndex < 0 | rowCount <= component.Key.RowIndex)
                 {
                     throw new ArgumentOutOfRangeException("The row index of a component must be positive and smaller that the number of rows.");
                 }

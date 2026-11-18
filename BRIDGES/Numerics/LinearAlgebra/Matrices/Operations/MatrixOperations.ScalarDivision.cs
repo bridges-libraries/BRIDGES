@@ -29,6 +29,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
             };
         }
 
+
         /// <summary>
         /// Computes the scalar division of a dense matrix with a <typeparamref name="T"/> number.
         /// </summary>

@@ -71,14 +71,14 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.Operations
         private static SStor.CompressedColumn<T> Negate<T>(SStor.CompressedColumn<T> operand)
             where T : INumberBase<T>
         {
-            T[] resultValues = new T[operand.Values.Count];
-            for (int i = 0; i < operand.Values.Count; i++) { resultValues[i] = -operand.Values[i]; }
+            int[] resultColumnPointers = new int[operand.ColumnPointers.Count];
+            for (int i = 0; i < operand.ColumnPointers.Count; i++) { resultColumnPointers[i] = operand.ColumnPointers[i]; }
 
             int[] resultRowIndices = new int[operand.RowIndices.Count];
-            for (int i = 0; i < operand.RowIndices.Count; i++) { resultRowIndices[i] = -operand.RowIndices[i]; }
+            for (int i = 0; i < operand.RowIndices.Count; i++) { resultRowIndices[i] = operand.RowIndices[i]; }
 
-            int[] resultColumnPointers = new int[operand.ColumnPointers.Count];
-            for (int i = 0; i < operand.ColumnPointers.Count; i++) { resultColumnPointers[i] = -operand.ColumnPointers[i]; }
+            T[] resultValues = new T[operand.Values.Count];
+            for (int i = 0; i < operand.Values.Count; i++) { resultValues[i] = -operand.Values[i]; }
 
             return new SStor.CompressedColumn<T>(operand.RowCount, operand.ColumnCount, resultColumnPointers, resultRowIndices, resultValues);
         }

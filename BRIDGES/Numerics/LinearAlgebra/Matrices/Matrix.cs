@@ -135,7 +135,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
 
         /// <inheritdoc cref="Operations.MatrixOperations.Divide{T}(Matrix{T}, T)"/>
-        public static Matrix<T> operator /(Matrix<T> operand, T divisor) => Operations.MatrixOperations.Multiply(operand, divisor);
+        public static Matrix<T> operator /(Matrix<T> operand, T divisor) => Operations.MatrixOperations.Divide(operand, divisor);
 
 
         //     -----     Vectors     -----     //

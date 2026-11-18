@@ -79,7 +79,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         #region Public Static Methods
 
-        //     -----     -----     Factory    -----     -----     //
+        //     -----     -----     Constructor Pattern     -----     -----     //
 
         /// <summary>
         /// Builds a <see cref="SparseMatrix{T}"/> storage from the <see cref="DictionaryOfKeys{T}"/> sparse matrix builder.
@@ -99,6 +99,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
                 _ => throw new NotImplementedException()
             };
         }
+
 
         //     -----     -----     Algebraic Near Ring : SparseMatrix<T>     -----     -----     //
 
@@ -252,7 +253,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
 
         /// <inheritdoc cref="Operations.MatrixOperations.Divide{T}(SparseMatrix{T}, T)"/>
-        public static SparseMatrix<T> operator /(SparseMatrix<T> operand, T divisor) => Operations.MatrixOperations.Multiply(operand, divisor);
+        public static SparseMatrix<T> operator /(SparseMatrix<T> operand, T divisor) => Operations.MatrixOperations.Divide(operand, divisor);
 
 
         //     -----      -----     Vectors     -----     -----     //
