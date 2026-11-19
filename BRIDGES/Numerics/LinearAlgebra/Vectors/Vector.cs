@@ -106,7 +106,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Vectors
         /// </summary>
         /// <param name="index"> Index of the component. </param>
         /// <returns> The value of the component. </returns>
-        public abstract T Get(int index);
+        public abstract T GetComponent(int index);
 
 
         /// <summary>

@@ -252,6 +252,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
         }
 
 
+
         //     -----     -----     Right Embedding : SparseMatrix<T>     -----     -----     //
 
         /// <summary>
@@ -530,6 +531,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 Assert.Equal(expected[i], result[i]);
             }
         }
+
 
 
         //     -----      Other Operations : Vectors     -----     //
@@ -2927,6 +2929,25 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
             #endregion
 
+            #region For Static Methods
+
+            /// <summary>
+            /// Class data for <see cref="DenseMatrix.Static__Transpose__DenseMatrix(Mat.DenseMatrix{double}, Mat.DenseMatrix{double})"/>.
+            /// </summary>
+            internal class Transposition__DenseMatrix : BaseDataClass
+            {
+                /// <inheritdoc/>
+                internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
+                    {
+                        { DataStorages.M1.Readable, DataStorages.M1.Transpose },
+                        { DataStorages.M2.Readable, DataStorages.M2.Transpose },
+                        { DataStorages.M3.Readable, DataStorages.M3.Transpose },
+                        { DataStorages.M4.Readable, DataStorages.M4.Transpose },
+                    };
+            }
+
+            #endregion
+
             #region For Operations
 
             /// <summary>
@@ -3070,23 +3091,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { DataStorages.M4.Readable, DataStorages.M4.Division_T },
                     };
             }
-
-
-            /// <summary>
-            /// Class data for <see cref="DenseMatrix.Static__Transpose__DenseMatrix(Mat.DenseMatrix{double}, Mat.DenseMatrix{double})"/>.
-            /// </summary>
-            internal class Transposition__DenseMatrix : BaseDataClass
-            {
-                /// <inheritdoc/>
-                internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
-                    {
-                        { DataStorages.M1.Readable, DataStorages.M1.Transpose },
-                        { DataStorages.M2.Readable, DataStorages.M2.Transpose },
-                        { DataStorages.M3.Readable, DataStorages.M3.Transpose },
-                        { DataStorages.M4.Readable, DataStorages.M4.Transpose },
-                    };
-            }
-
 
 
             /// <summary>

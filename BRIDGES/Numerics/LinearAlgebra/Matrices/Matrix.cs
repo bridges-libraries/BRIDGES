@@ -96,13 +96,24 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         public static Matrix<T> Divide(Matrix<T> operand, T divisor) => operand / divisor;
 
 
-        //     -----     -----     Vectors     -----     -----     //
+        //     -----      Vectors     -----     //
 
         /// <inheritdoc cref="operator *(Matrix{T}, Vect.Vector{T})"/>
         public static Vect.Vector<T> Multiply(Matrix<T> matrix, Vect.Vector<T> vector) => matrix * vector;
 
         /// <inheritdoc cref="Operations.MatrixOperations.TransposeMultiply{T}(Matrix{T}, Vect.Vector{T})"/>
         public static Vect.Vector<T> TransposeMultiply(Matrix<T> matrix, Vect.Vector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
+
+
+
+        //     -----     -----     Other Operations     -----     -----     //
+
+        /// <summary>
+        /// Computes the transposition of a matrix.
+        /// </summary>
+        /// <param name="operand"> <see cref="Matrix{T}"/> to operate from. </param>
+        /// <returns> The new <see cref="Matrix{T}"/> resulting from the transposition. </returns>
+        public static Matrix<T> Transpose(Matrix<T> operand) => Operations.MatrixOperations.Transposition(operand);
 
         #endregion
 

@@ -335,7 +335,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i], result.Get(i));
+                Assert.Equal(expected[i], result.GetComponent(i));
             }
         }
 
@@ -361,7 +361,37 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i], result.Get(i));
+                Assert.Equal(expected[i], result.GetComponent(i));
+            }
+        }
+
+
+
+        //     -----     -----     Other Operations     -----     -----     //
+
+        /// <summary>
+        /// Tests the method <see cref="Mat.Matrix{T}.Transpose(Mat.Matrix{T})"/>.
+        /// </summary>
+        /// <param name="operand"> <see cref="Mat.Matrix{T}"/> to operate from. </param>
+        /// <param name="expected"> Expected result <see cref="Mat.Matrix{T}"/> of the transposition. </param>
+        [Theory(DisplayName = "Static Transpose(Matrix)")]
+        [ClassData(typeof(DataClasses.Transposition__Matrix))]
+        public void Static__Transpose__Matrix(Mat.Matrix<double> operand, Mat.Matrix<double> expected)
+        {
+            // Arrange
+
+            // Act 
+            Mat.Matrix<double> result = Mat.Matrix<double>.Transpose(operand);
+
+            // Assert
+            Assert.Equal(expected.RowCount, result.RowCount);
+            Assert.Equal(expected.ColumnCount, result.ColumnCount);
+            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
+            {
+                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
+                {
+                    Assert.Equal(expected.GetComponent(i_Row, i_Column), result.GetComponent(i_Row, i_Column));
+                }
             }
         }
 
@@ -588,7 +618,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             Assert.Equal(expected.Length, result.RowCount);
             for (int i = 0; i < expected.Length; i++)
             {
-                Assert.Equal(expected[i], result.Get(i));
+                Assert.Equal(expected[i], result.GetComponent(i));
             }
         }
 
@@ -744,7 +774,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
                 for (int i = 0; i < expectedRow.RowCount; i++)
                 {
-                    Assert.Equal(expectedRow.Get(i), resultRow.Get(i));
+                    Assert.Equal(expectedRow.GetComponent(i), resultRow.GetComponent(i));
                 }
             }
         }
@@ -785,7 +815,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
                 for (int i = 0; i < expectedColumn.RowCount; i++)
                 {
-                    Assert.Equal(expectedColumn.Get(i), resultColumn.Get(i));
+                    Assert.Equal(expectedColumn.GetComponent(i), resultColumn.GetComponent(i));
                 }
             }
         }
@@ -838,6 +868,32 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                         { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.ColumnCount },
                         { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.ColumnCount },
                         { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.ColumnCount },
+                    };
+            }
+
+            #endregion
+
+            #region For Static Methods
+
+
+            /// <summary>
+            /// Class data for <see cref="Matrix.Static__Transpose__Matrix(Mat.Matrix{double}, Mat.Matrix{double})"/>
+            /// </summary>
+            internal class Transposition__Matrix : BaseDataClass
+            {
+                /// <inheritdoc/>
+                internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
+                    {
+                        // For DenseMatrix
+                        { DenseMatrix.DataStorages.M1.Readable, DenseMatrix.DataStorages.M1.Transpose },
+                        { DenseMatrix.DataStorages.M2.Readable, DenseMatrix.DataStorages.M2.Transpose },
+                        { DenseMatrix.DataStorages.M3.Readable, DenseMatrix.DataStorages.M3.Transpose },
+                        { DenseMatrix.DataStorages.M4.Readable, DenseMatrix.DataStorages.M4.Transpose },
+                        // For CompressedColumn
+                        { SparseMatrix.DataStorages.M1.FromCC.Readable, SparseMatrix.DataStorages.M1.FromCC.Transpose },
+                        { SparseMatrix.DataStorages.M2.FromCC.Readable, SparseMatrix.DataStorages.M2.FromCC.Transpose },
+                        { SparseMatrix.DataStorages.M3.FromCC.Readable, SparseMatrix.DataStorages.M3.FromCC.Transpose },
+                        { SparseMatrix.DataStorages.M4.FromCC.Readable, SparseMatrix.DataStorages.M4.FromCC.Transpose },
                     };
             }
 

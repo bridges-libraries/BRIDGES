@@ -57,7 +57,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -80,7 +80,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -103,7 +103,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -152,7 +152,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -175,7 +175,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -199,7 +199,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -228,7 +228,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -251,7 +251,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -274,7 +274,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -300,7 +300,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -323,7 +323,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 
@@ -347,7 +347,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             Assert.Equal(expected.RowCount, result.RowCount);
             for (int i = 0; i < result.RowCount; i++)
             {
-                Assert.Equal(expected.Get(i), result.Get(i));
+                Assert.Equal(expected.GetComponent(i), result.GetComponent(i));
             }
         }
 

@@ -205,7 +205,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Vectors
         #region Public Methods
 
         /// <inheritdoc/>
-        public override T Get(int index)
+        public override T GetComponent(int index)
         {
             return _components[index];
         }

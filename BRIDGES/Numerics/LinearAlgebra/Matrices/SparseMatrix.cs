@@ -77,7 +77,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
 
         #endregion
 
-        #region Public Static Methods
+        #region "Static Constructor"
 
         //     -----     -----     Constructor Pattern     -----     -----     //
 
@@ -87,7 +87,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="rowCount"> Number of rows for the matrix. </param>
         /// <param name="columnCount"> Number of columns for the matrix. </param>
         /// <param name="dok"> Sparse matrix builder containing the unsorted components for the matrix.</param>
-        /// <param name="format"> </param>
+        /// <param name="format"> Sparse storage format of the matrix to build. </param>
         /// <param name="validityChecks"> Evaluates whether the component indices and the component values should be verified.</param>
         /// <returns> The <see cref="CompressedColumn{T}"/> storage.</returns>
         public static SparseMatrix<T> Build(int rowCount, int columnCount, DictionaryOfKeys<T> dok, SparseStorageFormat format = SparseStorageFormat.CompressedColumn, bool validityChecks = true)
@@ -100,6 +100,29 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
             };
         }
 
+
+        //     -----     -----     Other Static Methods     -----     -----     //
+
+        /// <summary>
+        /// Creates the identity matrix of a given size.
+        /// </summary>
+        /// <remarks> The identity matrix has ones in the diagonal and zeros elsewhere. </remarks>
+        /// <param name="size"> Number of rows and columns for the matrix. </param>
+        /// <param name="format"> Sparse storage format of the matrix to build. </param>
+        /// <returns> The identity <see cref="SparseMatrix{T}"/>. </returns>
+        public static SparseMatrix<T> Identity(int size, SparseStorageFormat format)
+        {
+            return format switch
+            {
+                SparseStorageFormat.CompressedColumn => new SparseMatrix<T>(CompressedColumn<T>.Identity(size)),
+                // General fallback
+                _ => throw new NotImplementedException()
+            };
+        }
+
+        #endregion
+
+        #region Public Static Methods
 
         //     -----     -----     Algebraic Near Ring : SparseMatrix<T>     -----     -----     //
 
@@ -208,6 +231,17 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         /// <param name="vector"> <see cref="Vect.DenseVector{T}"/> to multiply. </param>
         /// <returns> The new <see cref="Vect.DenseVector{T}"/> resulting from the multiplication. </returns>
         public static Vect.DenseVector<T> TransposeMultiply(SparseMatrix<T> matrix, Vect.DenseVector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
+
+
+
+        //     -----     -----     Other Operations     -----     -----     //
+
+        /// <summary>
+        /// Computes the transposition of a sparse matrix.
+        /// </summary>
+        /// <param name="operand"> <see cref="SparseMatrix{T}"/> to operate from. </param>
+        /// <returns> The new <see cref="SparseMatrix{T}"/> resulting from the transposition. </returns>
+        public static SparseMatrix<T> Transpose(SparseMatrix<T> operand) => Operations.MatrixOperations.Transposition(operand);
 
         #endregion
 

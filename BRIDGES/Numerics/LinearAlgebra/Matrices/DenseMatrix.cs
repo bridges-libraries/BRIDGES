@@ -176,26 +176,15 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices
         public static Vect.DenseVector<T> TransposeMultiply(DenseMatrix<T> matrix, Vect.SparseVector<T> vector) => Operations.MatrixOperations.TransposeMultiply(matrix, vector);
 
 
+
         //     -----     -----     Other Operations     -----     -----     //
 
         /// <summary>
         /// Computes the transposition of a dense matrix.
         /// </summary>
-        /// <param name="matrix"> <see cref="DenseMatrix{T}"/> to operate from. </param>
+        /// <param name="operand"> <see cref="DenseMatrix{T}"/> to operate from. </param>
         /// <returns> The new <see cref="DenseMatrix{T}"/> resulting from the transposition. </returns>
-        public static DenseMatrix<T> Transpose(DenseMatrix<T> matrix)
-        {
-            DenseMatrix<T> result = new DenseMatrix<T>(matrix.ColumnCount, matrix.RowCount);
-            for (int i_InitialRow = 0; i_InitialRow < matrix.RowCount; i_InitialRow++)
-            {
-                for (int i_InitialColumn = 0; i_InitialColumn < matrix.ColumnCount; i_InitialColumn++)
-                {
-                    result[i_InitialColumn, i_InitialRow] = matrix[i_InitialRow, i_InitialColumn];
-                }
-            }
-
-            return result;
-        }
+        public static DenseMatrix<T> Transpose(DenseMatrix<T> operand) => Operations.MatrixOperations.Transposition(operand);
 
 
         //     -----     -----     Other Static Methods     -----     -----     //

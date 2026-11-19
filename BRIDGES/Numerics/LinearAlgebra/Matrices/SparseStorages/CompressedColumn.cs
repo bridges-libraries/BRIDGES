@@ -123,7 +123,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
 
         #endregion
 
-        #region Public Static Methods
+        #region "Static Constructors"
 
         /// <summary>
         /// Builds a <see cref="CompressedColumn{T}"/> storage from the components in the <see cref="SBuilders.DictionaryOfKeys{T}"/> sparse matrix builder.
@@ -168,6 +168,29 @@ namespace BRIDGES.Numerics.LinearAlgebra.Matrices.SparseStorages
             }
 
             return new CompressedColumn<T>(rowCount, columnCount, columnPointers, rowIndices, values);
+        }
+
+        /// <summary>
+        /// Builds a <see cref="CompressedColumn{T}"/> storage for the identity matrix.
+        /// </summary>
+        /// <param name="size"> Number of row and column of the identity matrix. </param>
+        /// <returns> The <see cref="CompressedColumn{T}"/> storage for the identity matrix. </returns>
+        public static CompressedColumn<T> Identity(int size)
+        {
+            int[] columnPointers = new int[size + 1];
+            int[] rowIndices = new int[size];
+            T[] values = new T[size];
+
+            for (int i = 0; i < size; i++)
+            {
+                columnPointers[i] = i;
+                rowIndices[i] = i;
+                values[i] = T.One;
+            }
+
+            columnPointers[size] = size;
+
+            return new CompressedColumn<T>(size, size, columnPointers, rowIndices, values);
         }
 
         #endregion

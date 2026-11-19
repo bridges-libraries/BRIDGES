@@ -144,22 +144,40 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
         /// <param name="rowIndex"> Row index of the component to insert. </param>
         /// <param name="columnIndex"> Column index of the component to insert. </param>
         /// <param name="value"> Value of the component to insert. </param>
-        /// <param name="expected">  Expected sparse storage after insertion of the component in the <paramref name="storage"/> </param>
+        /// <param name="expected"> Expected sparse storage after insertion of the component in the <paramref name="storage"/>. </param>
         [Theory(DisplayName = "Add(int, int, T)")]
         [ClassData(typeof(DataClasses.Add))]
         public void Add__Int_Int_T(SBuilders.DictionaryOfKeys<double> storage, int rowIndex, int columnIndex, double value, SBuilders.DictionaryOfKeys<double> expected)
         {
-            // Arrange
+            //     -----     Arrange
+            bool isZero = value == 0.0;
+            (bool isExisting, bool isOpposite)= storage.TryGet(rowIndex, columnIndex, out double existing) ? (true, existing == -value) : (false, false); 
 
-            // Act
+            //     -----     Act
             storage.Add(rowIndex, columnIndex, value);
 
-            // Assert
-            Assert.Equal(expected.Count, storage.Count);
+            //     -----     Assert
+            if (isOpposite | (!isExisting & isZero)) { Assert.Equal(expected.Count + 1, storage.Count); }
+            else { Assert.Equal(expected.Count, storage.Count); }
+
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), double> kvp in expected.Storage)
             {
                 Assert.True(storage.Contains(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
                 Assert.Equal(kvp.Value, storage.Get(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
+            }
+
+            // Undesired cases resulting from not checking potential zeros.
+            if (isOpposite) 
+            {
+                // The storage ends with a zero values because no check is performed when the added value is the opposite
+                Assert.True(storage.Contains(rowIndex, columnIndex));
+                Assert.Equal(0.0, storage.Get(rowIndex, columnIndex));
+            }
+            else if (!isExisting & isZero) 
+            {
+                // The storage ends with a zero values because no check is performed when the added value is zero
+                Assert.True(storage.Contains(rowIndex, columnIndex));
+                Assert.Equal(0.0, storage.Get(rowIndex, columnIndex));
             }
         }
 
@@ -176,27 +194,11 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
         public void Add__Int_Int_T_Bool__Check(SBuilders.DictionaryOfKeys<double> storage, int rowIndex, int columnIndex, double value, SBuilders.DictionaryOfKeys<double> expected)
         {
             // Arrange
-            bool shouldAdd = true;
-            if (storage.TryGet(rowIndex, columnIndex, out double existing))
-            {
-                if (existing + value == 0.0) // Remove the component
-                { 
-                    expected = new SBuilders.DictionaryOfKeys<double>(storage);
-                    expected.Remove(rowIndex, columnIndex);
-                }
-            }
-            else if (value == 0.0) // Do not add the 0.0
-            { 
-                shouldAdd = false;
-                expected = new SBuilders.DictionaryOfKeys<double>(storage);
-            }
 
             // Act
             bool isAdded = storage.Add(rowIndex, columnIndex, value, true);
 
             // Assert
-            Assert.Equal(shouldAdd, isAdded);
-
             Assert.Equal(expected.Count, storage.Count);
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), double> kvp in expected.Storage)
             {
@@ -217,15 +219,35 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
         [ClassData(typeof(DataClasses.Add))]
         public void Add__Int_Int_T_Bool__NoCheck(SBuilders.DictionaryOfKeys<double> storage, int rowIndex, int columnIndex, double value, SBuilders.DictionaryOfKeys<double> expected)
         {
-            // Act
+            //     -----     Arrange
+            bool isZero = value == 0.0;
+            (bool isExisting, bool isOpposite) = storage.TryGet(rowIndex, columnIndex, out double existing) ? (true, existing == -value) : (false, false);
+
+            //     -----     Act
             bool _ = storage.Add(rowIndex, columnIndex, value, false);
 
-            // Assert
-            Assert.Equal(expected.Count, storage.Count);
+            //     -----     Assert
+            if (isOpposite | (!isExisting & isZero)) { Assert.Equal(expected.Count + 1, storage.Count); }
+            else { Assert.Equal(expected.Count, storage.Count); }
+
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), double> kvp in expected.Storage)
             {
                 Assert.True(storage.Contains(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
                 Assert.Equal(kvp.Value, storage.Get(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
+            }
+
+            // Undesired cases resulting from not checking potential zeros.
+            if (isOpposite)
+            {
+                // The storage ends with a zero values because no check is performed when the added value is the opposite
+                Assert.True(storage.Contains(rowIndex, columnIndex));
+                Assert.Equal(0.0, storage.Get(rowIndex, columnIndex));
+            }
+            else if (!isExisting & isZero)
+            {
+                // The storage ends with a zero values because no check is performed when the added value is zero
+                Assert.True(storage.Contains(rowIndex, columnIndex));
+                Assert.Equal(0.0, storage.Get(rowIndex, columnIndex));
             }
         }
 
@@ -242,20 +264,31 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
         [ClassData(typeof(DataClasses.Replace))]
         public void Replace__Int_Int_T(SBuilders.DictionaryOfKeys<double> storage, int rowIndex, int columnIndex, double value, SBuilders.DictionaryOfKeys<double> expected)
         {
-            // Arrange
-            bool shouldReplace = storage.Contains(rowIndex, columnIndex);
+            //     -----    Arrange
+            bool isZero = value == 0.0;
+            bool isExisting = storage.Contains(rowIndex, columnIndex);
 
-            // Act
+            //     -----    Act
             bool isReplaced = storage.Replace(rowIndex, columnIndex, value);
 
-            // Assert
-            Assert.Equal(shouldReplace, isReplaced);
+            //     -----    Assert
+            Assert.Equal(isExisting, isReplaced);
 
-            Assert.Equal(expected.Count, storage.Count);
+            if (isExisting & isZero) { Assert.Equal(expected.Count + 1, storage.Count); }
+            else { Assert.Equal(expected.Count, storage.Count); }
+
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), double> kvp in expected.Storage)
             {
                 Assert.True(storage.Contains(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
                 Assert.Equal(kvp.Value, storage.Get(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
+            }
+
+            // Undesired cases resulting from not checking potential zeros.
+            if (isExisting & isZero)
+            {
+                // The storage ends with a zero values because no check is performed when the added value is zero
+                Assert.True(storage.Contains(rowIndex, columnIndex));
+                Assert.Equal(0.0, storage.Get(rowIndex, columnIndex));
             }
         }
 
@@ -302,22 +335,31 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
         [ClassData(typeof(DataClasses.Replace))]
         public void Replace__Int_Int_T_Bool__NoCheck(SBuilders.DictionaryOfKeys<double> storage, int rowIndex, int columnIndex, double value, SBuilders.DictionaryOfKeys<double> expected)
         {
-            // Arrange
-            bool shouldReplace = storage.Contains(rowIndex, columnIndex);
+            //     -----     Arrange
+            bool isZero = value == 0.0;
+            bool isExisting = storage.Contains(rowIndex, columnIndex);
 
-            if (!shouldReplace) { expected = new SBuilders.DictionaryOfKeys<double>(storage); }
-
-            // Act
+            //     -----     Act
             bool isReplaced = storage.Replace(rowIndex, columnIndex, value, false);
 
-                        // Assert
-            Assert.Equal(shouldReplace, isReplaced);
+            //     -----    Assert
+            Assert.Equal(isExisting, isReplaced);
 
-            Assert.Equal(expected.Count, storage.Count);
+            if (isExisting & isZero) { Assert.Equal(expected.Count + 1, storage.Count); }
+            else { Assert.Equal(expected.Count, storage.Count); }
+
             foreach (KeyValuePair<(int RowIndex, int ColumnIndex), double> kvp in expected.Storage)
             {
                 Assert.True(storage.Contains(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
                 Assert.Equal(kvp.Value, storage.Get(kvp.Key.RowIndex, kvp.Key.ColumnIndex));
+            }
+
+            // Undesired cases resulting from not checking potential zeros.
+            if (isExisting & isZero)
+            {
+                // The storage ends with a zero values because no check is performed when the added value is zero
+                Assert.True(storage.Contains(rowIndex, columnIndex));
+                Assert.Equal(0.0, storage.Get(rowIndex, columnIndex));
             }
         }
 
@@ -1306,7 +1348,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
 
                     SBuilders.DictionaryOfKeys<double> result = new SBuilders.DictionaryOfKeys<double>(5);
 
-                      result.Add(0, 0, 1.0);     result.Add(0, 1, 0.0);   /*result.Add(0, 2, 0.0);*/   result.Add(0, 3, -2.0);   /*result.Add(0, 4, 0.0);*/
+                      result.Add(0, 0, 1.0);   /*result.Add(0, 1, 0.0);*/ /*result.Add(0, 2, 0.0);*/   result.Add(0, 3, -2.0);   /*result.Add(0, 4, 0.0);*/
                     /*result.Add(1, 0, 0.0);*/ /*result.Add(1, 1, 0.0);*/ /*result.Add(1, 2, 0.0);*/ /*result.Add(1, 3,  0.0);*/ /*result.Add(1, 4, 0.0);*/
                       result.Add(2, 0, 2.0);   /*result.Add(2, 1, 0.0);*/ /*result.Add(2, 2, 0.0);*/ /*result.Add(2, 3,  0.0);*/   result.Add(2, 4, 5.5);
 
@@ -1471,9 +1513,9 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double.SparseBuilders
 
                     SBuilders.DictionaryOfKeys<double> result = new SBuilders.DictionaryOfKeys<double>(4);
 
-                      result.Add(0, 0, 1.0);   /*result.Add(0, 1, 0.0);*/ /*result.Add(0, 2, 0.0);*/   result.Add(0, 3, 0.0);   /*result.Add(0, 4, 0.0);*/
-                    /*result.Add(1, 0, 0.0);*/ /*result.Add(1, 1, 0.0);*/ /*result.Add(1, 2, 0.0);*/ /*result.Add(1, 3, 0.0);*/ /*result.Add(1, 4, 0.0);*/
-                      result.Add(2, 0, 2.0);   /*result.Add(2, 1, 0.0);*/ /*result.Add(2, 2, 0.0);*/ /*result.Add(2, 3, 0.0);*/   result.Add(2, 4, 5.5);
+                      result.Add(0, 0, 1.0);   /*result.Add(0, 1, 0.0);*/  /*result.Add(0, 2, 0.0);*/  /*result.Add(0, 3, 0.0);*/  /*result.Add(0, 4, 0.0);*/
+                    /*result.Add(1, 0, 0.0);*/ /*result.Add(1, 1, 0.0);*/  /*result.Add(1, 2, 0.0);*/  /*result.Add(1, 3, 0.0);*/  /*result.Add(1, 4, 0.0);*/
+                      result.Add(2, 0, 2.0);   /*result.Add(2, 1, 0.0);*/  /*result.Add(2, 2, 0.0);*/  /*result.Add(2, 3, 0.0);*/    result.Add(2, 4, 5.5);
 
                     return [rowIndex, columnIndex, value, result];
                 }

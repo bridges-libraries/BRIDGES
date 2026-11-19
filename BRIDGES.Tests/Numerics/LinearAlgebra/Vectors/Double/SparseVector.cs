@@ -758,7 +758,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Vectors.Double
             // Act & Assert
             for (int i = 0; i < vector.RowCount; i++)
             {
-                Assert.Equal(components[i], vector.Get(i));
+                Assert.Equal(components[i], vector.GetComponent(i));
             }
         }
 

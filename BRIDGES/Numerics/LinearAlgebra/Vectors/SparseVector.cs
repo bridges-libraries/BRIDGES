@@ -292,7 +292,7 @@ namespace BRIDGES.Numerics.LinearAlgebra.Vectors
 
         /// <inheritdoc/>
         /// <remarks> If the sparse storage does not have an existing entry for the component, zero is returned. </remarks>
-        public override T Get(int index)
+        public override T GetComponent(int index)
         {
             return _components.TryGetValue(index, out T? value) ? value : T.Zero;
         }

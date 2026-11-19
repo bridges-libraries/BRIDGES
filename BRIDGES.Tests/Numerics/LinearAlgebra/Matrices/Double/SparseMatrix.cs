@@ -74,9 +74,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
         #endregion
 
-        #region Tests : Public Static Methods
-
-        //     -----     -----     Constructor Pattern     -----     -----     //
+        #region Tests : "Static Constructors"
 
         /// <summary>
         /// Tests the static method <see cref="Mat.SparseMatrix{T}.Build(int, int, Mat.SparseBuilders.DictionaryOfKeys{T}, Mat.SparseStorages.SparseStorageFormat, bool)"/>
@@ -112,6 +110,11 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
             }
         }
 
+        #endregion
+
+        #region Tests : Public Static Methods
+
+        //     -----     -----     Constructor Pattern     -----     -----     //
 
         //     -----     -----     Algebraic Near Ring : SparseMatrix<T>     -----     -----     //
 
@@ -545,7 +548,6 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
         }
 
 
-
         //     -----      -----     Vectors     -----     -----     //
 
         /// <summary>
@@ -651,7 +653,40 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                 Assert.Equal(expected[i], result[i]);
             }
         }
-        
+
+
+        //     -----     -----     Other Operations     -----     -----     //
+
+        /// <summary>
+        /// Tests the method <see cref="Mat.SparseMatrix{T}.Transpose(Mat.SparseMatrix{T})"/>.
+        /// </summary>
+        /// <param name="operand"> <see cref="Mat.SparseMatrix{T}"/> to operate from. </param>
+        /// <param name="expected"> Expected result <see cref="Mat.SparseMatrix{T}"/> of the transposition. </param>
+        [Theory(DisplayName = "Static Transpose(SparseMatrix)")]
+        [ClassData(typeof(DataClasses.Transposition__SparseMatrix))]
+        public void Static__Transpose__SparseMatrix(Mat.SparseMatrix<double> operand, Mat.SparseMatrix<double> expected)
+        {
+            // Arrange
+
+            // Act 
+            Mat.SparseMatrix<double> result = Mat.SparseMatrix<double>.Transpose(operand);
+
+            // Assert
+            Assert.Equal(expected.RowCount, result.RowCount);
+            Assert.Equal(expected.ColumnCount, result.ColumnCount);
+            Assert.Equal(expected.NonZeroCount, result.NonZeroCount);
+            for (int i_Row = 0; i_Row < result.RowCount; i_Row++)
+            {
+                for (int i_Column = 0; i_Column < result.ColumnCount; i_Column++)
+                {
+                    if (expected.Contains(i_Row, i_Column))
+                    {
+                        Assert.Equal(expected[i_Row, i_Column], result[i_Row, i_Column]);
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Tests : Operators
@@ -2838,7 +2873,7 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
 
             #endregion
 
-            #region For Static Methods
+            #region For "Static Constructors"
 
             //     -----     -----     Constructor Pattern     -----     -----     //
 
@@ -2862,6 +2897,26 @@ namespace BRIDGES.Tests.Numerics.LinearAlgebra.Matrices.Double
                             DataStorages.M4.FromCC.StorageFormat , DataStorages.M4.FromCC.Readable,},
                         { SparseBuilders.DictionaryOfKeys.DataStorages.B5.RowCount, SparseBuilders.DictionaryOfKeys.DataStorages.B5.ColumnCount, SparseBuilders.DictionaryOfKeys.DataStorages.B5.Readable,
                             DataStorages.M5.FromCC.StorageFormat , DataStorages.M5.FromCC.Readable,},
+                    };
+            }
+
+            #endregion
+
+            #region For Static Methods
+
+            /// <summary>
+            /// Class data for <see cref="SparseMatrix.Static__Transpose__SparseMatrix(Mat.SparseMatrix{double}, Mat.SparseMatrix{double})"/>
+            /// </summary>
+            internal class Transposition__SparseMatrix : BaseDataClass
+            {
+                /// <inheritdoc/>
+                internal override Func<object[]>[,] DataProviders => new Func<object[]>[,]
+                    {
+                        // For CompressedColumn with CompressedColumn
+                        { DataStorages.M1.FromCC.Readable, DataStorages.M1.FromCC.Transpose },
+                        { DataStorages.M2.FromCC.Readable, DataStorages.M2.FromCC.Transpose },
+                        { DataStorages.M3.FromCC.Readable, DataStorages.M3.FromCC.Transpose },
+                        { DataStorages.M4.FromCC.Readable, DataStorages.M4.FromCC.Transpose },
                     };
             }
 
