@@ -306,11 +306,26 @@ namespace BRIDGES.Geometry.Euclidean3D
 
 
         /// <summary>
-        /// Computes the distance of this <see cref="Point"/> to another <see cref="Point"/> (using the L2-norm).
+        /// Computes the distance of this <see cref="Point"/> to another <see cref="Point"/>.
         /// </summary>
         /// <param name="other"> <see cref="Point"/> to evaluate the distance to. </param>
-        /// <returns> The value of the distance between the two <see cref="Point"/>. </returns>
+        /// <returns> The value of the distance between the two <see cref="Point"/> (using the L2-norm). </returns>
         public double DistanceTo(Point other) => (this - other).Norm();
+
+        /// <summary>
+        /// Computes the squared distance of this <see cref="Point"/> to another <see cref="Point"/>.
+        /// </summary>
+        /// <param name="other"> <see cref="Point"/> to evaluate the distance to. </param>
+        /// <returns> The value of the distance between the two <see cref="Point"/> (using the L2-norm). </returns>
+        public double SquaredDistanceTo(Point other)
+        {
+            double dx = X - other.X;
+            double dy = Y - other.Y;
+            double dz = Z - other.Z;
+
+            return (dx * dx + dy * dy + dz * dz);
+        }
+
 
         /// <summary>
         /// Computes the L2-norm this <see cref="Point"/>.
