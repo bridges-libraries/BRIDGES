@@ -18,7 +18,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
         /// <returns> The <see langword="double"/>-precision value of the area. </returns>
         /// <exception cref="NotImplementedException"> The type of vertex area provided is not implemented. </exception>
         public static double InfluenceArea<VTraits, ETraits, FTraits>(this Mesh<VTraits, ETraits, FTraits>.Vertex vertex, Euc3D.VertexAreaType areaType = Euc3D.VertexAreaType.VoronoiCell)
-            where VTraits : VertexTraits.PositionTrait
+            where VTraits : VertexTraits.IPositionTrait
         {
             return areaType switch
             {
@@ -28,8 +28,9 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
             };
         }
 
+
         private static double InfluenceArea_Barycentric<VTraits, ETraits, FTraits>(Mesh<VTraits, ETraits, FTraits>.Vertex vertex)
-            where VTraits : VertexTraits.PositionTrait
+            where VTraits : VertexTraits.IPositionTrait
         {
             double result = 0.0;
             foreach (Mesh<VTraits, ETraits, FTraits>.Face adjacentFace in vertex.AdjacentFaces())
@@ -40,7 +41,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes
         }
 
         private static double InfluenceArea_VoronoiCell<VTraits, ETraits, FTraits>(Mesh<VTraits, ETraits, FTraits>.Vertex vertex)
-            where VTraits : VertexTraits.PositionTrait
+            where VTraits : VertexTraits.IPositionTrait
         {
             double result = 0.0;
             foreach (Mesh<VTraits, ETraits, FTraits>.Face face in vertex.AdjacentFaces())

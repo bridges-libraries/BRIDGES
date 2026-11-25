@@ -83,7 +83,7 @@ namespace BRIDGES.Geometry.Euclidean3D
         /// <summary>
         /// Computes the area at the point <paramref name="p"/> in a triangle.
         /// </summary>
-        /// <param name="p"> First point of the triangle, where the area is evaluated.</param>
+        /// <param name="p"> First point of the triangle, where the area is evaluated. </param>
         /// <param name="q"> Second point of the triangle. </param>
         /// <param name="r"> Third point of the triangle. </param>
         /// <param name="areaType"> Nature of the area to compute.</param>
@@ -97,6 +97,24 @@ namespace BRIDGES.Geometry.Euclidean3D
                 VertexAreaType.VoronoiCell => VoronoiArea(p, q, r),
                 _ => throw new NotImplementedException("The nature of the area to compute is not implemented."),
             };
+        }
+
+
+        /// <summary>
+        /// Computes the area of a triangle delimited by the specified vertices.
+        /// </summary>
+        /// <param name="p"> First point of the triangle. </param>
+        /// <param name="q"> Second point of the triangle. </param>
+        /// <param name="r"> Third point of the triangle. </param>
+        /// <returns> The area of the triangle. </returns>
+        public static double Area(Point p, Point q, Point r)
+        {
+            // Use of Heron's formula for area of triangles
+            double a_2 = q.SquaredDistanceTo(p);
+            double b_2 = r.SquaredDistanceTo(q);
+            double c_2 = p.SquaredDistanceTo(r);
+
+            return 0.25 * Math.Sqrt(4 * (a_2 * b_2 + a_2 * c_2 + b_2 * c_2) - ((a_2 + b_2 + c_2) * (a_2 + b_2 + c_2)));
         }
 
 
@@ -400,6 +418,5 @@ namespace BRIDGES.Geometry.Euclidean3D
         public double Area() => Area(_vertices);
 
         #endregion
-
     }
 }

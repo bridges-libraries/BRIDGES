@@ -6,7 +6,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.VertexTraits
     /// <summary>
     /// Vertex position trait.
     /// </summary>
-    public interface PositionTrait
+    public interface IPositionTrait
     {
         #region Properties
 

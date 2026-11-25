@@ -6,7 +6,7 @@ namespace BRIDGES.DataStructures.PolyhedralMeshes.VertexTraits
     /// <summary>
     /// Vertex normal vector trait.
     /// </summary>
-    public interface NormalTrait
+    public interface INormalTrait
     {
         #region Properties
 
